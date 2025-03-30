@@ -28,35 +28,126 @@ button:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 30px; /* Increased padding for better spacing */
-    background-color: white;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); /* Modern shadow */
+    border-radius: 12px; /* Rounded corners */
     z-index: 1000;
-    margin: 20px; /* Add margin for better spacing on smaller screens */
-    max-width: 500px; /* Limit modal width for better layout */
-    width: 90%; /* Ensure responsiveness on smaller screens */
-    box-sizing: border-box; /* Include padding in width calculation */
+    max-width: 500px;
+    width: 90%;
+    box-sizing: border-box;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
 }
 
-.modal input, .modal button {
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px; /* Increased padding for balance */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd; /* Subtle divider */
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px; /* Slightly larger font for modern look */
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 25px; /* Increased padding for better spacing */
+    background-color: #f9f9f9; /* Light background for contrast */
+}
+
+.modal-body label {
     display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin-bottom: 8px; /* Increased spacing for readability */
+    font-weight: bold;
+    color: #333;
 }
 
-.modal button {
+.modal-body input {
+    width: 100%;
+    max-width: 400px; /* Limit the width of input fields */
+    padding: 12px; /* Increased padding for modern look */
+    margin-bottom: 20px; /* Increased spacing between fields */
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Rounded corners for inputs */
+    font-size: 14px;
+    box-sizing: border-box; /* Ensure padding is included in width */
+    transition: border-color 0.3s ease;
+}
+
+.modal-body input:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none;
+}
+
+.modal-body select {
+    width: 100%;
+    max-width: 400px; /* Limit the width of the dropdown */
+    padding: 12px; /* Modern padding */
+    margin-bottom: 20px; /* Spacing between fields */
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Rounded corners for dropdown */
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.modal-body select:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none;
+}
+
+.modal-footer {
+    padding: 20px; /* Consistent padding with header and body */
+    background-color: #ffffff;
+    text-align: right;
+    border-top: 1px solid #ddd; /* Subtle divider */
+}
+
+.save-button {
     background-color: #28a745;
     color: white;
     border: none;
+    padding: 12px 25px; /* Modern button padding */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.modal button:hover {
+.save-button:hover {
     background-color: #218838;
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.close-button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #ffcccc; /* Subtle hover effect */
 }
 
 table {
@@ -173,4 +264,58 @@ div {
 .delete-button:hover {
     background-color: #c82333;
     transform: scale(1.05);
+}
+
+.add-supplier-button {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Modern button padding */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Added spacing below the button */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-supplier-button:hover {
+    background-color: #e0a800;
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.add-supplier-button {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.add-supplier-button:hover {
+    background-color: #e0a800;
+}
+
+.add-item-button {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Modern button padding */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Added spacing below the button */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-item-button:hover {
+    background-color: #138496;
+    transform: scale(1.05); /* Slight zoom effect */
 }

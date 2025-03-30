@@ -1,5 +1,5 @@
 <?php
-include 'db.php'; // Include database connection
+include '../db/db.php';
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("Property ID is required.");

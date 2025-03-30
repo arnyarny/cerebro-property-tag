@@ -51,17 +51,33 @@
     </div>
 
     <div id="propertyModal" class="modal">
-        <form id="addPropertyForm">
-            <label for="item_name">Item Name:</label>
-            <input type="text" id="item_name" name="item_name" required>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
-            <label for="item_supplier">Item Supplier:</label>
-            <input type="text" id="item_supplier" name="item_supplier" required>
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" step="0.01" required>
-            <button type="submit">Generate and Save</button>
-        </form>
+        <div class="modal-header">
+            <h2>Add New Property</h2>
+            <button class="close-button" onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <form id="addPropertyForm">
+                <label for="item_name">Item Name:</label>
+                <select id="item_name" name="item_name" required>
+                    <option value="">Select Item</option>
+                    <!-- Item names will be dynamically loaded here -->
+                </select>
+                <button type="button" class="add-item-button" onclick="addNewItem()">Add New Item</button>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+                <label for="item_supplier">Item Supplier:</label>
+                <select id="item_supplier" name="item_supplier" required>
+                    <option value="">Select Supplier</option>
+                    <!-- Suppliers will be dynamically loaded here -->
+                </select>
+                <button type="button" class="add-supplier-button" onclick="addNewSupplier()">Add New Supplier</button>
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" step="0.01" required>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" form="addPropertyForm" class="save-button">Generate and Save</button>
+        </div>
         <img id="qrCodeImage" src="" alt="QR Code" class="qr-code" style="display: none;">
     </div>
 
