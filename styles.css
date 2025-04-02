@@ -400,3 +400,15 @@ div {
     background-color: #5a6268; /* Darker shade on hover */
     transform: scale(1.05); /* Same hover effect as Edit button */
 }
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#qrcode img {
+    max-width: 100%;
+    height: auto;
+}

@@ -416,14 +416,40 @@ function searchProperties() {
 }
 
 function generateQRCode(propertyId) {
-  const qrCodeImage = document.getElementById("qrCodeImage");
-  qrCodeImage.src = `generate_qr.php?propertyId=${propertyId}`;
-  qrCodeImage.onload = () => {
-    document.getElementById("qrCodeModal").style.display = "block";
-  };
-  qrCodeImage.onerror = () => {
-    alert("Failed to load QR code. Please try again.");
-  };
+  if (!propertyId) {
+    alert("Property ID is missing. Cannot generate QR code.");
+    return;
+  }
+
+  // Fetch property details
+  fetch(`api/get_property.php?id=${propertyId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        const property = data.property;
+        const qrText = `ID: ${property.id}\nItem Name: ${property.item_name}\nDate: ${property.date}\nSupplier: ${property.item_supplier}\nAmount: ${property.amount}`;
+
+        // Clear previous QR code
+        const qrcodeDiv = document.getElementById("qrcode");
+        qrcodeDiv.innerHTML = "";
+
+        // Generate new QR code
+        new QRCode(qrcodeDiv, {
+          text: qrText,
+          width: 300,
+          height: 300,
+        });
+
+        // Show the modal
+        document.getElementById("qrCodeModal").style.display = "block";
+      } else {
+        alert("Failed to fetch property details.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error generating QR code:", error);
+      alert("Failed to generate QR code. Please try again.");
+    });
 }
 
 function closeQRCodeModal() {

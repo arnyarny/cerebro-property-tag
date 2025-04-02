@@ -1,0 +1,39 @@
+[02-Apr-2025 05:18:05 Europe/Berlin] Error generating QR code for property ID 20250006: Failed to generate QR code. Google Chart API returned an error.
+[02-Apr-2025 05:19:23 Europe/Berlin] Error generating QR code for property ID 20250006: Failed to generate QR code. Google Chart API returned an error.
+[02-Apr-2025 05:22:12 Europe/Berlin] Error generating QR code for property ID 20250006: Failed to generate QR code. Google Chart API returned an error.
+[02-Apr-2025 05:28:34 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::create() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:46
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 46
+[02-Apr-2025 05:28:42 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::create() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:46
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 46
+[02-Apr-2025 05:28:59 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::create() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:46
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 46
+[02-Apr-2025 05:29:53 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::setEncoding() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:47
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 47
+[02-Apr-2025 05:31:35 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::create() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:46
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 46
+[02-Apr-2025 05:34:14 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::setSize() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:45
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 45
+[02-Apr-2025 05:35:42 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::setSize() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:45
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 45
+[02-Apr-2025 05:39:34 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\QrCode::setSize() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:45
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 45
+[02-Apr-2025 05:40:46 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Endroid\QrCode\Builder\Builder::create() in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:45
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 45

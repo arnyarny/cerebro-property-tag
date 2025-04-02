@@ -107,13 +107,14 @@
             <button class="close-button" onclick="closeQRCodeModal()">X</button>
         </div>
         <div class="modal-body">
-            <img id="qrCodeImage" src="" alt="QR Code">
+            <div id="qrcode"></div>
         </div>
         <div class="modal-footer">
             <button class="close-button" onclick="closeQRCodeModal()">Close</button>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

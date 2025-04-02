@@ -1,7 +1,9 @@
 <?php
 include 'db/db.php';
 
-header('Content-Type: image/png');
+// Enable error logging
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/error_log.txt');
 
 $propertyId = $_GET['propertyId'] ?? null;
 
@@ -12,6 +14,7 @@ if (!$propertyId) {
 }
 
 try {
+    // Fetch property details from the database
     $stmt = $conn->prepare("SELECT p.id, i.name AS item_name, p.date, s.name AS item_supplier, p.amount
                             FROM properties p
                             JOIN items i ON p.item_id = i.item_id
@@ -28,15 +31,23 @@ try {
         exit;
     }
 
+    // Prepare data for the QR code
     $data = "ID: {$property['id']}\nItem Name: {$property['item_name']}\nDate: {$property['date']}\nSupplier: {$property['item_supplier']}\nAmount: {$property['amount']}";
 
-    // Generate QR code using Google Chart API
-    $qrCodeUrl = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($data) . "&choe=UTF-8";
+    // Generate QR code URL using Google Charts API
+    $googleChartsUrl = 'https://chart.googleapis.com/chart?' . http_build_query([
+        'cht' => 'qr',
+        'chs' => '300x300',
+        'chl' => $data,
+        'choe' => 'UTF-8'
+    ]);
 
-    // Redirect to the QR code URL
-    header("Location: $qrCodeUrl");
+    // Redirect to the Google Charts URL
+    header('Location: ' . $googleChartsUrl);
     exit;
+
 } catch (Exception $e) {
+    error_log("Error generating QR code for property ID {$propertyId}: " . $e->getMessage());
     http_response_code(500);
     echo 'Error generating QR code: ' . $e->getMessage();
 }
