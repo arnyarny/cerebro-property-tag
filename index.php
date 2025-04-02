@@ -38,6 +38,20 @@
         <tbody id="propertyList"></tbody>
     </table>
 
+    <div id="qrCodeModal" class="modal" style="display: none;">
+    <div class="modal-header">
+        <h2>QR Code</h2>
+        <button class="close-button" onclick="closeQRCodeModal()">X</button>
+    </div>
+    <div class="modal-body">
+        <div id="qrcode"></div>
+    </div>
+    <div class="modal-footer">
+        <button onclick="closeQRCodeModal()">Close</button>
+    </div>
+</div>
+
+
     <div>
         <span id="totalItems">Total Items: 0</span>
         <span id="totalAmount" class="float-right">Total Amount: 0</span>
@@ -83,7 +97,6 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="qr-button" id="generateQRCodeButton" onclick="generateQRCode()" style="display: none;">Generate QR Code</button>
             <button type="submit" form="addPropertyForm" class="save-button">Save to Database</button>
         </div>
     </div>
@@ -101,20 +114,6 @@
         </div>
     </div>
 
-    <div id="qrCodeModal" class="modal">
-        <div class="modal-header">
-            <h2>Generated QR Code</h2>
-            <button class="close-button" onclick="closeQRCodeModal()">X</button>
-        </div>
-        <div class="modal-body">
-            <div id="qrcode"></div>
-        </div>
-        <div class="modal-footer">
-            <button class="close-button" onclick="closeQRCodeModal()">Close</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -417,40 +417,37 @@ function searchProperties() {
 
 function generateQRCode(propertyId) {
   if (!propertyId) {
-    alert("Property ID is missing. Cannot generate QR code.");
+    console.error("Invalid Property ID.");
+    alert("Invalid Property ID.");
     return;
   }
 
-  // Fetch property details
-  fetch(`api/get_property.php?id=${propertyId}`)
-    .then((response) => response.json())
+  fetch(`api/generate_qr.php?id=${propertyId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Parse JSON response
+    })
     .then((data) => {
-      if (data.success) {
-        const property = data.property;
-        const qrText = `ID: ${property.id}\nItem Name: ${property.item_name}\nDate: ${property.date}\nSupplier: ${property.item_supplier}\nAmount: ${property.amount}`;
-
-        // Clear previous QR code
-        const qrcodeDiv = document.getElementById("qrcode");
-        qrcodeDiv.innerHTML = "";
-
-        // Generate new QR code
-        new QRCode(qrcodeDiv, {
-          text: qrText,
-          width: 300,
-          height: 300,
-        });
-
+      if (data.image_url) {
+        // Display the generated image
+        const qrCodeContainer = document.getElementById("qrcode");
+        qrCodeContainer.innerHTML = `<img src="${data.image_url}" alt="QR Code" style="max-width: 100%; height: auto;">`;
+        
         // Show the modal
         document.getElementById("qrCodeModal").style.display = "block";
       } else {
-        alert("Failed to fetch property details.");
+        alert("Failed to generate QR code.");
       }
     })
     .catch((error) => {
       console.error("Error generating QR code:", error);
-      alert("Failed to generate QR code. Please try again.");
+      alert("An error occurred while generating the QR code.");
     });
 }
+
+
 
 function closeQRCodeModal() {
   document.getElementById("qrCodeModal").style.display = "none";

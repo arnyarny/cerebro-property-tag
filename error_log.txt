@@ -37,3 +37,11 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 45
+[02-Apr-2025 05:59:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class "QRcode" not found in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:40
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 40
+[02-Apr-2025 06:00:28 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class "QRcode" not found in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php:40
+Stack trace:
+#0 {main}
+  thrown in C:\Users\user\Documents\GitHub\cerebro-property-tag\generate_qr.php on line 40
