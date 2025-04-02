@@ -88,6 +88,8 @@ button:hover {
     font-size: 14px;
     box-sizing: border-box; /* Ensure padding is included in width */
     transition: border-color 0.3s ease;
+    pointer-events: auto; /* Ensure the field is clickable */
+    z-index: auto; /* Ensure no z-index issues */
 }
 
 .modal-body input:focus {
@@ -318,4 +320,83 @@ div {
 .add-item-button:hover {
     background-color: #138496;
     transform: scale(1.05); /* Slight zoom effect */
+}
+
+.generate-qr-button, .save-qr-button {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.generate-qr-button:hover {
+    background-color: #138496;
+    transform: scale(1.05);
+}
+
+.save-qr-button {
+    background-color: #ffc107;
+}
+
+.save-qr-button:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+.qr-code {
+    max-width: 200px;
+    max-height: 200px;
+    margin: 10px auto;
+    display: block;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.logo {
+    width: 180px;
+}
+
+.qr-button {
+    background-color: #17a2b8; /* Different color for QR Code button */
+    color: white;
+    border: none;
+    padding: 8px 15px; /* Same padding as Edit button */
+    border-radius: 5px; /* Same border radius as Edit button */
+    cursor: pointer;
+    font-size: 14px; /* Same font size as Edit button */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Same transition as Edit button */
+}
+
+.qr-button:hover {
+    background-color: #138496; /* Darker shade on hover */
+    transform: scale(1.05); /* Same hover effect as Edit button */
+}
+
+/* New button style (similar to Edit button but with a different color) */
+.new-button-style {
+    background-color: #6c757d; /* Different color for the new button */
+    color: white;
+    border: none;
+    padding: 8px 15px; /* Same padding as Edit button */
+    border-radius: 5px; /* Same border radius as Edit button */
+    cursor: pointer;
+    font-size: 14px; /* Same font size as Edit button */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Same transition as Edit button */
+}
+
+.new-button-style:hover {
+    background-color: #5a6268; /* Darker shade on hover */
+    transform: scale(1.05); /* Same hover effect as Edit button */
 }

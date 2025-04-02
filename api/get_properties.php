@@ -7,7 +7,6 @@ $sql = "
         p.id AS id, 
         i.name AS item_name, 
         p.date, 
-        p.qr_code, 
         s.name AS item_supplier, 
         p.amount 
     FROM 

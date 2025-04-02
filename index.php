@@ -3,8 +3,13 @@
 <head>
     <title>Property Management</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
+    <header class="header">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+    </header>
+
     <div class="controls">
         <div class="sort-search">
             <select id="sortClassification" onchange="sortProperties()">
@@ -52,7 +57,7 @@
 
     <div id="propertyModal" class="modal">
         <div class="modal-header">
-            <h2>Add New Property</h2>
+            <h2>Add/Edit Property</h2>
             <button class="close-button" onclick="closeModal()">X</button>
         </div>
         <div class="modal-body">
@@ -60,25 +65,53 @@
                 <label for="item_name">Item Name:</label>
                 <select id="item_name" name="item_name" required>
                     <option value="">Select Item</option>
-                    <!-- Item names will be dynamically loaded here -->
                 </select>
                 <button type="button" class="add-item-button" onclick="addNewItem()">Add New Item</button>
+
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
+
                 <label for="item_supplier">Item Supplier:</label>
                 <select id="item_supplier" name="item_supplier" required>
                     <option value="">Select Supplier</option>
-                    <!-- Suppliers will be dynamically loaded here -->
                 </select>
                 <button type="button" class="add-supplier-button" onclick="addNewSupplier()">Add New Supplier</button>
+
                 <label for="amount">Amount:</label>
                 <input type="number" id="amount" name="amount" step="0.01" required>
+                <input type="hidden" id="propertyId" name="propertyId">
             </form>
         </div>
         <div class="modal-footer">
-            <button type="submit" form="addPropertyForm" class="save-button">Generate and Save</button>
+            <button type="button" class="qr-button" id="generateQRCodeButton" onclick="generateQRCode()" style="display: none;">Generate QR Code</button>
+            <button type="submit" form="addPropertyForm" class="save-button">Save to Database</button>
         </div>
-        <img id="qrCodeImage" src="" alt="QR Code" class="qr-code" style="display: none;">
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-header">
+            <h2>Confirm Deletion</h2>
+            <button class="close-button" onclick="closeDeleteModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this property?</p>
+        </div>
+        <div class="modal-footer">
+            <button id="confirmDeleteButton" class="delete-button">Delete</button>
+        </div>
+    </div>
+
+    <div id="qrCodeModal" class="modal">
+        <div class="modal-header">
+            <h2>Generated QR Code</h2>
+            <button class="close-button" onclick="closeQRCodeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <img id="qrCodeImage" src="" alt="QR Code">
+        </div>
+        <div class="modal-footer">
+            <button class="close-button" onclick="closeQRCodeModal()">Close</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

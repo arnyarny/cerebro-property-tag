@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function showModal() {
+  const form = document.getElementById("addPropertyForm");
+  form.reset(); // Reset the form fields
+  document.getElementById("propertyId").value = ""; // Clear the propertyId field
+  document.getElementById("amount").removeAttribute("readonly"); // Ensure the amount field is editable
+  document.getElementById("amount").removeAttribute("disabled"); // Ensure the amount field is not disabled
+  document.querySelector(".modal-header h2").textContent = "Add Property"; // Set header to "Add Property"
   document.getElementById("propertyModal").style.display = "block";
 }
 
@@ -15,12 +21,29 @@ function closeModal() {
   document.getElementById("propertyModal").style.display = "none";
 }
 
+function showDeleteModal(propertyId) {
+  const deleteModal = document.getElementById("deleteModal");
+  deleteModal.style.display = "block";
+  document.getElementById("confirmDeleteButton").onclick = () => {
+    deleteProperty(propertyId);
+  };
+}
+
+function closeDeleteModal() {
+  document.getElementById("deleteModal").style.display = "none";
+}
+
 function handleFormSubmit(event) {
   event.preventDefault();
   const form = document.getElementById("addPropertyForm");
   const formData = new FormData(form);
+  const propertyId = document.getElementById("propertyId").value; // Check if propertyId exists
 
-  fetch("api/add_property.php", {
+  const endpoint = propertyId
+    ? "api/edit_property.php"
+    : "api/add_property.php"; // Use appropriate endpoint
+
+  fetch(endpoint, {
     method: "POST",
     body: formData,
   })
@@ -34,13 +57,16 @@ function handleFormSubmit(event) {
       try {
         const data = JSON.parse(text); // Parse JSON manually
         if (data.success) {
-          alert("Property added successfully!");
-          document.getElementById("qrCodeImage").src = data.qrCodePath;
-          document.getElementById("qrCodeImage").style.display = "block";
+          alert(
+            propertyId
+              ? "Property updated successfully!"
+              : "Property added successfully!"
+          ); // Show appropriate message
           form.reset();
           loadProperties();
+          closeModal(); // Close the modal after success
         } else {
-          alert(data.message || "Failed to add property.");
+          alert(data.message || "Failed to add/update property.");
         }
       } catch (error) {
         console.error("Invalid JSON:", text); // Log invalid JSON for debugging
@@ -77,7 +103,8 @@ function loadProperties() {
                     <td>${property.amount}</td>
                     <td>
                         <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-                        <button class="delete-button" onclick="deleteProperty(${property.id})">Delete</button>
+                        <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+                        <button class="qr-button" onclick="generateQRCode(${property.id})">Generate QR Code</button>
                     </td>
                 `;
         propertyList.appendChild(row);
@@ -129,88 +156,6 @@ function updateItemsPerPage() {
   updatePagination();
 }
 
-async function generateQRCode() {
-  const itemName = document.getElementById("item_name").value;
-  const date = document.getElementById("date").value;
-  const itemSupplier = document.getElementById("item_supplier").value;
-  const amount = document.getElementById("amount").value;
-
-  if (!itemName || !date || !itemSupplier || !amount) {
-    alert("Please fill in all fields before generating the QR code.");
-    return;
-  }
-
-  const response = await fetch("api/add_property.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      generate_qr: true,
-      item_name: itemName,
-      date: date,
-      item_supplier: itemSupplier,
-      amount: amount,
-    }),
-  });
-
-  const result = await response.json();
-
-  if (result.success) {
-    const qrCodeImage = document.getElementById("qrCodeImage");
-    qrCodeImage.src = result.qrCodePath;
-    qrCodeImage.style.display = "block";
-
-    document.getElementById("propertyId").value = result.propertyId || 1;
-  } else {
-    alert("Failed to generate QR code.");
-  }
-}
-
-async function saveProperty(event) {
-  event.preventDefault();
-
-  const itemName = document.getElementById("item_name").value;
-  const date = document.getElementById("date").value;
-  const itemSupplier = document.getElementById("item_supplier").value;
-  const amount = document.getElementById("amount").value;
-  const qrCodeImage = document.getElementById("qrCodeImage").src;
-  const propertyId = document.getElementById("propertyId").value;
-
-  if (
-    !itemName ||
-    !date ||
-    !itemSupplier ||
-    !amount ||
-    !qrCodeImage ||
-    !propertyId
-  ) {
-    alert("Please fill in all fields and generate the QR code before saving.");
-    return;
-  }
-
-  const response = await fetch("api/add_property.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      save_property: true,
-      item_name: itemName,
-      date: date,
-      item_supplier: itemSupplier,
-      amount: amount,
-      qr_code_base64: qrCodeImage,
-      property_id: propertyId,
-    }),
-  });
-
-  const result = await response.json();
-
-  if (result.success) {
-    alert("Property saved successfully! File saved at: " + result.filePath);
-    location.reload();
-  } else {
-    alert("Failed to save property.");
-  }
-}
-
 function fetchProperties() {
   fetch("api/get_properties.php")
     .then((response) => response.json())
@@ -229,7 +174,7 @@ function fetchProperties() {
                     <td>${property.amount}</td>
                     <td>
                         <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-                        <button class="delete-button" onclick="deleteProperty(${property.id})">Delete</button>
+                        <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
                     </td>
                 `;
         propertyList.appendChild(row);
@@ -244,13 +189,12 @@ function loadSuppliers() {
   fetch("api/get_suppliers.php")
     .then((response) => response.json())
     .then((data) => {
+      const supplierDropdown = document.getElementById("item_supplier");
+      supplierDropdown.innerHTML =
+        '<option value="">Select Item Supplier</option>'; // Default option
       if (data.success && Array.isArray(data.data)) {
-        const supplierDropdown = document.getElementById("item_supplier"); // Ensure this ID matches in the HTML
-        supplierDropdown.innerHTML =
-          '<option value="">Select Supplier</option>'; // Reset options
         data.data.forEach((supplier) => {
           if (supplier) {
-            // Ensure supplier is not empty
             const option = document.createElement("option");
             option.value = supplier;
             option.textContent = supplier;
@@ -292,12 +236,11 @@ function loadItemNames() {
   fetch("api/get_item_names.php")
     .then((response) => response.json())
     .then((data) => {
+      const itemDropdown = document.getElementById("item_name");
+      itemDropdown.innerHTML = '<option value="">Select Item Name</option>'; // Default option
       if (data.success && Array.isArray(data.data)) {
-        const itemDropdown = document.getElementById("item_name"); // Ensure this ID matches in the HTML
-        itemDropdown.innerHTML = '<option value="">Select Item</option>'; // Reset options
         data.data.forEach((item) => {
           if (item) {
-            // Ensure item is not empty
             const option = document.createElement("option");
             option.value = item;
             option.textContent = item;
@@ -333,4 +276,156 @@ function addNewItem() {
       })
       .catch((error) => console.error("Error adding item:", error));
   }
+}
+
+function sortProperties() {
+  const sortBy = document.getElementById("sortClassification").value;
+  const propertyList = document.getElementById("propertyList");
+  const rows = Array.from(propertyList.querySelectorAll("tr"));
+
+  rows.sort((a, b) => {
+    const getCellValue = (row, columnIndex) =>
+      row.children[columnIndex].textContent.trim().toLowerCase();
+
+    switch (sortBy) {
+      case "name":
+        return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
+      case "date":
+        return new Date(getCellValue(a, 2)) - new Date(getCellValue(b, 2));
+      case "supplier":
+        return getCellValue(a, 3).localeCompare(getCellValue(b, 3));
+      case "amount":
+        return parseFloat(getCellValue(a, 4)) - parseFloat(getCellValue(b, 4));
+      default:
+        return 0; // No sorting if no valid option is selected
+    }
+  });
+
+  // Clear the table and append sorted rows
+  propertyList.innerHTML = "";
+  rows.forEach((row) => propertyList.appendChild(row));
+}
+
+function editProperty(propertyId) {
+  fetch(`api/get_property.php?id=${propertyId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        const property = data.property;
+
+        // Prefill the input fields
+        document.getElementById("item_name").value = property.item_name;
+        document.getElementById("date").value = new Date(property.date)
+          .toISOString()
+          .split("T")[0]; // Ensure date is in YYYY-MM-DD format
+        document.getElementById("amount").value = parseFloat(
+          property.amount
+        ).toFixed(2); // Ensure amount is formatted correctly
+
+        // Ensure the amount field is not readonly or disabled
+        document.getElementById("amount").removeAttribute("readonly");
+        document.getElementById("amount").removeAttribute("disabled");
+
+        document.getElementById("propertyId").value = propertyId;
+
+        // Prefill the supplier dropdown
+        const supplierDropdown = document.getElementById("item_supplier");
+        supplierDropdown.innerHTML = `<option value="${property.item_supplier}" selected>${property.item_supplier}</option>`;
+
+        // Load all suppliers and ensure the current one is selected
+        fetch("api/get_suppliers.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success && Array.isArray(data.data)) {
+              supplierDropdown.innerHTML = ""; // Clear existing options
+              data.data.forEach((supplier) => {
+                const option = document.createElement("option");
+                option.value = supplier;
+                option.textContent = supplier;
+                if (supplier === property.item_supplier) {
+                  option.selected = true; // Mark the current supplier as selected
+                }
+                supplierDropdown.appendChild(option);
+              });
+            }
+          });
+
+        // Prefill the item dropdown
+        const itemDropdown = document.getElementById("item_name");
+        itemDropdown.innerHTML = `<option value="${property.item_name}" selected>${property.item_name}</option>`;
+
+        // Load all items and ensure the current one is selected
+        fetch("api/get_item_names.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success && Array.isArray(data.data)) {
+              itemDropdown.innerHTML = ""; // Clear existing options
+              data.data.forEach((item) => {
+                const option = document.createElement("option");
+                option.value = item;
+                option.textContent = item;
+                if (item === property.item_name) {
+                  option.selected = true; // Mark the current item as selected
+                }
+                itemDropdown.appendChild(option);
+              });
+            }
+          });
+
+        // Set the modal header to "Edit Property"
+        document.querySelector(".modal-header h2").textContent =
+          "Edit Property";
+
+        // Show the modal
+        document.getElementById("propertyModal").style.display = "block";
+      } else {
+        alert(data.message || "Failed to fetch property details.");
+      }
+    })
+    .catch((error) => console.error("Error fetching property:", error));
+}
+
+function deleteProperty(propertyId) {
+  fetch(`api/delete_property.php?id=${propertyId}`, {
+    method: "DELETE", // Use the id in the query string
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert("Property deleted successfully!");
+        loadProperties();
+        closeDeleteModal();
+      } else {
+        alert(data.message || "Failed to delete property.");
+      }
+    })
+    .catch((error) => console.error("Error deleting property:", error));
+}
+
+function searchProperties() {
+  const searchInput = document.getElementById("searchBar").value.toLowerCase();
+  const rows = document.querySelectorAll("#propertyList tr");
+
+  rows.forEach((row) => {
+    const cells = Array.from(row.children);
+    const matches = cells.some((cell) =>
+      cell.textContent.toLowerCase().includes(searchInput)
+    );
+    row.style.display = matches ? "" : "none"; // Show row if it matches, hide otherwise
+  });
+}
+
+function generateQRCode(propertyId) {
+  const qrCodeImage = document.getElementById("qrCodeImage");
+  qrCodeImage.src = `generate_qr.php?propertyId=${propertyId}`;
+  qrCodeImage.onload = () => {
+    document.getElementById("qrCodeModal").style.display = "block";
+  };
+  qrCodeImage.onerror = () => {
+    alert("Failed to load QR code. Please try again.");
+  };
+}
+
+function closeQRCodeModal() {
+  document.getElementById("qrCodeModal").style.display = "none";
 }
