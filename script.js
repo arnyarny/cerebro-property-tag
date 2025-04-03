@@ -422,6 +422,8 @@ function generateQRCode(propertyId) {
     return;
   }
 
+  const timestamp = new Date().getTime(); // Add a unique timestamp to bypass cache
+
   fetch(`api/generate_qr.php?id=${propertyId}`)
     .then((response) => {
       if (!response.ok) {
@@ -431,12 +433,12 @@ function generateQRCode(propertyId) {
     })
     .then((data) => {
       if (data.image_url) {
-        // Display the generated image
+        // Force browser to load the latest QR code by appending a timestamp
         const qrCodeContainer = document.getElementById("qrcode");
-        qrCodeContainer.innerHTML = `<img src="${data.image_url}" alt="QR Code" style="max-width: 100%; height: auto;">`;
-        
-        // Show the modal
+        qrCodeContainer.innerHTML = `<img src="${data.image_url}?t=${timestamp}" alt="QR Code" style="max-width: 100%; height: auto;">`;
+
         document.getElementById("qrCodeModal").style.display = "block";
+        alert("QR code is successfully saved in the qr_codes folder!");
       } else {
         alert("Failed to generate QR code.");
       }
@@ -446,7 +448,6 @@ function generateQRCode(propertyId) {
       alert("An error occurred while generating the QR code.");
     });
 }
-
 
 
 function closeQRCodeModal() {

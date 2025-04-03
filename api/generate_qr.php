@@ -22,7 +22,7 @@ $stmt = $conn->prepare("
     JOIN suppliers s ON p.supplier_id = s.supplier_id  
     WHERE p.id = ?
 ");
-$stmt->bind_param("i", $propertyId); // "i" indicates the parameter type is an integer
+$stmt->bind_param("i", $propertyId);
 $stmt->execute();
 $result = $stmt->get_result();
 $property = $result->fetch_assoc();
@@ -70,15 +70,41 @@ if ($qrcodeImage === false) {
     exit;
 }
 
-// Define the position for overlaying the QR code (adjust as needed)
-$qrX = 108; // X position
-$qrY = 181; // Y position
+$qrcodeWidth = imagesx($qrcodeImage);
+$qrcodeHeight = imagesy($qrcodeImage);
+
+// Center it dynamically instead of using fixed coordinates
+$qrX = (imagesx($templateImage) - $qrcodeWidth) / 2; // Center horizontally
+$qrY = (imagesy($templateImage) - $qrcodeHeight) / 1.5; // Center vertically
 
 // Overlay the QR code onto the template image
 imagecopy($templateImage, $qrcodeImage, $qrX, $qrY, 0, 0, imagesx($qrcodeImage), imagesy($qrcodeImage));
 
-// Save the combined image to a file
-$outputImagePath = __DIR__ . '/../qr_codes/property_' . $propertyId . '.png'; // Path to save the output image
+// Add text (Property ID) at the bottom of the QR code
+$fontPath = __DIR__ . '/../fonts/Vera.ttf'; // Ensure this font file exists
+$fontSize = 20;
+$textColor = imagecolorallocate($templateImage, 0, 0, 0); // Black text
+$text = "ID: " . $propertyId;
+
+// Get text bounding box
+$bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
+$textWidth = $bbox[2] - $bbox[0];
+$textHeight = $bbox[1] - $bbox[7];
+
+$textX = (imagesx($templateImage) - $textWidth) / 2; // Center horizontally
+$textY = $qrY + $qrcodeHeight + $textHeight + 55; // Position below QR code
+
+imagettftext($templateImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $text);
+
+// Generate the output file path
+$outputImagePath = __DIR__ . '/../qr_codes/property_' . $propertyId . '.png';
+
+// Delete the old QR code if it exists
+if (file_exists($outputImagePath)) {
+    unlink($outputImagePath); // This will remove the previous QR code
+}
+
+// Save the new QR code image
 imagepng($templateImage, $outputImagePath);
 
 // Free memory
@@ -87,7 +113,7 @@ imagedestroy($qrcodeImage);
 
 // Return the path of the combined image in JSON
 header('Content-Type: application/json');
-echo json_encode(['image_url' => 'qr_codes/property_' . $propertyId . '.png']); 
+echo json_encode(['image_url' => 'qr_codes/property_' . $propertyId . '.png']);
 
 // Close the database connection
 $conn->close();
