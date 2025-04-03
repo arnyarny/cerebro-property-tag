@@ -7,7 +7,7 @@ body {
 }
 
 button {
-    background-color: #007bff;
+    background-color: #0671B7;
     color: white;
     border: none;
     padding: 12px 20px; /* Modern button padding */
@@ -18,7 +18,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0671B7;
     transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
@@ -51,7 +51,7 @@ button:hover {
 }
 
 .modal-header {
-    background-color: #007bff;
+    background-color: #0671B7;
     color: white;
     padding: 20px; /* Increased padding for balance */
     display: flex;
@@ -93,7 +93,7 @@ button:hover {
 }
 
 .modal-body input:focus {
-    border-color: #007bff; /* Highlight border on focus */
+    border-color: #0671B7; /* Highlight border on focus */
     outline: none;
 }
 
@@ -111,7 +111,7 @@ button:hover {
 }
 
 .modal-body select:focus {
-    border-color: #007bff; /* Highlight border on focus */
+    border-color: #0671B7; /* Highlight border on focus */
     outline: none;
 }
 
@@ -149,7 +149,7 @@ button:hover {
 }
 
 .close-button:hover {
-    color: #ffcccc; /* Subtle hover effect */
+    color: #a7a7a7; /* Subtle hover effect */
 }
 
 table {
@@ -172,7 +172,7 @@ th, td {
 }
 
 th {
-    background-color: #007bff;
+    background-color: #0671B7;
     color: white;
     font-weight: bold;
 }
@@ -237,7 +237,7 @@ div {
 
 /* Edit button */
 .edit-button {
-    background-color: #007bff;
+    background-color: #0671B7;
     color: white;
     border: none;
     padding: 8px 15px; /* Adjust padding for smaller buttons */
@@ -247,13 +247,13 @@ div {
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: #0965a2;
     transform: scale(1.05); /* Add hover zoom effect */
 }
 
 /* Delete button */
 .delete-button {
-    background-color: #dc3545;
+    background-color: #F03A25;
     color: white;
     border: none;
     padding: 8px 15px; /* Adjust padding for smaller buttons */
@@ -318,7 +318,7 @@ div {
 }
 
 .add-item-button:hover {
-    background-color: #138496;
+    background-color: #0671B7;
     transform: scale(1.05); /* Slight zoom effect */
 }
 
@@ -380,7 +380,7 @@ div {
 }
 
 .qr-button:hover {
-    background-color: #138496; /* Darker shade on hover */
+    background-color: #0671B7; /* Darker shade on hover */
     transform: scale(1.05); /* Same hover effect as Edit button */
 }
 
