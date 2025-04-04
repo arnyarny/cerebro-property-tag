@@ -45,7 +45,7 @@ $data = json_encode([
 $options = new QROptions([
     'eccLevel' => QRCode::ECC_L,
     'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-    'imageBase64' => false, // Do not return base64, we will output directly to a file
+    'imageBase64' => false, // Do not return base64, we will output directly to the browser
 ]);
 
 $qrcode = new QRCode($options);
@@ -96,24 +96,28 @@ $textY = $qrY + $qrcodeHeight + $textHeight + 55; // Position below QR code
 
 imagettftext($templateImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $text);
 
-// Generate the output file path
-$outputImagePath = __DIR__ . '/../qr_codes/property_' . $propertyId . '.png';
+// Draw a rectangle outline around the final image
+$outlineColor = imagecolorallocate($templateImage, 0, 0, 0); // Color for the outline (black)
+$strokeWidth = 1; // Stroke width in pixels
 
-// Delete the old QR code if it exists
-if (file_exists($outputImagePath)) {
-    unlink($outputImagePath); // This will remove the previous QR code
-}
+// Draw the rectangle
+imagerectangle($templateImage, 
+    $strokeWidth / 2, // X1
+    $strokeWidth / 2, // Y1
+    imagesx($templateImage) - ($strokeWidth / 2), // X2
+    imagesy($templateImage) - ($strokeWidth / 2), // Y2
+    $outlineColor // Outline color
+);
 
-// Save the new QR code image
-imagepng($templateImage, $outputImagePath);
+// Set the content type header to output the image directly
+header('Content-Type: image/png');
+
+// Output the combined image directly to the browser
+imagepng($templateImage);
 
 // Free memory
 imagedestroy($templateImage);
 imagedestroy($qrcodeImage);
-
-// Return the path of the combined image in JSON
-header('Content-Type: application/json');
-echo json_encode(['image_url' => 'qr_codes/property_' . $propertyId . '.png']);
 
 // Close the database connection
 $conn->close();

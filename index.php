@@ -11,6 +11,7 @@
     </header>
 
     <div class="controls">
+    <div class="controls-left">
         <div class="sort-search">
             <select id="sortClassification" onchange="sortProperties()">
                 <option value="">Sort by Classification</option>
@@ -21,12 +22,19 @@
             </select>
             <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()">
         </div>
-        <button class="new-button" onclick="showModal()">New</button>
     </div>
+    <div class="controls-right">
+        <button class="new-button" onclick="showModal()">New</button>
+        <button class="generate-qr-button" onclick="generateBulkQRCodes(propertyId)">Generate QR Codes Selected</button>
+    </div>
+    </div>
+
+    <div class="select-all"><input type="checkbox" id="selectAllPage" onclick="toggleSelectAll(this)"> Select All in this Page</div>
 
     <table>
         <thead>
             <tr>
+                <th>Select</th>
                 <th>ID</th>
                 <th>Item Name</th>
                 <th>Date</th>
@@ -39,18 +47,17 @@
     </table>
 
     <div id="qrCodeModal" class="modal" style="display: none;">
-    <div class="modal-header">
-        <h2>QR Code</h2>
-        <button class="close-button" onclick="closeQRCodeModal()">X</button>
+        <div class="modal-header">
+            <h2>QR Code</h2>
+            <button class="close-button" onclick="closeQRCodeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <div id="qrcode"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeQRCodeModal()">Close</button>
+        </div>
     </div>
-    <div class="modal-body">
-        <div id="qrcode"></div>
-    </div>
-    <div class="modal-footer">
-        <button onclick="closeQRCodeModal()">Close</button>
-    </div>
-</div>
-
 
     <div>
         <span id="totalItems">Total Items: 0</span>
@@ -82,7 +89,7 @@
                 </select>
                 <button type="button" class="add-item-button" onclick="addNewItem()">Add New Item</button>
 
-                <label for="date">Date:</label>
+                <label for="date">Date Purchased:</label>
                 <input type="date" id="date" name="date" required>
 
                 <label for="item_supplier">Item Supplier:</label>
@@ -113,6 +120,9 @@
             <button id="confirmDeleteButton" class="delete-button">Delete</button>
         </div>
     </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
 
     <script src="script.js"></script>
 </body>

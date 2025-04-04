@@ -57,26 +57,36 @@ function handleFormSubmit(event) {
       try {
         const data = JSON.parse(text); // Parse JSON manually
         if (data.success) {
-          alert(
+          showToast(
             propertyId
               ? "Property updated successfully!"
               : "Property added successfully!"
-          ); // Show appropriate message
+          );
           form.reset();
           loadProperties();
           closeModal(); // Close the modal after success
         } else {
-          alert(data.message || "Failed to add/update property.");
+          showToast(
+            data.message || "Failed to add/update property.",
+            3000,
+            true
+          );
         }
       } catch (error) {
         console.error("Invalid JSON:", text); // Log invalid JSON for debugging
-        alert("An error occurred while processing the response.");
+        showToast(
+          "An error occurred while processing the response.",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert(
-        "An error occurred while processing the request. Check the console for details."
+      showToast(
+        "An error occurred while processing the request. Check the console for details.",
+        3000,
+        true
       );
     });
 }
@@ -96,17 +106,17 @@ function loadProperties() {
 
         const row = document.createElement("tr");
         row.innerHTML = `
-                    <td>${property.id}</td>
-                    <td>${property.item_name}</td>
-                    <td>${property.date}</td>
-                    <td>${property.item_supplier}</td>
-                    <td>${property.amount}</td>
-                    <td>
-                        <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-                        <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
-                        <button class="qr-button" onclick="generateQRCode(${property.id})">Generate QR Code</button>
-                    </td>
-                `;
+          <td><input type="checkbox" class="property-checkbox" value="${property.id}" onchange="updateSelectAllCheckboxState()"></td>
+          <td>${property.id}</td>
+          <td>${property.item_name}</td>
+          <td>${property.date}</td>
+          <td>${property.item_supplier}</td>
+          <td>${property.amount}</td>
+          <td>
+              <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
+              <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+          </td>
+        `;
         propertyList.appendChild(row);
       });
 
@@ -127,11 +137,21 @@ function changePage(direction) {
   const totalItems = document.querySelectorAll("#propertyList tr").length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  currentPage += direction;
+  // Calculate the new current page
+  const newPage = currentPage + direction;
 
+  // Only update currentPage if newPage is within bounds
+  if (newPage >= 1 && newPage <= totalPages) {
+    currentPage = newPage;
+  }
+
+  // Disable the previous button if on the first page
   document.getElementById("prevPage").disabled = currentPage === 1;
+
+  // Disable the next button if on the last page
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 
+  // Update the pagination display
   updatePagination();
 }
 
@@ -151,8 +171,25 @@ function updatePagination() {
 }
 
 function updateItemsPerPage() {
+  // Get the new items per page value
   itemsPerPage = parseInt(document.getElementById("itemsPerPage").value, 10);
+
+  // Calculate the total number of items
+  const totalItems = document.querySelectorAll("#propertyList tr").length;
+
+  // Calculate the new total pages based on the updated items per page
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Reset to first page if the new items per page is set
   currentPage = 1;
+
+  // Disable the previous button if on the first page
+  document.getElementById("prevPage").disabled = currentPage === 1;
+
+  // Disable the next button if there are no more pages
+  document.getElementById("nextPage").disabled = currentPage === totalPages;
+
+  // Update the pagination display
   updatePagination();
 }
 
@@ -222,13 +259,36 @@ function addNewSupplier() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert("Supplier added successfully!");
-          loadSuppliers(); // Reload the supplier list
+          showToast("Supplier added successfully!");
+
+          // Get the supplier dropdown
+          const supplierDropdown = document.getElementById("item_supplier");
+
+          // Create a new option for the added supplier
+          const option = document.createElement("option");
+          option.value = newSupplier; // Set the value
+          option.textContent = newSupplier; // Set the displayed text
+
+          // Append the new option to the dropdown
+          supplierDropdown.appendChild(option);
+
+          // Optionally, reset the dropdown to select the newly added supplier
+          supplierDropdown.value = newSupplier;
+
+          // Load suppliers to ensure consistency
+          // loadSuppliers(); // Uncomment if you want to refresh the entire list
         } else {
-          alert(data.message || "Failed to add supplier.");
+          showToast(data.message || "Failed to add supplier.", 3000, true);
         }
       })
-      .catch((error) => console.error("Error adding supplier:", error));
+      .catch((error) => {
+        console.error("Error adding supplier:", error);
+        showToast(
+          "An error occurred while processing the request.",
+          3000,
+          true
+        );
+      });
   }
 }
 
@@ -268,13 +328,36 @@ function addNewItem() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert("Item added successfully!");
-          loadItemNames(); // Reload the item list
+          showToast("Item added successfully!");
+
+          // Get the item dropdown
+          const itemDropdown = document.getElementById("item_name");
+
+          // Create a new option for the added item
+          const option = document.createElement("option");
+          option.value = newItem; // Set the value
+          option.textContent = newItem; // Set the displayed text
+
+          // Append the new option to the dropdown
+          itemDropdown.appendChild(option);
+
+          // Optionally, reset the dropdown to select the newly added item
+          itemDropdown.value = newItem;
+
+          // Load item names to ensure consistency
+          // loadItemNames(); // Uncomment if you want to refresh the entire list
         } else {
-          alert(data.message || "Failed to add item.");
+          showToast(data.message || "Failed to add item.", 3000, true);
         }
       })
-      .catch((error) => console.error("Error adding item:", error));
+      .catch((error) => {
+        console.error("Error adding item:", error);
+        showToast(
+          "An error occurred while processing the request.",
+          3000,
+          true
+        );
+      });
   }
 }
 
@@ -379,7 +462,11 @@ function editProperty(propertyId) {
         // Show the modal
         document.getElementById("propertyModal").style.display = "block";
       } else {
-        alert(data.message || "Failed to fetch property details.");
+        showToast(
+          data.message || "Failed to fetch property details.",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => console.error("Error fetching property:", error));
@@ -392,11 +479,11 @@ function deleteProperty(propertyId) {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        alert("Property deleted successfully!");
+        showToast("Property deleted successfully!");
         loadProperties();
         closeDeleteModal();
       } else {
-        alert(data.message || "Failed to delete property.");
+        showToast(data.message || "Failed to delete property.", 3000, true);
       }
     })
     .catch((error) => console.error("Error deleting property:", error));
@@ -415,41 +502,48 @@ function searchProperties() {
   });
 }
 
-function generateQRCode(propertyId) {
-  if (!propertyId) {
-    console.error("Invalid Property ID.");
-    alert("Invalid Property ID.");
+function closeQRCodeModal() {
+  document.getElementById("qrCodeModal").style.display = "none";
+}
+
+function showToast(message, duration = 3000) {
+  const toastContainer = document.getElementById("toastContainer");
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("hide");
+    setTimeout(() => toast.remove(), 500);
+  }, duration);
+}
+
+function generateBulkQRCodes() {
+  const checkboxes = document.querySelectorAll(".property-checkbox:checked");
+  const selectedIds = Array.from(checkboxes).map((checkbox) => checkbox.value);
+
+  if (selectedIds.length === 0) {
+    alert("No properties selected.");
     return;
   }
 
-  const timestamp = new Date().getTime(); // Add a unique timestamp to bypass cache
-
-  fetch(`api/generate_qr.php?id=${propertyId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json(); // Parse JSON response
-    })
-    .then((data) => {
-      if (data.image_url) {
-        // Force browser to load the latest QR code by appending a timestamp
-        const qrCodeContainer = document.getElementById("qrcode");
-        qrCodeContainer.innerHTML = `<img src="${data.image_url}?t=${timestamp}" alt="QR Code" style="max-width: 100%; height: auto;">`;
-
-        document.getElementById("qrCodeModal").style.display = "block";
-        alert("QR code is successfully saved in the qr_codes folder!");
-      } else {
-        alert("Failed to generate QR code.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error generating QR code:", error);
-      alert("An error occurred while generating the QR code.");
-    });
+  // Open a new page or perform an action with the selected IDs
+  window.open(`bulk_print_qr.html?ids=${selectedIds.join(",")}`, "_blank");
 }
 
+function toggleSelectAll(selectAllCheckbox) {
+  // Get all checkboxes within the property list
+  const checkboxes = document.querySelectorAll(
+    "#propertyList input[type='checkbox']"
+  );
 
-function closeQRCodeModal() {
-  document.getElementById("qrCodeModal").style.display = "none";
+  // Iterate over checkboxes and set their checked state based on the "Select All" checkbox
+  checkboxes.forEach((checkbox) => {
+    // Check if the checkbox is visible (not hidden)
+    if (checkbox.closest("tr").style.display !== "none") {
+      checkbox.checked = selectAllCheckbox.checked; // Set the checked state to match the "Select All" checkbox
+    }
+  });
 }

@@ -206,12 +206,17 @@ div {
     float: right;
 }
 
-/* Align controls */
 .controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space between left and right controls */
+    align-items: center; /* Align items vertically in the center */
+    margin-bottom: 20px; /* Space below the controls */
+}
+
+.controls-left,
+.controls-right {
+    display: flex; /* Use flexbox for left and right controls */
+    align-items: center; /* Align items vertically in the center */
 }
 
 .sort-search {
@@ -225,7 +230,7 @@ div {
     color: white;
     border: none;
     padding: 12px 20px; /* Modern padding for consistency */
-    border-radius: 5px;
+    border-radius:8px;
     cursor: pointer;
     font-size: 16px; /* Larger font size for better visibility */
 }
@@ -318,12 +323,12 @@ div {
 }
 
 .add-item-button:hover {
-    background-color: #0671B7;
+    background-color: #138496;
     transform: scale(1.05); /* Slight zoom effect */
 }
 
-.generate-qr-button, .save-qr-button {
-    background-color: #17a2b8;
+.generate-qr-button {
+    background-color: #0671B7;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -332,10 +337,11 @@ div {
     font-size: 14px;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 20px;
 }
 
 .generate-qr-button:hover {
-    background-color: #138496;
+    background-color: #0965a2;
     transform: scale(1.05);
 }
 
@@ -390,7 +396,7 @@ div {
     color: white;
     border: none;
     padding: 8px 15px; /* Same padding as Edit button */
-    border-radius: 5px; /* Same border radius as Edit button */
+    border-radius: 8px; /* Same border radius as Edit button */
     cursor: pointer;
     font-size: 14px; /* Same font size as Edit button */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Same transition as Edit button */
@@ -412,3 +418,53 @@ div {
     max-width: 100%;
     height: auto;
 }
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.toast {
+    background-color: #fff; /* White background for the toast */
+    color: #333; /* Dark text color for better readability */
+    padding: 15px 20px; /* Padding for the toast */
+    margin-bottom: 10px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    opacity: 0.9;
+    transition: opacity 0.5s ease-in-out;
+    font-size: 16px; /* Increased font size */
+    font-family: 'Arial', sans-serif; /* Clean font */
+    position: relative; /* Position relative for the accent bar */
+}
+
+.toast::before {
+    content: ''; /* Empty content for the accent bar */
+    position: absolute; /* Absolute positioning */
+    left: 0; /* Align to the left */
+    top: 0; /* Align to the top */
+    bottom: 0; /* Stretch to the bottom */
+    width: 8px; /* Width of the accent bar */
+    background-color: #28a745; /* Accent color for the bar */
+    border-top-left-radius: 8px; /* Rounded top left corner */
+    border-bottom-left-radius: 8px; /* Rounded bottom left corner */
+}
+
+.toast.error::before {
+    background-color: #F03A25; /* Accent color for error messages */
+}
+
+.toast.hide {
+    opacity: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+
+
