@@ -18,7 +18,7 @@
     <div class="controls-left">
         <div class="sort-search">
         <select id="sortBy" onchange="sortProperties()">
-  <option value="">Sort By</option>
+  <option value="default">Sort By</option>
   <option value="name_asc">Name (A-Z)</option>
   <option value="name_desc">Name (Z-A)</option>
   <option value="date_newest">Date Purchased (Newest)</option>

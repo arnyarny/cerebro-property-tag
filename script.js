@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("addPropertyForm")
     .addEventListener("submit", handleFormSubmit);
 
-  document.getElementById("sortBy").value = "name_asc"; // Default sorting by name ascending
+  document.getElementById("sortBy").value = "default"; // Default sorting by name ascending
   sortProperties(); // Apply the default sorting
 });
 
