@@ -4,6 +4,10 @@
     <title>Property Management</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="assets/logoshape.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 </head>
 <body>
     <header class="header">
@@ -13,13 +17,16 @@
     <div class="controls">
     <div class="controls-left">
         <div class="sort-search">
-            <select id="sortClassification" onchange="sortProperties()">
-                <option value="">Sort by Classification</option>
-                <option value="name">Name</option>
-                <option value="date">Date</option>
-                <option value="supplier">Supplier</option>
-                <option value="amount">Amount</option>
-            </select>
+        <select id="sortBy" onchange="sortProperties()">
+  <option value="">Sort By</option>
+  <option value="name_asc">Name (A-Z)</option>
+  <option value="name_desc">Name (Z-A)</option>
+  <option value="date_newest">Date Purchased (Newest)</option>
+  <option value="date_oldest">Date Purchased (Oldest)</option>
+  <option value="amount_low_high">Amount (Low to High)</option>
+  <option value="amount_high_low">Amount (High to Low)</option>
+</select>
+
             <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()">
         </div>
     </div>
@@ -38,7 +45,7 @@
                 <th>Select</th>
                 <th>ID</th>
                 <th>Item Name</th>
-                <th>Date</th>
+                <th>Date Purchased</th>
                 <th>Supplier</th>
                 <th>Amount</th>
                 <th>Actions</th>

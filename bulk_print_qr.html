@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print Multiple QR Codes</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add any additional styles for printing if needed */
+        @media print {
+            /* Additional print styles can go here */
+        }
+    </style>
 </head>
 <body>
     <div id="qrCodeContainer"></div>
@@ -20,18 +26,38 @@
             }
 
             const propertyIds = ids.split(',');
+            const totalImages = propertyIds.length;
+            let loadedImages = 0;
 
             propertyIds.forEach(id => {
                 const img = document.createElement('img');
                 img.src = `api/generate_qr.php?id=${id}`;
                 img.alt = `QR Code for Property ID: ${id}`;
-                img.style.width = '250px'; // Adjust size as needed
+                img.style.width = '200px'; // Adjust size as needed
                 img.style.margin = '10px';
+
+                // Add load event listener to count loaded images
+                img.onload = function() {
+                    loadedImages++;
+                    // Check if all images are loaded
+                    if (loadedImages === totalImages) {
+                        window.print(); // Open the print dialog after all images are loaded
+                    }
+                };
+
+                img.onerror = function() {
+                    console.error(`Error loading QR code for ID: ${id}`);
+                    loadedImages++; // Count failed loads to avoid blocking
+                    if (loadedImages === totalImages) {
+                        window.print(); // Open print dialog even if some images fail to load
+                    }
+                };
+
                 document.getElementById('qrCodeContainer').appendChild(img);
             });
         }
 
-        window.onload = loadBulkQRCodes;
+        window.onload = loadBulkQRCodes; // Load QR codes on window load
     </script>
 </body>
 </html>

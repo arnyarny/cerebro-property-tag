@@ -189,7 +189,7 @@ div {
     margin: 20px 0;
 }
 
-#sortClassification, #searchBar {
+#sortBy, #searchBar {
     padding: 10px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -463,6 +463,140 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+/* Responsive styles for iPhone 14 Pro Max and similar screens */
+@media only screen and (max-width: 430px) {
+
+    body {
+        margin: 10px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #sortBy, #searchBar, 
+    .new-button, .generate-qr-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table, tbody, tr, td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
+    }
+
+    .modal {
+        width: 95%;
+        max-width: 95%;
+        padding: 10px;
+    }
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #totalItems, #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+  
+    thead {
+      display: none;
+    }
+  
+    tr {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      background: white;
+    }
+  
+    td {
+      position: relative;
+      padding-left: 50%;
+      text-align: left;
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+  
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .edit-button,
+    .delete-button {
+      display: inline-block;
+      margin-top: 10px;
+    }
+  }
+  
+
 
 
 

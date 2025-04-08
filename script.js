@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("addPropertyForm")
     .addEventListener("submit", handleFormSubmit);
+
+  document.getElementById("sortBy").value = "name_asc"; // Default sorting by name ascending
+  sortProperties(); // Apply the default sorting
 });
 
 function showModal() {
@@ -115,13 +118,13 @@ function loadProperties() {
 
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td><input type="checkbox" class="property-checkbox" value="${property.id}" onchange="updateSelectAllCheckboxState()"></td>
-          <td>${property.id}</td>
-          <td>${property.item_name}</td>
-          <td>${property.date}</td>
-          <td>${property.item_supplier}</td>
-          <td>${property.amount}</td>
-          <td>
+          <td data-label="Select"><input type="checkbox" class="property-checkbox" value="${property.id}" onchange="updateSelectAllCheckboxState()"></td>
+          <td data-label="ID">${property.id}</td>
+          <td data-label="Item Name">${property.item_name}</td>
+          <td data-label="Date Purchased">${property.date}</td>
+          <td data-label="Supplier">${property.item_supplier}</td>
+          <td data-label="Amount">${property.amount}</td>
+          <td data-label="Actions">
               <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
               <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
           </td>
@@ -161,11 +164,13 @@ function changePage(direction) {
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 
   // Uncheck all checkboxes and the select all checkbox
-  const checkboxes = document.querySelectorAll("#propertyList input.property-checkbox");
-  checkboxes.forEach(checkbox => {
+  const checkboxes = document.querySelectorAll(
+    "#propertyList input.property-checkbox"
+  );
+  checkboxes.forEach((checkbox) => {
     checkbox.checked = false; // Uncheck individual checkboxes
   });
-  
+
   const selectAllCheckbox = document.getElementById("selectAllCheckbox");
   if (selectAllCheckbox) {
     selectAllCheckbox.checked = false; // Uncheck the "Select All" checkbox
@@ -178,8 +183,6 @@ function changePage(direction) {
   // Update the "Select All" checkbox state after changing pages
   updateSelectAllCheckboxState();
 }
-
-
 
 function updatePagination() {
   const rows = document.querySelectorAll("#propertyList tr");
@@ -215,6 +218,15 @@ function updateItemsPerPage() {
   // Disable the next button if there are no more pages
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 
+  // Uncheck the 'Select All' checkbox
+  document.getElementById("selectAllCheckbox").checked = false;
+
+  // Uncheck all individual checkboxes in the current page
+  const checkboxes = document.querySelectorAll(
+    '#propertyList input[type="checkbox"]'
+  );
+  checkboxes.forEach((checkbox) => (checkbox.checked = false));
+
   // Update the pagination display
   updatePagination();
 }
@@ -230,16 +242,16 @@ function fetchProperties() {
       data.forEach((property) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-                    <td>${property.id}</td>
-                    <td>${property.item_name}</td>
-                    <td>${property.date}</td>
-                    <td>${property.item_supplier}</td>
-                    <td>${property.amount}</td>
-                    <td>
-                        <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-                        <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
-                    </td>
-                `;
+            <td data-label="ID">${property.id}</td>
+            <td data-label="Item Name">${property.item_name}</td>
+            <td data-label="Date">${property.date}</td>
+            <td data-label="Supplier">${property.item_supplier}</td>
+            <td data-label="Amount">${property.amount}</td>
+            <td data-label="Actions">
+                <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
+                <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+            </td>
+        `;
         propertyList.appendChild(row);
       });
     })
@@ -388,23 +400,30 @@ function addNewItem() {
 }
 
 function sortProperties() {
-  const sortBy = document.getElementById("sortClassification").value;
+  const sortBy = document.getElementById("sortBy").value; // Change to get the new sortBy value
   const propertyList = document.getElementById("propertyList");
+
+  // Convert rows to an array for sorting
   const rows = Array.from(propertyList.querySelectorAll("tr"));
 
+  // Sort the rows based on the selected criteria
   rows.sort((a, b) => {
     const getCellValue = (row, columnIndex) =>
       row.children[columnIndex].textContent.trim().toLowerCase();
 
     switch (sortBy) {
-      case "name":
-        return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
-      case "date":
-        return new Date(getCellValue(a, 2)) - new Date(getCellValue(b, 2));
-      case "supplier":
-        return getCellValue(a, 3).localeCompare(getCellValue(b, 3));
-      case "amount":
-        return parseFloat(getCellValue(a, 4)) - parseFloat(getCellValue(b, 4));
+      case "name_asc":
+        return getCellValue(a, 2).localeCompare(getCellValue(b, 2)); // Item Name
+      case "name_desc":
+        return getCellValue(b, 2).localeCompare(getCellValue(a, 2)); // Item Name
+      case "date_newest":
+        return new Date(getCellValue(b, 3)) - new Date(getCellValue(a, 3)); // Date
+      case "date_oldest":
+        return new Date(getCellValue(a, 3)) - new Date(getCellValue(b, 3)); // Date
+      case "amount_low_high":
+        return parseFloat(getCellValue(a, 5)) - parseFloat(getCellValue(b, 5)); // Amount
+      case "amount_high_low":
+        return parseFloat(getCellValue(b, 5)) - parseFloat(getCellValue(a, 5)); // Amount
       default:
         return 0; // No sorting if no valid option is selected
     }
@@ -575,7 +594,9 @@ function toggleSelectAll(selectAllCheckbox) {
 }
 
 function updateSelectAllCheckboxState() {
-  const checkboxes = document.querySelectorAll("#propertyList input.property-checkbox");
+  const checkboxes = document.querySelectorAll(
+    "#propertyList input.property-checkbox"
+  );
   const selectAllCheckbox = document.getElementById("selectAllCheckbox");
 
   // Only consider visible checkboxes (e.g., after pagination or search)
@@ -584,13 +605,15 @@ function updateSelectAllCheckboxState() {
     return row && row.style.display !== "none"; // Only visible rows
   });
 
-  const checkedCount = visibleCheckboxes.filter((checkbox) => checkbox.checked).length;
+  const checkedCount = visibleCheckboxes.filter(
+    (checkbox) => checkbox.checked
+  ).length;
   const totalVisible = visibleCheckboxes.length;
 
   if (selectAllCheckbox) {
-    selectAllCheckbox.checked = checkedCount === totalVisible && totalVisible > 0; // Check if all are checked
-    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalVisible; // Indeterminate if some are checked
+    selectAllCheckbox.checked =
+      checkedCount === totalVisible && totalVisible > 0; // Check if all are checked
+    selectAllCheckbox.indeterminate =
+      checkedCount > 0 && checkedCount < totalVisible; // Indeterminate if some are checked
   }
 }
-
-

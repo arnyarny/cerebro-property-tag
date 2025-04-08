@@ -84,7 +84,8 @@ imagecopy($templateImage, $qrcodeImage, $qrX, $qrY, 0, 0, imagesx($qrcodeImage),
 $fontPath = __DIR__ . '/../fonts/Vera.ttf'; // Ensure this font file exists
 $fontSize = 20;
 $textColor = imagecolorallocate($templateImage, 0, 0, 0); // Black text
-$text = "ID: " . $propertyId;
+$text = date("m/d/Y", strtotime($property['date']));
+
 
 // Get text bounding box
 $bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
