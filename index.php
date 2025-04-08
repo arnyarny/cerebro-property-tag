@@ -3,7 +3,7 @@
 <head>
     <title>Property Management</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" href="assets/logoshape.png">
 </head>
 <body>
     <header class="header">
@@ -29,7 +29,8 @@
     </div>
     </div>
 
-    <div class="select-all"><input type="checkbox" id="selectAllPage" onclick="toggleSelectAll(this)"> Select All in this Page</div>
+    <div class="select-all"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+    Select All in this Page</div>
 
     <table>
         <thead>

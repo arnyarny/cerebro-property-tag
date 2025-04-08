@@ -9,12 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function showModal() {
   const form = document.getElementById("addPropertyForm");
-  form.reset(); // Reset the form fields
-  document.getElementById("propertyId").value = ""; // Clear the propertyId field
-  document.getElementById("amount").removeAttribute("readonly"); // Ensure the amount field is editable
-  document.getElementById("amount").removeAttribute("disabled"); // Ensure the amount field is not disabled
-  document.querySelector(".modal-header h2").textContent = "Add Property"; // Set header to "Add Property"
+  form.reset();
+  document.getElementById("propertyId").value = "";
+  document.getElementById("amount").removeAttribute("readonly");
+  document.getElementById("amount").removeAttribute("disabled");
+  document.querySelector(".modal-header h2").textContent = "Add Property";
   document.getElementById("propertyModal").style.display = "block";
+
+  // Reset dropdowns
+  const supplierDropdown = document.getElementById("item_supplier");
+  supplierDropdown.innerHTML = '<option value="">Select Item Supplier</option>';
+  loadSuppliers(); // repopulate suppliers fresh
+
+  const itemDropdown = document.getElementById("item_name");
+  itemDropdown.innerHTML = '<option value="">Select Item Name</option>';
+  loadItemNames(); // repopulate items fresh
 }
 
 function closeModal() {
@@ -151,9 +160,26 @@ function changePage(direction) {
   // Disable the next button if on the last page
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 
+  // Uncheck all checkboxes and the select all checkbox
+  const checkboxes = document.querySelectorAll("#propertyList input.property-checkbox");
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false; // Uncheck individual checkboxes
+  });
+  
+  const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+  if (selectAllCheckbox) {
+    selectAllCheckbox.checked = false; // Uncheck the "Select All" checkbox
+    selectAllCheckbox.indeterminate = false; // Remove indeterminate state
+  }
+
   // Update the pagination display
   updatePagination();
+
+  // Update the "Select All" checkbox state after changing pages
+  updateSelectAllCheckboxState();
 }
+
+
 
 function updatePagination() {
   const rows = document.querySelectorAll("#propertyList tr");
@@ -525,7 +551,7 @@ function generateBulkQRCodes() {
   const selectedIds = Array.from(checkboxes).map((checkbox) => checkbox.value);
 
   if (selectedIds.length === 0) {
-    alert("No properties selected.");
+    showToast("No properties selected.");
     return;
   }
 
@@ -547,3 +573,24 @@ function toggleSelectAll(selectAllCheckbox) {
     }
   });
 }
+
+function updateSelectAllCheckboxState() {
+  const checkboxes = document.querySelectorAll("#propertyList input.property-checkbox");
+  const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+
+  // Only consider visible checkboxes (e.g., after pagination or search)
+  const visibleCheckboxes = Array.from(checkboxes).filter((checkbox) => {
+    const row = checkbox.closest("tr");
+    return row && row.style.display !== "none"; // Only visible rows
+  });
+
+  const checkedCount = visibleCheckboxes.filter((checkbox) => checkbox.checked).length;
+  const totalVisible = visibleCheckboxes.length;
+
+  if (selectAllCheckbox) {
+    selectAllCheckbox.checked = checkedCount === totalVisible && totalVisible > 0; // Check if all are checked
+    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalVisible; // Indeterminate if some are checked
+  }
+}
+
+
