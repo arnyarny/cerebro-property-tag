@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate QR Code</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="qrCodeContainer"></div>
+
+    <script>
+        function loadQRCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                alert("No property ID provided.");
+                return;
+            }
+
+            const img = document.createElement('img');
+            img.src = `api/generate_qr.php?id=${id}`;
+            img.alt = `QR Code for Property ID: ${id}`;
+            img.style.width = '200px'; // Adjust size as needed
+            img.style.margin = '10px';
+            
+            document.getElementById('qrCodeContainer').appendChild(img);
+
+            // Open the print dialog after the image loads
+            img.onload = function() {
+                window.print(); // Open print dialog
+            };
+        }
+
+        window.onload = loadQRCode; // Load the QR code on window load
+    </script>
+</body>
+</html>

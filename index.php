@@ -61,13 +61,11 @@
         </div>
         <div class="modal-body">
             <div id="qrcode"></div>
-        </div>
-        <div class="modal-footer">
             <button onclick="closeQRCodeModal()">Close</button>
         </div>
     </div>
 
-    <div>
+    <div class="summary">
         <span id="totalItems">Total Items: 0</span>
         <span id="totalAmount" class="float-right">Total Amount: 0</span>
     </div>
@@ -110,9 +108,9 @@
                 <input type="number" id="amount" name="amount" step="0.01" required>
                 <input type="hidden" id="propertyId" name="propertyId">
             </form>
-        </div>
-        <div class="modal-footer">
+            <div class="modal-footer">
             <button type="submit" form="addPropertyForm" class="save-button">Save to Database</button>
+        </div>
         </div>
     </div>
 

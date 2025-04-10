@@ -49,7 +49,8 @@ $date = $_POST['date'] ?? null;
 $supplier_name = $_POST['item_supplier'] ?? null;
 $amount = $_POST['amount'] ?? null;
 
-if (!$item_name || !$date || !$supplier_name || !$amount) {
+if (!$item_name || !$date || !$supplier_name || !isset($_POST['amount'])) {
+
     echo json_encode(["success" => false, "message" => "All fields are required."]);
     exit;
 }

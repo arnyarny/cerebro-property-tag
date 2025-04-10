@@ -25,10 +25,10 @@ button:hover {
 .modal {
     display: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 47.5%;
+    left: 48.5%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); /* Modern shadow */
     border-radius: 12px; /* Rounded corners */
     z-index: 1000;
@@ -53,7 +53,7 @@ button:hover {
 .modal-header {
     background-color: #0671B7;
     color: white;
-    padding: 20px; /* Increased padding for balance */
+    padding: 10px; /* Increased padding for balance */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,13 +67,14 @@ button:hover {
 }
 
 .modal-body {
-    padding: 25px; /* Increased padding for better spacing */
+    padding: 10px; /* Increased padding for better spacing */
     background-color: #f9f9f9; /* Light background for contrast */
+    margin-bottom: 5px;
 }
 
 .modal-body label {
     display: block;
-    margin-bottom: 8px; /* Increased spacing for readability */
+    margin: 8px 0; /* Increased spacing for readability */
     font-weight: bold;
     color: #333;
 }
@@ -82,7 +83,7 @@ button:hover {
     width: 100%;
     max-width: 400px; /* Limit the width of input fields */
     padding: 12px; /* Increased padding for modern look */
-    margin-bottom: 20px; /* Increased spacing between fields */
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 8px; /* Rounded corners for inputs */
     font-size: 14px;
@@ -116,10 +117,9 @@ button:hover {
 }
 
 .modal-footer {
-    padding: 20px; /* Consistent padding with header and body */
-    background-color: #ffffff;
+    padding: 10px; /* Consistent padding with header and body */
+    background-color: #f9f9f9;
     text-align: right;
-    border-top: 1px solid #ddd; /* Subtle divider */
 }
 
 .save-button {
@@ -185,7 +185,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-div {
+.summary {
     margin: 20px 0;
 }
 
@@ -194,7 +194,6 @@ div {
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px;
 }
 
 #totalItems, #totalAmount {
@@ -217,6 +216,10 @@ div {
 .controls-right {
     display: flex; /* Use flexbox for left and right controls */
     align-items: center; /* Align items vertically in the center */
+}
+
+.controls-right {
+    margin-top: 10px;
 }
 
 .sort-search {
@@ -282,7 +285,6 @@ div {
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 10px;
     margin-bottom: 20px; /* Added spacing below the button */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -290,22 +292,6 @@ div {
 .add-supplier-button:hover {
     background-color: #e0a800;
     transform: scale(1.05); /* Slight zoom effect */
-}
-
-.add-supplier-button {
-    background-color: #ffc107;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.add-supplier-button:hover {
-    background-color: #e0a800;
 }
 
 .add-item-button {
@@ -317,7 +303,6 @@ div {
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 10px;
     margin-bottom: 20px; /* Added spacing below the button */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -385,7 +370,7 @@ div {
 }
 
 .qr-button:hover {
-    background-color: #0671B7; /* Darker shade on hover */
+    background-color: #138496; /* Darker shade on hover */
     transform: scale(1.05); /* Same hover effect as Edit button */
 }
 
@@ -464,13 +449,8 @@ img {
     height: auto;
 }
 
-/* Responsive styles for iPhone 14 Pro Max and similar screens */
-@media only screen and (max-width: 430px) {
-
-    body {
-        margin: 10px;
-    }
-
+/* Responsive styles for specific devices */
+@media only screen and (max-width: 375px) { /* iPhone SE */
     .controls {
         flex-direction: column;
         align-items: stretch;
@@ -481,16 +461,18 @@ img {
         flex-direction: column;
         align-items: stretch;
         width: 100%;
-        gap: 10px;
+        gap: 8px; /* Reduced gap for smaller screens */
     }
 
     .sort-search {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px; /* Reduced gap for smaller screens */
     }
 
-    #sortBy, #searchBar, 
-    .new-button, .generate-qr-button {
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
         width: 100%;
         margin-left: 0;
     }
@@ -499,13 +481,115 @@ img {
         display: none; /* Hide table headers for compact display */
     }
 
-    table, tbody, tr, td {
+    table,
+    tbody,
+    tr,
+    td {
         display: block;
         width: 100%;
     }
 
     tr {
-        margin-bottom: 20px;
+        margin-bottom: 15px; /* Reduced margin for smaller screens */
+        background-color: #fff;
+        border-radius: 6px; /* Slightly smaller border radius */
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Reduced shadow for a more compact look */
+        padding: 8px; /* Reduced padding */
+    }
+
+    td {
+        text-align: right;
+        padding-left: 40%; /* Reduced left padding */
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 40%; /* Reduced width for better fit */
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
+    }
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+        padding: 6px; /* Adjusted padding for input elements */
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 8px; /* Reduced gap for smaller screens */
+    }
+
+    #totalItems,
+    #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 5px 0; /* Reduced margin for compactness */
+    }
+}
+
+@media only screen and (max-width: 414px) { /* iPhone XR */
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px; /* Adjusted gap for screens with width 414px */
+    }
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px; /* Adjusted gap for screens with width 414px */
+    }
+
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 20px; /* Adjusted margin for screens with width 414px */
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -529,10 +613,19 @@ img {
     }
 
     .modal {
-        width: 95%;
-        max-width: 95%;
-        padding: 10px;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
     }
+    
 
     .modal-body input,
     .modal-body select {
@@ -544,7 +637,8 @@ img {
         gap: 10px;
     }
 
-    #totalItems, #totalAmount {
+    #totalItems,
+    #totalAmount {
         display: block;
         float: none;
         text-align: center;
@@ -552,52 +646,467 @@ img {
     }
 }
 
-@media screen and (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-      display: block;
+@media only screen and (max-width: 390px) { /* iPhone 12 Pro */
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
     }
-  
-    thead {
-      display: none;
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px; /* Adjusted gap for screens with width 390px */
     }
-  
-    tr {
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
-      background: white;
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px; /* Adjusted gap for screens with width 390px */
     }
-  
+
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table,
+    tbody,
+    tr,
     td {
-      position: relative;
-      padding-left: 50%;
-      text-align: left;
-      border: none;
-      border-bottom: 1px solid #eee;
+        display: block;
+        width: 100%;
     }
-  
+
+    tr {
+        margin-bottom: 20px; /* Adjusted margin for screens with width 390px */
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
     td::before {
-      content: attr(data-label);
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 45%;
-      padding-right: 10px;
-      white-space: nowrap;
-      font-weight: bold;
-      color: #333;
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
     }
-  
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #totalItems,
+    #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+@media only screen and (max-width: 430px) { /* iPhone Pro Max */
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px; /* Adjusted gap for screens with width 430px */
+    }
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px; /* Adjusted gap for screens with width 430px */
+    }
+
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 20px; /* Adjusted margin for screens with width 430px */
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
+    }
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #totalItems,
+    #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+@media only screen and (max-width: 412px) { /* Pixel 7 */
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px; /* Adjusted gap for screens with width 412px */
+    }
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px; /* Adjusted gap for screens with width 412px */
+    }
+
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 20px; /* Adjusted margin for screens with width 412px */
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
+    }
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #totalItems,
+    #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+@media only screen and (max-width: 360px) { /* Samsung Galaxy S8 */
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 10px; /* Adjusted gap for screens with width 360px */
+    }
+
+    .sort-search {
+        flex-direction: column;
+        gap: 10px; /* Adjusted gap for screens with width 360px */
+    }
+
+    #sortBy,
+    #searchBar,
+    .new-button,
+    .generate-qr-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    table thead {
+        display: none; /* Hide table headers for compact display */
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 20px; /* Adjusted margin for screens with width 360px */
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #0671B7;
+    }
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    .modal-body input,
+    .modal-body select {
+        max-width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #totalItems,
+    #totalAmount {
+        display: block;
+        float: none;
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+/* General responsive styles for screens up to 768px */
+@media screen and (max-width: 768px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    .modal {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-y: auto;
+        padding: 16px; /* Optional: add some padding inside */
+    }
+    
+
+    thead {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        background: white;
+    }
+
+    td {
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #333;
+    }
+    .action-buttons {
+        display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+        align-items: flex-start; /* Align buttons to the start for mobile */
+    }
+
+    .qr-button,
     .edit-button,
     .delete-button {
-      display: inline-block;
-      margin-top: 10px;
+        padding: 6px 10px; /* Smaller padding for mobile */
+        font-size: 12px; /* Smaller font size for buttons */
     }
-  }
-  
 
-
-
-
-
+    /* Adjust margins for mobile */
+    .qr-button,
+    .edit-button,
+    .delete-button {
+        margin-bottom: 3px; /* Smaller space between buttons */
+    }
+}

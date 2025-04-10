@@ -125,8 +125,11 @@ function loadProperties() {
           <td data-label="Supplier">${property.item_supplier}</td>
           <td data-label="Amount">${property.amount}</td>
           <td data-label="Actions">
-              <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-              <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+               <div class="action-buttons">
+          <button class="qr-button" onclick="generateQRCode(${property.id})">Generate QR Code</button>
+          <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
+          <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+      </div>
           </td>
         `;
         propertyList.appendChild(row);
@@ -576,6 +579,16 @@ function generateBulkQRCodes() {
 
   // Open a new page or perform an action with the selected IDs
   window.open(`bulk_print_qr.html?ids=${selectedIds.join(",")}`, "_blank");
+}
+
+function generateQRCode(id) {
+  if (!id) {
+    alert("Invalid property ID.");
+    return;
+  }
+
+  // Open the single_qr.html page with the property ID as a query parameter
+  window.open(`single_qr.html?id=${id}`, "_blank");
 }
 
 function toggleSelectAll(selectAllCheckbox) {
