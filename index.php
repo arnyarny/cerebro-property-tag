@@ -123,7 +123,7 @@
             <p>Are you sure you want to delete this property?</p>
         </div>
         <div class="modal-footer">
-            <button id="confirmDeleteButton" class="delete-button">Delete</button>
+            <button id="confirmDeleteButton" class="confirm-delete-button">Delete</button>
         </div>
     </div>
 

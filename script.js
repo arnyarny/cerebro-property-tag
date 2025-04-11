@@ -118,6 +118,14 @@ function loadProperties() {
 
         const row = document.createElement("tr");
         row.innerHTML = `
+         <td class="edit-icon-cell" data-label="">
+    <div class="edit-cell-container">
+      <input type="checkbox" class="circle-checkbox property-checkbox" aria-label="Select Property" value="${property.id}" onchange="updateSelectAllCheckboxState()" />
+      <button class="edit-icon-button" onclick="editProperty(${property.id})" aria-label="Edit">
+        <i class="fas fa-pen"></i>
+      </button>
+    </div>
+  </td>
           <td data-label="Select"><input type="checkbox" class="property-checkbox" value="${property.id}" onchange="updateSelectAllCheckboxState()"></td>
           <td data-label="ID">${property.id}</td>
           <td data-label="Item Name">${property.item_name}</td>
@@ -130,6 +138,12 @@ function loadProperties() {
           <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
           <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
       </div>
+      <td class="generate-delete" data-label="">
+    <button class="mobile-qr-button" onclick="generateQRCode(${property.id})">
+      Generate QR Code
+    </button>
+    <button class="mobile-delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
+  </td>
           </td>
         `;
         propertyList.appendChild(row);
