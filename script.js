@@ -234,35 +234,6 @@ function updateItemsPerPage() {
   updatePagination();
 }
 
-function fetchProperties() {
-  fetch("api/get_properties.php")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const propertyList = document.getElementById("propertyList");
-      propertyList.innerHTML = "";
-
-      data.forEach((property) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td data-label="ID">${property.id}</td>
-            <td data-label="Item Name">${property.item_name}</td>
-            <td data-label="Date">${property.date}</td>
-            <td data-label="Supplier">${property.item_supplier}</td>
-            <td data-label="Amount">${property.amount}</td>
-            <td data-label="Actions">
-                <button class="edit-button" onclick="editProperty(${property.id})">Edit</button>
-                <button class="delete-button" onclick="showDeleteModal(${property.id})">Delete</button>
-            </td>
-        `;
-        propertyList.appendChild(row);
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching properties:", error);
-    });
-}
-
 function loadSuppliers() {
   fetch("api/get_suppliers.php")
     .then((response) => response.json())
