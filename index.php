@@ -109,7 +109,7 @@
                 <input type="hidden" id="propertyId" name="propertyId">
             </form>
             <div class="modal-footer">
-            <button type="submit" form="addPropertyForm" class="save-button">Save to Database</button>
+            <button type="submit" form="addPropertyForm" class="save-button">Save</button>
         </div>
         </div>
     </div>
