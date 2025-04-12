@@ -132,9 +132,6 @@ button:hover {
     font-size: 14px;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    position: fixed;
-  bottom: 20px;
-  right: 20px;
 }
 
 .save-button:hover {
@@ -272,6 +269,7 @@ tr:hover {
     cursor: pointer;
     font-size: 14px; /* Slightly larger font for better readability */
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
 }
 
 .delete-button:hover {
@@ -1122,6 +1120,12 @@ img {
         display: flex;
     flex-direction: column; /* Stack buttons vertically */
         align-items: flex-start; /* Align buttons to the start for mobile */
+    }
+
+    .save-button {
+        position: fixed;
+  bottom: 20px;
+  right: 20px;
     }
 
     .qr-button,
