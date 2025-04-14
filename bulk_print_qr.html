@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print Multiple QR Codes</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add any additional styles for printing if needed */
-        @media print {
-            /* Additional print styles can go here */
-        }
-    </style>
 </head>
 <body>
     <div id="qrCodeContainer"></div>
@@ -19,6 +12,7 @@
         function loadBulkQRCodes() {
             const urlParams = new URLSearchParams(window.location.search);
             const ids = urlParams.get('ids');
+            console.log(ids); // Debugging line to check the value of ids
 
             if (!ids) {
                 alert("No property IDs provided.");
