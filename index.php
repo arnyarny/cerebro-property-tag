@@ -1,135 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Property Management</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="assets/logoshape.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
+  <title>Property Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/logoshape.png">
+  <link rel="stylesheet" href="custom-styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="header">
-        <img src="assets/logo.png" alt="Logo" class="logo">
-    </header>
 
-    <div class="controls">
-    <div class="controls-left">
-        <div class="sort-search">
-        <select id="sortBy" onchange="sortProperties()">
-  <option value="default">Sort By</option>
-  <option value="name_asc">Name (A-Z)</option>
-  <option value="name_desc">Name (Z-A)</option>
-  <option value="date_newest">Date Purchased (Newest)</option>
-  <option value="date_oldest">Date Purchased (Oldest)</option>
-  <option value="amount_low_high">Amount (Low to High)</option>
-  <option value="amount_high_low">Amount (High to Low)</option>
-</select>
+<body class="bg-gray-50 text-gray-800">
 
-            <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()">
-        </div>
-    </div>
-    <div class="controls-right">
-        <button class="new-button" onclick="showModal()">New</button>
-        <button class="generate-qr-button" onclick="generateBulkQRCodes(propertyId)">Generate QR Codes Selected</button>
-    </div>
+  <!-- Header -->
+  <header class="bg-white shadow p-4 flex items-center">
+    <img src="assets/logo.png" alt="Logo" class="h-10">
+  </header>
+
+  <!-- Controls -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
+    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <option value="default">Sort By</option>
+        <option value="name_asc">Name (A-Z)</option>
+        <option value="name_desc">Name (Z-A)</option>
+        <option value="date_newest">Date Purchased (Newest)</option>
+        <option value="date_oldest">Date Purchased (Oldest)</option>
+        <option value="amount_low_high">Amount (Low to High)</option>
+        <option value="amount_high_low">Amount (High to Low)</option>
+      </select>
+
+      <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()"
+        class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
     </div>
 
-    <div class="select-all"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-    Select All in this Page</div>
+    <div class="flex gap-2 w-full md:w-auto justify-end">
+      <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm" onclick="showModal()">New</button>
+      <button class="bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-sm" onclick="handleBulkQRCodesClick()">
+  Generate QR Codes Selected
+</button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th>ID</th>
-                <th>Item Name</th>
-                <th>Date Purchased</th>
-                <th>Supplier</th>
-                <th>Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="propertyList"></tbody>
-    </table>
-
-    <div id="qrCodeModal" class="modal" style="display: none;">
-        <div class="modal-header">
-            <h2>QR Code</h2>
-            <button class="close-button" onclick="closeQRCodeModal()">X</button>
-        </div>
-        <div class="modal-body">
-            <div id="qrcode"></div>
-            <button onclick="closeQRCodeModal()">Close</button>
-        </div>
     </div>
+  </div>
 
-    <div class="summary">
-        <span id="totalItems">Total Items: 0</span>
-        <span id="totalAmount" class="float-right">Total Amount: 0</span>
+<!-- Select All -->
+<div class="px-4 mt-4 hidden md:block">
+  <label class="inline-flex items-center space-x-2 text-sm">
+    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="accent-[#0671B7]">
+    <span>Select All</span>
+  </label>
+</div>
+
+ <!-- Table container: visible only on md and up -->
+<div class="hidden md:block overflow-x-auto mt-4 px-4">
+  <table class="min-w-full bg-white rounded shadow border">
+    <thead class="bg-[#0671B7] text-white text-sm">
+      <tr>
+        <th class="p-2 text-left">Select</th>
+        <th class="p-2 text-left">ID</th>
+        <th class="p-2 text-left">Item Name</th>
+        <th class="p-2 text-left">Date Purchased</th>
+        <th class="p-2 text-left">Supplier</th>
+        <th class="p-2 text-left">Amount</th>
+        <th class="p-2 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="propertyList" class="text-sm divide-y"></tbody>
+  </table>
+</div>
+
+
+  <!-- Mobile card list (shown only on small screens) -->
+<div id="propertyCardList" class="md:hidden space-y-4 mt-4"></div>
+
+  <!-- QR Code Modal -->
+<div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-sm">
+    <h2 class="text-lg font-semibold mb-4">QR Code</h2>
+    <img id="qrImage" alt="QR Code" class="w-64 h-64 mx-auto mb-4" />
+    <div class="flex justify-center space-x-3">
+      <button id="printQRCodeBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm">
+        Print
+      </button>
+      <button onclick="closeQRModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded text-sm">
+        Close
+      </button>
     </div>
+  </div>
+</div>
 
-    <div class="pagination">
-        <button id="prevPage" onclick="changePage(-1)" disabled>Previous</button>
-        <span id="currentPage">Page 1</span>
-        <span id="totalPages"></span>
-        <button id="nextPage" onclick="changePage(1)">Next</button>
-        <select id="itemsPerPage" onchange="updateItemsPerPage()">
-            <option value="5">5 per page</option>
-            <option value="10" selected>10 per page</option>
-            <option value="20">20 per page</option>
-        </select>
+
+  <!-- Summary -->
+  <div class="flex justify-between items-center px-4 mt-4 text-sm">
+    <span id="totalItems">Total Items: 0</span>
+    <span id="totalAmount">Total Amount: 0</span>
+  </div>
+
+  <!-- Pagination -->
+<div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
+
+    <div class="flex items-center gap-2">
+      <button id="prevPage" onclick="changePage(-1)" disabled class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+      <span id="currentPage">Page 1</span>
+      <span id="totalPages"></span>
+      <button id="nextPage" onclick="changePage(1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
     </div>
+    <select id="itemsPerPage" onchange="updateItemsPerPage()" class="border border-gray-300 rounded px-3 py-1">
+      <option value="5">5 per page</option>
+      <option value="10" selected>10 per page</option>
+      <option value="20">20 per page</option>
+    </select>
+  </div>
 
-    <div id="propertyModal" class="modal">
-        <div class="modal-header">
-            <h2>Add/Edit Property</h2>
-            <button class="close-button" onclick="closeModal()">X</button>
-        </div>
-        <div class="modal-body">
-            <form id="addPropertyForm">
-                <label for="item_name">Item Name:</label>
-                <select id="item_name" name="item_name" required>
-                    <option value="">Select Item</option>
-                </select>
-                <button type="button" class="add-item-button" onclick="addNewItem()">Add New Item</button>
-
-                <label for="date">Date Purchased:</label>
-                <input type="date" id="date" name="date" required>
-
-                <label for="item_supplier">Item Supplier:</label>
-                <select id="item_supplier" name="item_supplier" required>
-                    <option value="">Select Supplier</option>
-                </select>
-                <button type="button" class="add-supplier-button" onclick="addNewSupplier()">Add New Supplier</button>
-
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" step="0.01" required>
-                <input type="hidden" id="propertyId" name="propertyId">
-            </form>
-            <div class="modal-footer">
-            <button type="submit" form="addPropertyForm" class="save-button">Save</button>
-        </div>
-        </div>
+  <!-- Property Modal -->
+<div id="propertyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
+    <div class="modal-header flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Add/Edit Property</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeModal()">×</button>
     </div>
+    <div class="modal-body space-y-4">
+      <form id="addPropertyForm" class="space-y-4">
+        <div>
+          <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
+          <select id="item_name" name="item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+            <option value="">Select Item</option>
+          </select>
+          <button type="button" class="text-[#0671B7] text-sm mt-2 hover:underline" onclick="addNewItem()">+ Add New Item</button>
+        </div>
 
-    <div id="deleteModal" class="modal">
-        <div class="modal-header">
-            <h2>Confirm Deletion</h2>
-            <button class="close-button" onclick="closeDeleteModal()">X</button>
+        <div>
+          <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
+          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
         </div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete this property?</p>
+
+        <div>
+          <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
+          <select id="item_supplier" name="item_supplier" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+            <option value="">Select Supplier</option>
+          </select>
+          <button type="button" class="text-[#0671B7] text-sm mt-2 hover:underline" onclick="addNewSupplier()">+ Add New Supplier</button>
         </div>
-        <div class="modal-footer">
-            <button id="confirmDeleteButton" class="confirm-delete-button">Delete</button>
+
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+          <input type="number" id="amount" name="amount" step="0.01" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+          <input type="hidden" id="propertyId" name="propertyId">
         </div>
+      </form>
     </div>
+    <div class="modal-footer flex justify-end mt-6 space-x-2">
+      <button type="submit" form="addPropertyForm" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
+      <!-- Cancel Button -->
+      <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeModal()">Cancel</button>
+    </div>
+    </div>
+  </div>
+</div>
 
-    <!-- Toast Container -->
-    <div id="toastContainer" class="toast-container"></div>
 
-    <script src="script.js"></script>
+  <!-- Delete Modal -->
+  <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white w-full max-w-sm p-6 rounded shadow">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-[#F03A25]">Confirm Deletion</h2>
+        <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeDeleteModal()">×</button>
+      </div>
+      <p class="mb-4 text-sm">Are you sure you want to delete this property?</p>
+      <div class="text-right">
+        <button id="confirmDeleteButton" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <script src="script.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,54 @@
+/* Tailwind Custom Style for Toggle Button */
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #0671B7;
+}
+
+.toggle-checkbox:checked + .toggle-label::before {
+  transform: translateX(100%);
+}
+
+.toggle-label {
+  position: relative;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  transition: background-color 0.3s;
+}
+
+.toggle-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background-color: white;
+  transition: transform 0.3s;
+}
+
+@keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.4s ease-out forwards;
+  }
+  
+  .animate-fade-out {
+    animation: fade-out 0.3s ease-in forwards;
+  }
+  
