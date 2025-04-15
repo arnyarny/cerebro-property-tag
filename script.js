@@ -72,14 +72,16 @@ function handleFormSubmit(event) {
           showToast(
             propertyId
               ? "Property updated successfully!"
-              : "Property added successfully!", "success", 
+              : "Property added successfully!",
+            "success"
           );
           form.reset();
           loadProperties();
           closeModal(); // Close the modal after success
         } else {
           showToast(
-            data.message || "Failed to add/update property.", "error",
+            data.message || "Failed to add/update property.",
+            "error",
             3000,
             true
           );
@@ -87,7 +89,8 @@ function handleFormSubmit(event) {
       } catch (error) {
         console.error("Invalid JSON:", text); // Log invalid JSON for debugging
         showToast(
-          "An error occurred while processing the response.", "error",
+          "An error occurred while processing the response.",
+          "error",
           3000,
           true
         );
@@ -96,7 +99,8 @@ function handleFormSubmit(event) {
     .catch((error) => {
       console.error("Error:", error);
       showToast(
-        "An error occurred while processing the request. Check the console for details.", "error",
+        "An error occurred while processing the request. Check the console for details.",
+        "error",
         3000,
         true
       );
@@ -121,7 +125,7 @@ function loadProperties() {
         // TABLE ROW (Desktop)
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td class="p-2 text-sm">
+          <td class="p-6 text-sm">
             <input type="checkbox" class="property-checkbox" value="${property.id}" onchange="updateSelectAllCheckboxState()">
           </td>
           <td class="p-2 text-sm">${property.id}</td>
@@ -130,20 +134,27 @@ function loadProperties() {
           <td class="p-2 text-sm">${property.item_supplier}</td>
           <td class="p-2 text-sm">${property.amount}</td>
           <td>
-            <div class="flex space-x-3">
-              <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded" onclick="generateQRCode(${property.id})">Generate QR Code</button>
-              <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-3 py-1 rounded" onclick="editProperty(${property.id})">Edit</button>
-              <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded" onclick="showDeleteModal(${property.id})">Delete</button>
+            <div class="flex space-x-2">
+            <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="generateQRCode(${property.id})">
+  Generate QR Code
+</button>
+<button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
+  Edit
+</button>
+<button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="showDeleteModal(${property.id})">
+  Delete
+</button>
+
             </div>
           </td>
         `;
         propertyList.appendChild(row);
 
         // CARD (Mobile)
-const card = document.createElement("div");
-card.className = "bg-white rounded-xl shadow-md p-4 relative";
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-xl shadow-md p-4 relative";
 
-card.innerHTML = `
+        card.innerHTML = `
   <!-- Select Toggle -->
   <div class="absolute top-3 left-5 flex items-center space-x-5">
     <label class="inline-flex items-center cursor-pointer">
@@ -167,21 +178,23 @@ card.innerHTML = `
 
   <!-- Actions -->
   <div class="flex flex-col gap-2">
-    <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded" onclick="generateQRCode(${property.id})">Generate QR Code</button>
-    <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded" onclick="showDeleteModal(${property.id})">Delete</button>
+    <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded" onclick="generateQRCode(${property.id})">Generate QR Code</button>
+    <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="showDeleteModal(${property.id})">Delete</button>
   </div>
 `;
 
-propertyCardList.appendChild(card);
-
+        propertyCardList.appendChild(card);
       });
 
-      document.getElementById("totalItems").textContent = `Total Items: ${totalItems}`;
-      document.getElementById("totalAmount").textContent = `Total Amount: ${totalAmount.toFixed(2)}`;
+      document.getElementById(
+        "totalItems"
+      ).textContent = `Total Items: ${totalItems}`;
+      document.getElementById(
+        "totalAmount"
+      ).textContent = `Total Amount: ${totalAmount.toFixed(2)}`;
     })
     .catch((error) => console.error("Error:", error));
 }
-
 
 let currentPage = 1;
 let itemsPerPage = 10;
@@ -328,13 +341,19 @@ function addNewSupplier() {
           // Load suppliers to ensure consistency
           // loadSuppliers(); // Uncomment if you want to refresh the entire list
         } else {
-          showToast(data.message || "Failed to add supplier.","error", 3000, true);
+          showToast(
+            data.message || "Failed to add supplier.",
+            "error",
+            3000,
+            true
+          );
         }
       })
       .catch((error) => {
         console.error("Error adding supplier:", error);
         showToast(
-          "An error occurred while processing the request.", "error",
+          "An error occurred while processing the request.",
+          "error",
           3000,
           true
         );
@@ -397,13 +416,14 @@ function addNewItem() {
           // Load item names to ensure consistency
           // loadItemNames(); // Uncomment if you want to refresh the entire list
         } else {
-          showToast(data.message || "Failed to add item.","error", 3000, true);
+          showToast(data.message || "Failed to add item.", "error", 3000, true);
         }
       })
       .catch((error) => {
         console.error("Error adding item:", error);
         showToast(
-          "An error occurred while processing the request.", "error",
+          "An error occurred while processing the request.",
+          "error",
           3000,
           true
         );
@@ -414,7 +434,9 @@ function addNewItem() {
 function sortProperties() {
   const sortBy = document.getElementById("sortBy").value;
   const isMobile = window.innerWidth <= 768;
-  const propertyContainer = document.getElementById(isMobile ? "propertyCardList" : "propertyList");
+  const propertyContainer = document.getElementById(
+    isMobile ? "propertyCardList" : "propertyList"
+  );
 
   const rowsOrCards = Array.from(propertyContainer.children);
 
@@ -422,18 +444,17 @@ function sortProperties() {
     if (isMobile) {
       const text = element.querySelectorAll("p")[columnIndex].textContent;
       const value = text.split(":")[1].trim().toLowerCase();
-      
+
       // For amount column, clean it up (remove ₱, commas)
       if (sortBy.includes("amount")) {
         return value.replace(/[₱,]/g, "");
       }
-      
+
       return value;
     } else {
       return element.children[columnIndex].textContent.trim().toLowerCase();
     }
   };
-  
 
   rowsOrCards.sort((a, b) => {
     switch (sortBy) {
@@ -458,7 +479,6 @@ function sortProperties() {
   propertyContainer.innerHTML = "";
   rowsOrCards.forEach((el) => propertyContainer.appendChild(el));
 }
-
 
 function editProperty(propertyId) {
   fetch(`api/get_property.php?id=${propertyId}`)
@@ -534,7 +554,8 @@ function editProperty(propertyId) {
         document.getElementById("propertyModal").style.display = "flex";
       } else {
         showToast(
-          data.message || "Failed to fetch property details.", "error",
+          data.message || "Failed to fetch property details.",
+          "error",
           3000,
           true
         );
@@ -554,7 +575,12 @@ function deleteProperty(propertyId) {
         loadProperties();
         closeDeleteModal();
       } else {
-        showToast(data.message || "Failed to delete property.","error", 3000, true);
+        showToast(
+          data.message || "Failed to delete property.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => console.error("Error deleting property:", error));
@@ -582,9 +608,8 @@ function searchProperties() {
   }
 }
 
-
 function closeQRModal() {
-  document.getElementById('qrModal').classList.add('hidden');
+  document.getElementById("qrModal").classList.add("hidden");
 }
 
 function showToast(message, duration = 3000) {
@@ -616,10 +641,14 @@ function generateBulkQRCodes() {
 
 function generateBulkMobileQRCodes() {
   // Select both regular checkboxes (desktop) and toggle checkboxes (mobile)
-  const checkboxes = document.querySelectorAll(".property-checkbox:checked, .toggle-checkbox:checked");
-  
+  const checkboxes = document.querySelectorAll(
+    ".property-checkbox:checked, .toggle-checkbox:checked"
+  );
+
   // Map the selected checkboxes to their IDs using the 'data-id' attribute
-  const selectedIds = Array.from(checkboxes).map((checkbox) => checkbox.dataset.id);
+  const selectedIds = Array.from(checkboxes).map(
+    (checkbox) => checkbox.dataset.id
+  );
 
   // Check if no properties are selected
   if (selectedIds.length === 0) {
@@ -648,18 +677,17 @@ function generateQRCode(id) {
   }
 
   // Show the QR modal
-  const qrModal = document.getElementById('qrModal');
-  const qrImage = document.getElementById('qrImage');
-  const printButton = document.getElementById('printQRCodeBtn');
+  const qrModal = document.getElementById("qrModal");
+  const qrImage = document.getElementById("qrImage");
+  const printButton = document.getElementById("printQRCodeBtn");
 
   qrImage.src = `api/generate_qr.php?id=${id}`;
-  qrModal.classList.remove('hidden');
+  qrModal.classList.remove("hidden");
 
   printButton.onclick = () => {
     window.open(`single_qr.html?id=${id}`, "_blank");
   };
 }
-
 
 function toggleSelectAll(selectAllCheckbox) {
   // Get all checkboxes within the property list
@@ -690,14 +718,17 @@ function updateSelectAllCheckboxState() {
     return row && row.style.display !== "none";
   });
 
-  const checkedCount = visibleCheckboxes.filter((checkbox) => checkbox.checked).length;
+  const checkedCount = visibleCheckboxes.filter(
+    (checkbox) => checkbox.checked
+  ).length;
   const totalVisible = visibleCheckboxes.length;
 
   const isAllChecked = checkedCount === totalVisible && totalVisible > 0;
 
   if (selectAllCheckbox) {
     selectAllCheckbox.checked = isAllChecked;
-    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalVisible; // Keep indeterminate for desktop
+    selectAllCheckbox.indeterminate =
+      checkedCount > 0 && checkedCount < totalVisible; // Keep indeterminate for desktop
   }
 }
 
@@ -708,7 +739,7 @@ function showToast(message, type = "success") {
     success: "bg-emerald-600",
     error: "bg-red-600",
     info: "bg-blue-600",
-    warning: "bg-yellow-500 text-black"
+    warning: "bg-yellow-500 text-black",
   }[type];
 
   toast.className = `${background} text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between gap-2 w-full max-w-xs animate-slide-in-right`;
@@ -725,5 +756,3 @@ function showToast(message, type = "success") {
     setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
-
-

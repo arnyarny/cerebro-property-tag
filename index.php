@@ -35,12 +35,12 @@
     </div>
 
     <div class="flex gap-2 w-full md:w-auto justify-end">
-      <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm" onclick="showModal()">New</button>
-      <button class="bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-sm" onclick="handleBulkQRCodesClick()">
-  Generate QR Codes Selected
-</button>
+  <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="showModal()">New</button>
+  <button class="bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-base" onclick="handleBulkQRCodesClick()">
+    Generate QR Codes Selected
+  </button>
+</div>
 
-    </div>
   </div>
 
 <!-- Select All -->
