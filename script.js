@@ -756,3 +756,192 @@ function showToast(message, type = "success") {
     setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+
+  const openSidebar = () => {
+    sidebar.classList.remove("-translate-x-full");
+    overlay.classList.remove("hidden");
+    document.body.classList.add("sidebar-open");
+  };
+
+  const closeSidebar = () => {
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+    document.body.classList.remove("sidebar-open");
+  };
+
+  if (menuToggle) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = !sidebar.classList.contains("-translate-x-full");
+      isOpen ? closeSidebar() : openSidebar();
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", closeSidebar);
+  }
+
+  // Nav logic
+  const navLinks = {
+    properties: document.getElementById("nav-properties"),
+    items: document.getElementById("nav-items"),
+    suppliers: document.getElementById("nav-suppliers")
+  };
+
+  function setActiveNav(section) {
+    Object.entries(navLinks).forEach(([key, el]) => {
+      if (key === section) {
+        el.classList.add("bg-[#0565A4]", "font-semibold");
+      } else {
+        el.classList.remove("bg-[#0565A4]", "font-semibold");
+      }
+    });
+
+    document.querySelectorAll('.content-section').forEach(sectionEl => {
+      sectionEl.classList.add('hidden');
+    });
+
+    const activeSection = document.getElementById(`section-${section}`);
+    if (activeSection) {
+      activeSection.classList.remove('hidden');
+    }
+
+     // ✅ Hide QR button except on 'items' section
+  const qrButton = document.getElementById("bulkQrButton");
+  if (qrButton) {
+    if (section === "properties") {
+      qrButton.classList.remove("hidden");
+    } else {
+      qrButton.classList.add("hidden");
+    }
+  }
+  }
+
+  navLinks.properties.addEventListener("click", () => setActiveNav("properties"));
+  navLinks.items.addEventListener("click", () => {
+    setActiveNav("items");
+    loadItems(); // ✅ Load item list when navigating
+  });
+  navLinks.suppliers.addEventListener("click", () => {
+    setActiveNav("suppliers");
+    loadSuppliers(); // ✅ Load supplier list when navigating
+  });
+
+  document.addEventListener("click", (event) => {
+    const isClickInsideSidebar = sidebar.contains(event.target);
+    const isClickOnMenuButton = menuToggle.contains(event.target);
+  
+    const isSidebarOpen = !sidebar.classList.contains("-translate-x-full");
+  
+    if (!isClickInsideSidebar && !isClickOnMenuButton && isSidebarOpen) {
+      closeSidebar();
+    }
+  });
+  
+});
+
+function loadItems() {
+  fetch("api/get_items.php")
+    .then((response) => response.json())
+    .then((data) => {
+      const itemList = document.getElementById("itemList"); // desktop
+      const itemCardList = document.getElementById("itemCardList"); // mobile
+      itemList.innerHTML = "";
+      itemCardList.innerHTML = "";
+
+      if (data.success && Array.isArray(data.data)) {
+        data.data.forEach((item) => {
+          if (item && item.item_id && item.name) {
+            // Desktop row
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="p-2">${item.item_id}</td>
+              <td class="p-2">${item.name}</td>
+              <td class="p-2">
+                <div class="flex space-x-2">
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-3 py-1 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteItem(${item.item_id})">Delete</button>
+                </div>
+              </td>
+            `;
+            itemList.appendChild(row);
+
+            // Mobile card
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-xl shadow p-4 relative";
+
+            card.innerHTML = `
+              <div class="text-gray-700 mb-4">
+                <p><span class="font-semibold">Item ID:</span> ${item.item_id}</p>
+                <p><span class="font-semibold">Name:</span> ${item.name}</p>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
+                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteItem(${item.item_id})">Delete</button>
+              </div>
+            `;
+            itemCardList.appendChild(card);
+          }
+        });
+      } else {
+        console.error("Invalid response:", data.message || "Invalid data format");
+      }
+    })
+    .catch((error) => console.error("Error loading items:", error));
+}
+
+function loadSuppliers() {
+  fetch("api/get_supplier.php")
+    .then((response) => response.json())
+    .then((data) => {
+      const supplierList = document.getElementById("supplierList"); // desktop
+      const supplierCardList = document.getElementById("supplierCardList"); // mobile
+      supplierList.innerHTML = "";
+      supplierCardList.innerHTML = "";
+
+      if (data.success && Array.isArray(data.data)) {
+        data.data.forEach((supplier) => {
+          if (supplier && supplier.supplier_id && supplier.name) {
+            // Desktop row
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="p-2">${supplier.supplier_id}</td>
+              <td class="p-2">${supplier.name}</td>
+              <td class="p-2">
+                <div class="flex space-x-2">
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-3 py-1 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
+                </div>
+              </td>
+            `;
+            supplierList.appendChild(row);
+
+            // Mobile card
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-xl shadow p-4 relative";
+
+            card.innerHTML = `
+              <div class="text-gray-700 mb-4">
+                <p><span class="font-semibold">Supplier ID:</span> ${supplier.supplier_id}</p>
+                <p><span class="font-semibold">Name:</span> ${supplier.name}</p>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
+              </div>
+            `;
+            supplierCardList.appendChild(card);
+          }
+        });
+      } else {
+        console.error("Invalid response:", data.message || "Invalid data format");
+      }
+    })
+    .catch((error) => console.error("Error loading suppliers:", error));
+}

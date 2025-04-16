@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
   <title>Property Management</title>
@@ -10,12 +10,36 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-50 text-gray-800">
+<body class="h-full min-h-screen bg-gray-50 text-gray-800 flex">
+ <!-- Sidebar -->
+<aside id="sidebar" class="bg-[#0671B7] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
+  <div class="flex items-center gap-2 mb-8">
+    <!-- Optional logo/title -->
+  </div>
+  <nav class="flex flex-col gap-4 text-sm">
+  <a href="#" id="nav-properties" class="bg-[#0565A4] font-semibold px-3 py-2 rounded flex items-center gap-2">
+    <i class="fas fa-building"></i> Properties
+  </a>
+  <a href="#" id="nav-items" class="hover:bg-[#0565A4] px-3 py-2 rounded flex items-center gap-2">
+    <i class="fas fa-box"></i> Masterlist: Items
+  </a>
+  <a href="#" id="nav-suppliers" class="hover:bg-[#0565A4] px-3 py-2 rounded flex items-center gap-2">
+    <i class="fas fa-truck"></i> Masterlist: Suppliers
+  </a>
+</nav>
+</aside>
 
+
+<main class="flex-1">
   <!-- Header -->
-  <header class="bg-white shadow p-4 flex items-center">
+<header class="bg-white shadow p-4 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <button id="menuToggle" class="text-[#0671B7] md:hidden text-2xl focus:outline-none">
+      <i class="fas fa-bars"></i>
+    </button>
     <img src="assets/logo.png" alt="Logo" class="h-10">
-  </header>
+  </div>
+</header>
 
   <!-- Controls -->
   <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
@@ -36,13 +60,14 @@
 
     <div class="flex gap-2 w-full md:w-auto justify-end">
   <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="showModal()">New</button>
-  <button class="bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-base" onclick="handleBulkQRCodesClick()">
+  <button id="bulkQrButton" class="bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-base" onclick="handleBulkQRCodesClick()">
     Generate QR Codes Selected
   </button>
 </div>
-
   </div>
 
+<!-- Section: Properties -->
+<div id="section-properties" class="content-section">
 <!-- Select All -->
 <div class="px-4 mt-4 hidden md:block">
   <label class="inline-flex items-center space-x-2 text-sm">
@@ -69,9 +94,58 @@
   </table>
 </div>
 
-
   <!-- Mobile card list (shown only on small screens) -->
 <div id="propertyCardList" class="md:hidden space-y-4 mt-4"></div>
+
+  <!-- Summary -->
+  <div class="flex justify-between items-center px-4 mt-4 text-sm">
+    <span id="totalItems">Total Items: 0</span>
+    <span id="totalAmount">Total Amount: 0</span>
+  </div>
+</div>
+
+<!-- Section: Items -->
+<div id="section-items" class="content-section hidden">
+  <!-- Desktop Table -->
+  <div class="hidden md:block overflow-x-auto mt-4 px-4">
+    <table class="min-w-full bg-white rounded shadow border">
+      <thead class="bg-[#0671B7] text-white text-sm">
+        <tr>
+          <th class="p-2 text-left">Item ID</th>
+          <th class="p-2 text-left">Name</th>
+          <th class="p-2 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="itemList" class="text-sm divide-y"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div id="itemCardList" class="md:hidden space-y-4 mt-4 px-4"></div>
+</div>
+
+
+
+<!-- Section: Suppliers -->
+<div id="section-suppliers" class="content-section hidden">
+  <!-- Desktop Table -->
+  <div class="hidden md:block overflow-x-auto mt-4 px-4">
+    <table class="min-w-full bg-white rounded shadow border">
+      <thead class="bg-[#0671B7] text-white text-sm">
+        <tr>
+          <th class="p-2 text-left">Supplier ID</th>
+          <th class="p-2 text-left">Name</th>
+          <th class="p-2 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="supplierList" class="text-sm divide-y"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div id="supplierCardList" class="md:hidden space-y-4 mt-4 px-4"></div>
+</div>
+
 
   <!-- QR Code Modal -->
 <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -88,13 +162,6 @@
     </div>
   </div>
 </div>
-
-
-  <!-- Summary -->
-  <div class="flex justify-between items-center px-4 mt-4 text-sm">
-    <span id="totalItems">Total Items: 0</span>
-    <span id="totalAmount">Total Amount: 0</span>
-  </div>
 
   <!-- Pagination -->
 <div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
@@ -177,6 +244,7 @@
   <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
   <script src="script.js"></script>
+  </main>
 </body>
 
 </html>
