@@ -138,7 +138,7 @@ function loadProperties() {
             <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="generateQRCode(${property.id})">
   Generate QR Code
 </button>
-<button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
+<button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
   Edit
 </button>
 <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="showDeleteModal(${property.id})">
@@ -163,7 +163,7 @@ function loadProperties() {
     </label>
   </div>
 
-  <button onclick="editProperty(${property.id})" class="absolute top-3 right-5 text-[#0671B7] hover:text-[#0565A4]">
+  <button onclick="editProperty(${property.id})" class="absolute top-3 right-5 text-[#0671B7] hover:text-[#1C78B2]">
   <i class="fas fa-pen"></i>
 </button>
 
@@ -795,9 +795,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function setActiveNav(section) {
     Object.entries(navLinks).forEach(([key, el]) => {
       if (key === section) {
-        el.classList.add("bg-[#0565A4]", "font-semibold");
+        el.classList.add("bg-[#1C78B2]", "font-semibold");
       } else {
-        el.classList.remove("bg-[#0565A4]", "font-semibold");
+        el.classList.remove("bg-[#1C78B2]", "font-semibold");
       }
     });
 
@@ -863,7 +863,7 @@ function loadItems() {
               <td class="p-2">${item.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-3 py-1 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
                   <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteItem(${item.item_id})">Delete</button>
                 </div>
               </td>
@@ -881,7 +881,7 @@ function loadItems() {
               </div>
 
               <div class="flex flex-col gap-2">
-                <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
+                <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
                 <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteItem(${item.item_id})">Delete</button>
               </div>
             `;
@@ -914,7 +914,7 @@ function loadSuppliers() {
               <td class="p-2">${supplier.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-3 py-1 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
                   <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
                 </div>
               </td>
@@ -932,7 +932,7 @@ function loadSuppliers() {
               </div>
 
               <div class="flex flex-col gap-2">
-                <button class="edit-button bg-[#0671B7] hover:bg-[#0565A4] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
                 <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
               </div>
             `;

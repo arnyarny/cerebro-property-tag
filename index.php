@@ -12,18 +12,20 @@
 
 <body class="h-full min-h-screen bg-gray-50 text-gray-800 flex">
  <!-- Sidebar -->
-<aside id="sidebar" class="bg-[#0671B7] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
-  <div class="flex items-center gap-2 mb-8">
+<aside id="sidebar" class="bg-gradient-to-b from-[#0671B7] to-[#fd0000] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
+
+  <div class="flex items-center gap-2 mb-8 bg-[#fff] rounded p-x-4 py-4">
     <!-- Optional logo/title -->
+    <img src="assets/logo.png" alt="Logo" class="h-10">
   </div>
   <nav class="flex flex-col gap-4 text-sm">
-  <a href="#" id="nav-properties" class="bg-[#0565A4] font-semibold px-3 py-2 rounded flex items-center gap-2">
+  <a href="#" id="nav-properties" class="bg-[#1C78B2] font-semibold px-3 py-2 rounded flex items-center gap-2">
     <i class="fas fa-building"></i> Properties
   </a>
-  <a href="#" id="nav-items" class="hover:bg-[#0565A4] px-3 py-2 rounded flex items-center gap-2">
+  <a href="#" id="nav-items" class="hover:bg-[#1C78B2] px-3 py-2 rounded flex items-center gap-2">
     <i class="fas fa-box"></i> Masterlist: Items
   </a>
-  <a href="#" id="nav-suppliers" class="hover:bg-[#0565A4] px-3 py-2 rounded flex items-center gap-2">
+  <a href="#" id="nav-suppliers" class="hover:bg-[#1C78B2] px-3 py-2 rounded flex items-center gap-2">
     <i class="fas fa-truck"></i> Masterlist: Suppliers
   </a>
 </nav>
@@ -37,7 +39,6 @@
     <button id="menuToggle" class="text-[#0671B7] md:hidden text-2xl focus:outline-none">
       <i class="fas fa-bars"></i>
     </button>
-    <img src="assets/logo.png" alt="Logo" class="h-10">
   </div>
 </header>
 
