@@ -42,6 +42,9 @@
   </div>
 </header>
 
+<!-- Section: Properties -->
+<div id="section-properties" class="content-section">
+
   <!-- Controls -->
   <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
     <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -67,8 +70,6 @@
 </div>
   </div>
 
-<!-- Section: Properties -->
-<div id="section-properties" class="content-section">
 <!-- Select All -->
 <div class="px-4 mt-4 hidden md:block">
   <label class="inline-flex items-center space-x-2 text-sm">
@@ -107,6 +108,25 @@
 
 <!-- Section: Items -->
 <div id="section-items" class="content-section hidden">
+  
+  <!-- Controls -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
+    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <option value="default">Sort By</option>
+        <option value="name_asc">Name (A-Z)</option>
+        <option value="name_desc">Name (Z-A)</option>
+      </select>
+
+      <input type="text" id="itemSearchBar" placeholder="Search..." oninput="searchItems()"
+        class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
+    </div>
+
+    <div class="flex gap-2 w-full md:w-auto justify-end">
+  <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="addNewItem()">New</button>
+</div>
+  </div>  
+
   <!-- Desktop Table -->
   <div class="hidden md:block overflow-x-auto mt-4 px-4">
     <table class="min-w-full bg-white rounded shadow border">
@@ -129,6 +149,25 @@
 
 <!-- Section: Suppliers -->
 <div id="section-suppliers" class="content-section hidden">
+
+  <!-- Controls -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
+    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <option value="default">Sort By</option>
+        <option value="name_asc">Name (A-Z)</option>
+        <option value="name_desc">Name (Z-A)</option>
+      </select>
+
+      <input type="text" id="supplierSearchBar" placeholder="Search..." oninput="searchSuppliers()"
+        class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
+    </div>
+
+    <div class="flex gap-2 w-full md:w-auto justify-end">
+  <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="addNewSupplier()">New</button>
+</div>
+  </div>
+
   <!-- Desktop Table -->
   <div class="hidden md:block overflow-x-auto mt-4 px-4">
     <table class="min-w-full bg-white rounded shadow border">
