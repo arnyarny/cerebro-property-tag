@@ -924,9 +924,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function setActiveNav(section) {
     Object.entries(navLinks).forEach(([key, el]) => {
       if (key === section) {
-        el.classList.add("bg-[#1C78B2]", "font-semibold");
+        el.classList.add("bg-[#209ae6]", "font-semibold");
       } else {
-        el.classList.remove("bg-[#1C78B2]", "font-semibold");
+        el.classList.remove("bg-[#209ae6]", "font-semibold");
       }
     });
 

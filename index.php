@@ -12,14 +12,14 @@
 
 <body class="h-full min-h-screen bg-gray-50 text-gray-800 flex">
  <!-- Sidebar -->
-<aside id="sidebar" class="bg-gradient-to-b from-[#0671B7] to-[#fd0000] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
+ <aside id="sidebar" class="bg-gradient-to-b from-[#0671B7] via-[#0671B7] to-[#fd0000] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
 
-  <div class="flex items-center gap-2 mb-8 bg-[#fff] rounded p-x-2 py-4">
+  <div class="flex items-center gap-2 mb-8 bg-[#fff] rounded p-x-2 py-2">
     <!-- Optional logo/title -->
     <img src="assets/logo.png" alt="Logo" class="h-10 px-14">
   </div>
   <nav class="flex flex-col gap-4 text-sm">
-  <a href="#" id="nav-properties" class="bg-[#1C78B2] font-semibold px-3 py-2 rounded flex items-center gap-2">
+  <a href="#" id="nav-properties" class="bg-[#209ae6] font-semibold px-3 py-2 rounded flex items-center gap-2">
     <i class="fas fa-building"></i> Properties
   </a>
   <div class="relative inline-block text-white">
@@ -29,10 +29,10 @@
   </button>
 
   <div id="masterlist-dropdown" class="hidden absolute mt-2 space-y-1 pl-6 text-white">
-    <a href="#" id="nav-items" class="block px-4 py-2 hover:underline flex items-center gap-2">
+    <a href="#" id="nav-items" class="block px-4 py-2 rounded hover:underline flex items-center gap-2">
       <i class="fas fa-box"></i> Items
     </a>
-    <a href="#" id="nav-suppliers" class="block px-4 py-2 hover:underline flex items-center gap-2">
+    <a href="#" id="nav-suppliers" class="block px-4 py-2 rounded hover:underline flex items-center gap-2">
       <i class="fas fa-truck"></i> Suppliers
     </a>
   </div>
