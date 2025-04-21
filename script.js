@@ -358,7 +358,7 @@ function addNewSupplier() {
           supplierDropdown.value = newSupplier;
 
           // Load suppliers to ensure consistency
-          // loadSuppliers(); // Uncomment if you want to refresh the entire list
+          loadSupplier(); // Uncomment if you want to refresh the entire list
         } else {
           showToast(
             data.message || "Failed to add supplier.",
@@ -433,7 +433,7 @@ function addNewItem() {
           itemDropdown.value = newItem;
 
           // Load item names to ensure consistency
-          // loadItemNames(); // Uncomment if you want to refresh the entire list
+          loadItems(); // Uncomment if you want to refresh the entire list
         } else {
           showToast(data.message || "Failed to add item.", "error", 3000, true);
         }
@@ -498,6 +498,72 @@ function sortProperties() {
   propertyContainer.innerHTML = "";
   rowsOrCards.forEach((el) => propertyContainer.appendChild(el));
 }
+
+function sortItems() {
+  const sortBy = document.getElementById("itemSortBy").value;
+  const isMobile = window.innerWidth <= 768;
+  const itemContainer = document.getElementById(isMobile ? "itemCardList" : "itemList");
+  const elements = Array.from(itemContainer.children);
+
+  const getCellValue = (element, columnIndex) => {
+    if (isMobile) {
+      const text = element.querySelectorAll("p")[columnIndex].textContent;
+      const value = text.split(":")[1].trim().toLowerCase();
+      return value;
+    } else {
+      return element.children[columnIndex].textContent.trim().toLowerCase();
+    }
+  };
+
+  elements.sort((a, b) => {
+    switch (sortBy) {  
+      case "name_asc":
+        return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
+      case "name_desc":
+        return getCellValue(b, 1).localeCompare(getCellValue(a, 1));
+      default:
+        return 0;
+    }
+  });
+
+  // Re-render the sorted elements
+  itemContainer.innerHTML = "";
+  elements.forEach((el) => itemContainer.appendChild(el));
+}
+
+function sortSuppliers() {
+  const sortBy = document.getElementById("supplierSortBy").value;
+  const isMobile = window.innerWidth <= 768;
+  const supplierContainer = document.getElementById(
+    isMobile ? "supplierCardList" : "supplierList"
+  );
+
+  const elements = Array.from(supplierContainer.children);
+
+  const getCellValue = (element, columnIndex) => {
+    if (isMobile) {
+      const text = element.querySelectorAll("p")[columnIndex].textContent;
+      return text.split(":")[1].trim().toLowerCase();
+    } else {
+      return element.children[columnIndex].textContent.trim().toLowerCase();
+    }
+  };
+
+  elements.sort((a, b) => {
+    switch (sortBy) {
+      case "name_asc":
+        return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
+      case "name_desc":
+        return getCellValue(b, 1).localeCompare(getCellValue(a, 1));
+      default:
+        return 0;
+    }
+  });
+
+  supplierContainer.innerHTML = "";
+  elements.forEach((el) => supplierContainer.appendChild(el));
+}
+
 
 function editProperty(propertyId) {
   fetch(`api/get_property.php?id=${propertyId}`)
@@ -617,6 +683,50 @@ function searchProperties() {
     });
   } else {
     const rows = document.querySelectorAll("#propertyList tr");
+    rows.forEach((row) => {
+      const cells = Array.from(row.children);
+      const matches = cells.some((cell) =>
+        cell.textContent.toLowerCase().includes(searchInput)
+      );
+      row.style.display = matches ? "" : "none";
+    });
+  }
+}
+
+function searchItems() {
+  const searchInput = document.getElementById("itemSearchBar").value.toLowerCase();
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    const cards = document.querySelectorAll("#itemCardList > div"); // Each card is a div
+    cards.forEach((card) => {
+      const text = card.textContent.toLowerCase();
+      card.style.display = text.includes(searchInput) ? "" : "none";
+    });
+  } else {
+    const rows = document.querySelectorAll("#itemList tr");
+    rows.forEach((row) => {
+      const cells = Array.from(row.children);
+      const matches = cells.some((cell) =>
+        cell.textContent.toLowerCase().includes(searchInput)
+      );
+      row.style.display = matches ? "" : "none";
+    });
+  }
+}
+
+function searchSuppliers() {
+  const searchInput = document.getElementById("supplierSearchBar").value.toLowerCase();
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    const cards = document.querySelectorAll("#supplierCardList > div"); // Each card is a div
+    cards.forEach((card) => {
+      const text = card.textContent.toLowerCase();
+      card.style.display = text.includes(searchInput) ? "" : "none";
+    });
+  } else {
+    const rows = document.querySelectorAll("#supplierList tr");
     rows.forEach((row) => {
       const cells = Array.from(row.children);
       const matches = cells.some((cell) =>
@@ -828,18 +938,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (activeSection) {
       activeSection.classList.remove('hidden');
     }
-
-     // ✅ Hide QR button except on 'items' section
-  const qrButton = document.getElementById("bulkQrButton");
-  if (qrButton) {
-    if (section === "properties") {
-      qrButton.classList.remove("hidden");
-    } else {
-      qrButton.classList.add("hidden");
-    }
   }
-  }
-
   navLinks.properties.addEventListener("click", () => setActiveNav("properties"));
   navLinks.items.addEventListener("click", () => {
     setActiveNav("items");
@@ -847,7 +946,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   navLinks.suppliers.addEventListener("click", () => {
     setActiveNav("suppliers");
-    loadSuppliers(); // ✅ Load supplier list when navigating
+    loadSupplier(); // ✅ Load supplier list when navigating
   });
 
   document.addEventListener("click", (event) => {
@@ -914,7 +1013,7 @@ function loadItems() {
     .catch((error) => console.error("Error loading items:", error));
 }
 
-function loadSuppliers() {
+function loadSupplier() {
   fetch("api/get_supplier.php")
     .then((response) => response.json())
     .then((data) => {
