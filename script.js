@@ -10,6 +10,25 @@ document.addEventListener("DOMContentLoaded", () => {
   sortProperties(); // Apply the default sorting
 });
 
+  function toggleDropdown() {
+    const dropdown = document.getElementById('masterlist-dropdown');
+    dropdown.classList.toggle('hidden');
+
+    const icon = document.getElementById('arrow-icon');
+    icon.classList.toggle('rotate-180');
+  }
+
+  // Optional: Close dropdown if clicked outside
+  window.addEventListener('click', function (e) {
+    const button = document.getElementById('masterlist-button');
+    const dropdown = document.getElementById('masterlist-dropdown');
+    if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add('hidden');
+      document.getElementById('arrow-icon').classList.remove('rotate-180');
+    }
+  });
+
+
 function showModal() {
   const form = document.getElementById("addPropertyForm");
   form.reset();
@@ -945,3 +964,4 @@ function loadSuppliers() {
     })
     .catch((error) => console.error("Error loading suppliers:", error));
 }
+

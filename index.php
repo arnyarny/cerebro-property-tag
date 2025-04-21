@@ -22,12 +22,21 @@
   <a href="#" id="nav-properties" class="bg-[#1C78B2] font-semibold px-3 py-2 rounded flex items-center gap-2">
     <i class="fas fa-building"></i> Properties
   </a>
-  <a href="#" id="nav-items" class="hover:bg-[#1C78B2] px-3 py-2 rounded flex items-center gap-2">
-    <i class="fas fa-box"></i> Masterlist: Items
-  </a>
-  <a href="#" id="nav-suppliers" class="hover:bg-[#1C78B2] px-3 py-2 rounded flex items-center gap-2">
-    <i class="fas fa-truck"></i> Masterlist: Suppliers
-  </a>
+  <div class="relative inline-block text-white">
+  <button id="masterlist-button" onclick="toggleDropdown()" class="flex items-center gap-2 px-3 py-2 rounded">
+    <i class="fas fa-folder"></i> Masterlist
+    <i id="arrow-icon" class="fas fa-chevron-down transition-transform duration-200"></i>
+  </button>
+
+  <div id="masterlist-dropdown" class="hidden absolute mt-2 space-y-1 pl-6 text-white">
+    <a href="#" id="nav-items" class="block px-4 py-2 hover:underline flex items-center gap-2">
+      <i class="fas fa-box"></i> Items
+    </a>
+    <a href="#" id="nav-suppliers" class="block px-4 py-2 hover:underline flex items-center gap-2">
+      <i class="fas fa-truck"></i> Suppliers
+    </a>
+  </div>
+</div>
 </nav>
 </aside>
 
