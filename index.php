@@ -14,9 +14,9 @@
  <!-- Sidebar -->
 <aside id="sidebar" class="bg-gradient-to-b from-[#0671B7] to-[#fd0000] text-white w-64 space-y-6 px-4 py-6 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:block transition-transform duration-300 ease-in-out z-40">
 
-  <div class="flex items-center gap-2 mb-8 bg-[#fff] rounded p-x-4 py-4">
+  <div class="flex items-center gap-2 mb-8 bg-[#fff] rounded p-x-2 py-4">
     <!-- Optional logo/title -->
-    <img src="assets/logo.png" alt="Logo" class="h-10">
+    <img src="assets/logo.png" alt="Logo" class="h-10 px-14">
   </div>
   <nav class="flex flex-col gap-4 text-sm">
   <a href="#" id="nav-properties" class="bg-[#1C78B2] font-semibold px-3 py-2 rounded flex items-center gap-2">
