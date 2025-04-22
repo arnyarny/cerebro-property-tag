@@ -39,6 +39,9 @@
 </div>
 </nav>
 </aside>
+<!-- Sidebar Overlay -->
+<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"></div>
+
 
 
 <main class="flex-1">
@@ -113,6 +116,22 @@
     <span id="totalItems">Total Items: 0</span>
     <span id="totalAmount">Total Amount: 0</span>
   </div>
+
+  <!-- Pagination -->
+<div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
+
+<div class="flex items-center gap-2">
+  <button id="prevPage" onclick="changePage(-1)" disabled class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+  <span id="currentPage">Page 1</span>
+  <span id="totalPages"></span>
+  <button id="nextPage" onclick="changePage(1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
+</div>
+<select id="itemsPerPage" onchange="updateItemsPerPage()" class="border border-gray-300 rounded px-3 py-1">
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+</select>
+</div>
 </div>
 
 <!-- Section: Items -->
@@ -152,6 +171,22 @@
 
   <!-- Mobile Cards -->
   <div id="itemCardList" class="md:hidden space-y-4 mt-4 px-4"></div>
+
+  <!-- Pagination -->
+<div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
+
+<div class="flex items-center gap-2">
+  <button id="prevPage" onclick="changePage(-1)" disabled class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+  <span id="currentPage">Page 1</span>
+  <span id="totalPages"></span>
+  <button id="nextPage" onclick="changePage(1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
+</div>
+<select id="itemsPerPage" onchange="updateItemsPerPage()" class="border border-gray-300 rounded px-3 py-1">
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+</select>
+</div>
 </div>
 
 
@@ -193,6 +228,21 @@
 
   <!-- Mobile Cards -->
   <div id="supplierCardList" class="md:hidden space-y-4 mt-4 px-4"></div>
+  <!-- Pagination -->
+<div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
+
+<div class="flex items-center gap-2">
+  <button id="prevPage" onclick="changePage(-1)" disabled class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+  <span id="currentPage">Page 1</span>
+  <span id="totalPages"></span>
+  <button id="nextPage" onclick="changePage(1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
+</div>
+<select id="itemsPerPage" onchange="updateItemsPerPage()" class="border border-gray-300 rounded px-3 py-1">
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+</select>
+</div>
 </div>
 
 
@@ -211,22 +261,6 @@
     </div>
   </div>
 </div>
-
-  <!-- Pagination -->
-<div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
-
-    <div class="flex items-center gap-2">
-      <button id="prevPage" onclick="changePage(-1)" disabled class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
-      <span id="currentPage">Page 1</span>
-      <span id="totalPages"></span>
-      <button id="nextPage" onclick="changePage(1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
-    </div>
-    <select id="itemsPerPage" onchange="updateItemsPerPage()" class="border border-gray-300 rounded px-3 py-1">
-      <option value="5">5 per page</option>
-      <option value="10" selected>10 per page</option>
-      <option value="20">20 per page</option>
-    </select>
-  </div>
 
   <!-- Property Modal -->
 <div id="propertyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -274,20 +308,92 @@
   </div>
 </div>
 
+<!-- Edit Item Modal -->
+<div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
+    <div class="modal-header flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Edit Item</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeItemModal()">×</button>
+    </div>
+    <form id="editItemForm" class="space-y-4">
+      <div>
+        <label for="edit_item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
+        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+        <input type="hidden" id="edit_item_id" name="edit_item_id">
+      </div>
+      <div class="modal-footer flex justify-end mt-6 space-x-2">
+        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
+        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeItemModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Supplier Modal -->
+<div id="supplierModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
+    <div class="modal-header flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Edit Supplier</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeSupplierModal()">×</button>
+    </div>
+    <form id="editSupplierForm" class="space-y-4">
+      <div>
+        <label for="edit_supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
+        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+        <input type="hidden" id="edit_supplier_id" name="edit_supplier_id">
+      </div>
+      <div class="modal-footer flex justify-end mt-6 space-x-2">
+        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
+        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeSupplierModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
 
   <!-- Delete Modal -->
   <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white w-full max-w-sm p-6 rounded shadow">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-semibold text-[#F03A25]">Confirm Deletion</h2>
-        <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeDeleteModal()">×</button>
-      </div>
-      <p class="mb-4 text-sm">Are you sure you want to delete this property?</p>
-      <div class="text-right">
-        <button id="confirmDeleteButton" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded">Delete</button>
-      </div>
+  <div class="bg-white w-full max-w-sm p-6 rounded shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-[#F03A25]">Confirm Deletion</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeDeleteModal()">×</button>
+    </div>
+    <p class="mb-4 text-sm">Are you sure you want to delete this property?</p>
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeDeleteModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancel</button>
+      <button id="confirmDeleteButton" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded">Delete</button>
     </div>
   </div>
+</div>
+
+
+  <div id="deleteItemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-sm p-6 rounded shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-[#F03A25]">Confirm Item Deletion</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeDeleteItemModal()">×</button>
+    </div>
+    <p class="mb-4 text-sm">Are you sure you want to delete this item?</p>
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeDeleteItemModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancel</button>
+      <button id="confirmDeleteItemBtn" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded">Delete</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="deleteSupplierModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white w-full max-w-sm p-6 rounded shadow">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-[#F03A25]">Confirm Supplier Deletion</h2>
+      <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeDeleteSupplierModal()">×</button>
+    </div>
+    <p class="mb-4 text-sm">Are you sure you want to delete this supplier?</p>
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeDeleteSupplierModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">Cancel</button>
+      <button id="confirmDeleteSupplierBtn" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded">Delete</button>
+    </div>
+  </div>
+</div>
 
   <!-- Toast Container -->
   <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>

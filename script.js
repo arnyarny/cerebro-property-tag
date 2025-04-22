@@ -52,7 +52,7 @@ function closeModal() {
   document.getElementById("propertyModal").style.display = "none";
 }
 
-function showDeleteModal(propertyId) {
+function showDeletePropertyModal(propertyId) {
   const deleteModal = document.getElementById("deleteModal");
   deleteModal.style.display = "flex";
   document.getElementById("confirmDeleteButton").onclick = () => {
@@ -160,7 +160,7 @@ function loadProperties() {
 <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
   Edit
 </button>
-<button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="showDeleteModal(${property.id})">
+<button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="showDeletePropertyModal(${property.id})">
   Delete
 </button>
 
@@ -198,7 +198,7 @@ function loadProperties() {
   <!-- Actions -->
   <div class="flex flex-col gap-2">
     <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded" onclick="generateQRCode(${property.id})">Generate QR Code</button>
-    <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="showDeleteModal(${property.id})">Delete</button>
+    <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="showDeletePropertyModal(${property.id})">Delete</button>
   </div>
 `;
 
@@ -649,6 +649,144 @@ function editProperty(propertyId) {
     .catch((error) => console.error("Error fetching property:", error));
 }
 
+function editItem(itemId) {
+  fetch(`api/get_item.php?id=${itemId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Fetched item data:", data); // Log the response data to inspect it
+      if (data.success) {
+        const item = data.item;
+
+        // Prefill the input fields
+        document.getElementById("edit_item_name").value = item.name;
+        document.getElementById("edit_item_id").value = item.item_id;
+
+        // Set the modal header to "Edit Item"
+        document.querySelector(".modal-header h2").textContent = "Edit Item";
+
+        // Show the modal (make sure it's visible)
+        const modal = document.getElementById("itemModal");
+        // Show the modal using Tailwind's 'hidden' class removal
+modal.classList.remove('hidden');
+        console.log("Modal should now be visible.");
+      } else {
+        showToast(data.message || "Failed to fetch item details.", "error", 3000, true);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching item:", error);
+    });
+}
+
+function saveEditedItem() {
+  const itemId = document.getElementById("edit_item_id").value;
+const itemName = document.getElementById("edit_item_name").value;
+
+
+  if (!itemName) {
+    showToast("Item name is required.", "error", 3000, true);
+    return;
+  }
+
+  fetch("api/edit_item.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      itemId,
+      itemName
+    })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Item updated successfully.", "success", 3000, true);
+        closeItemModal();  // Close the modal
+        loadItems();
+      } else {
+        showToast(data.message || "Failed to update item.", "error", 3000, true);
+      }
+    })
+    .catch((error) => console.error("Error saving item:", error));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("editItemForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent default form submission
+    saveEditedItem();   // Call your custom function
+  });
+});
+
+// Function to close the modal
+function closeItemModal() {
+  const modal = document.getElementById('itemModal');
+  modal.classList.add('hidden');
+}
+
+function editSupplier(supplierId) {
+  fetch(`api/get_supplier_edit.php?id=${supplierId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        const supplier = data.supplier;
+        document.getElementById("edit_supplier_name").value = supplier.name;
+        document.getElementById("edit_supplier_id").value = supplier.supplier_id;
+        document.getElementById("supplierModal").classList.remove("hidden");
+      } else {
+        showToast(data.message || "Failed to fetch supplier details.", "error", 3000, true);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching supplier:", error);
+    });
+}
+
+function saveEditedSupplier() {
+  const supplierId = document.getElementById("edit_supplier_id").value;
+  const supplierName = document.getElementById("edit_supplier_name").value;
+
+  if (!supplierName) {
+    showToast("Supplier name is required.", "error", 3000, true);
+    return;
+  }
+
+  fetch("api/edit_supplier.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      supplierId,
+      supplierName
+    })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Supplier updated successfully.", "success", 3000, true);
+        closeSupplierModal(); // Hide modal
+        loadSupplier();      // Refresh the supplier list
+      } else {
+        showToast(data.message || "Failed to update supplier.", "error", 3000, true);
+      }
+    })
+    .catch((error) => console.error("Error saving supplier:", error));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("editSupplierForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    saveEditedSupplier();
+  });
+});
+
+function closeSupplierModal() {
+  document.getElementById("supplierModal").classList.add("hidden");
+}
+
 function deleteProperty(propertyId) {
   fetch(`api/delete_property.php?id=${propertyId}`, {
     method: "DELETE", // Use the id in the query string
@@ -669,6 +807,83 @@ function deleteProperty(propertyId) {
       }
     })
     .catch((error) => console.error("Error deleting property:", error));
+}
+
+let supplierIdPendingDelete = null;
+
+function openDeleteSupplierModal(supplierId) {
+  supplierIdPendingDelete = supplierId;
+  document.getElementById("deleteSupplierModal").classList.remove("hidden");
+}
+
+function closeDeleteSupplierModal() {
+  supplierIdPendingDelete = null;
+  document.getElementById("deleteSupplierModal").classList.add("hidden");
+}
+
+document.getElementById("confirmDeleteSupplierBtn").addEventListener("click", () => {
+  if (supplierIdPendingDelete !== null) {
+    deleteSupplier(supplierIdPendingDelete); // Call the supplier deletion function
+  }
+});
+
+function deleteSupplier(supplierId) {
+  fetch(`api/delete_supplier.php?id=${supplierId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Supplier deleted successfully!", "success");
+        loadSupplier(); // reload the list after deletion
+        closeDeleteSupplierModal(); // optional modal close
+      } else {
+        showToast(data.message || "Failed to delete supplier.", "error", 3000, true);
+      }
+    })
+    .catch((error) => console.error("Error deleting supplier:", error));
+}
+
+let itemIdPendingDelete = null;
+
+function openDeleteItemModal(itemId) {
+  itemIdPendingDelete = itemId;
+  document.getElementById("deleteItemModal").classList.remove("hidden");
+}
+
+function closeDeleteItemModal() {
+  itemIdPendingDelete = null;
+  document.getElementById("deleteItemModal").classList.add("hidden");
+}
+
+// Make sure the element exists before adding event listener to avoid errors.
+const confirmDeleteBtn = document.getElementById("confirmDeleteItemBtn");
+if (confirmDeleteBtn) {
+  confirmDeleteBtn.addEventListener("click", () => {
+    if (itemIdPendingDelete !== null) {
+      deleteItem(itemIdPendingDelete); // Calls your existing function
+    }
+  });
+}
+
+function deleteItem(itemId) {
+  fetch(`api/delete_item.php?id=${itemId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Item deleted successfully!", "success");
+        loadItems(); // Refresh item list
+        closeDeleteItemModal(); // Close the modal
+      } else {
+        showToast(data.message || "Failed to delete item.", "error", 3000, true);
+      }
+    })
+    .catch((error) => {
+      console.error("Error deleting item:", error);
+      showToast("An error occurred while deleting the item.", "error");
+    });
 }
 
 function searchProperties() {
@@ -982,7 +1197,7 @@ function loadItems() {
               <td class="p-2">
                 <div class="flex space-x-2">
                   <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteItem(${item.item_id})">Delete</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1000,7 +1215,7 @@ function loadItems() {
 
               <div class="flex flex-col gap-2">
                 <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
-                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteItem(${item.item_id})">Delete</button>
+                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
               </div>
             `;
             itemCardList.appendChild(card);
@@ -1033,7 +1248,7 @@ function loadSupplier() {
               <td class="p-2">
                 <div class="flex space-x-2">
                   <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1051,7 +1266,7 @@ function loadSupplier() {
 
               <div class="flex flex-col gap-2">
                 <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
-                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
+                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
               </div>
             `;
             supplierCardList.appendChild(card);
@@ -1063,4 +1278,3 @@ function loadSupplier() {
     })
     .catch((error) => console.error("Error loading suppliers:", error));
 }
-
