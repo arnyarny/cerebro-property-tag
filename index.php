@@ -158,23 +158,25 @@
       <form id="addPropertyForm" class="space-y-4">
         <div>
           <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
-          <select id="item_name" name="item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-            <option value="">Select Item</option>
-          </select>
-          <button type="button" class="text-[#0671B7] text-sm mt-2 hover:underline" onclick="addNewItem()">+ Add New Item</button>
+          <div class="relative">
+            <input type="text" id="item_name" name="item_name" autocomplete="off"
+  required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+<ul id="itemSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
+</div>
         </div>
-
         <div>
           <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
           <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
         </div>
 
         <div>
-          <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
-          <select id="item_supplier" name="item_supplier" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-            <option value="">Select Supplier</option>
-          </select>
-          <button type="button" class="text-[#0671B7] text-sm mt-2 hover:underline" onclick="addNewSupplier()">+ Add New Supplier</button>
+        <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
+<div class="relative">
+  <input type="text" id="item_supplier" name="item_supplier" autocomplete="off"
+    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" required>
+  <ul id="supplierSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
+</div>
+
         </div>
 
         <div>

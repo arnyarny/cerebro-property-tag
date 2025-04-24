@@ -1403,3 +1403,173 @@ document.addEventListener("DOMContentLoaded", () => {
   updatePagination("items");
   updatePagination("suppliers");
 });
+
+const itemInput = document.getElementById("item_name");
+const suggestionsBox = document.getElementById("itemSuggestions");
+
+itemInput.addEventListener("input", async () => {
+  const query = itemInput.value.trim();
+
+  if (query.length < 1) {
+    suggestionsBox.classList.add("hidden");
+    return;
+  }
+
+  try {
+    const response = await fetch(`../api/search_items.php?q=${encodeURIComponent(query)}`);
+    const suggestions = await response.json();
+
+    suggestionsBox.innerHTML = "";
+    suggestionsBox.classList.remove("hidden");
+
+    if (suggestions.length === 0) {
+      const li = document.createElement("li");
+      li.innerHTML = `No match found. <button class="text-[#0671B7] underline text-sm ml-1" onclick="addNewItemAuto('${query}')">+ Add New Item</button>`;
+      li.className = "px-4 py-2 text-gray-500";
+      suggestionsBox.appendChild(li);
+      return;
+    }
+
+    suggestions.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.className = "cursor-pointer px-4 py-2 hover:bg-emerald-100";
+      li.addEventListener("click", () => {
+        itemInput.value = item;
+        suggestionsBox.classList.add("hidden");
+      });
+      suggestionsBox.appendChild(li);
+    });
+  } catch (error) {
+    console.error("Autocomplete fetch failed:", error);
+  }
+});
+
+// Hide suggestions when clicking outside
+document.addEventListener("click", (e) => {
+  if (!suggestionsBox.contains(e.target) && e.target !== itemInput) {
+    suggestionsBox.classList.add("hidden");
+  }
+});
+
+// Allow "Enter" key to confirm item and close dropdown
+itemInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    suggestionsBox.classList.add("hidden");
+  }
+});
+
+function addNewItemAuto(itemName) {
+  const newItem = itemName || itemInput.value;
+  suggestionsBox.classList.add("hidden");
+
+  if (!newItem) return;
+
+  fetch("api/add_item.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ name: newItem }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Item added successfully!", "success");
+
+        // Optionally set input field to new item name
+        itemInput.value = newItem;
+
+        // Load or add to suggestions
+        loadItems(); // or update suggestions manually if needed
+      } else {
+        showToast(data.message || "Failed to add item.", "error", 3000, true);
+      }
+    })
+    .catch((error) => {
+      console.error("Error adding item:", error);
+      showToast(
+        "An error occurred while processing the request.",
+        "error",
+        3000,
+        true
+      );
+    });
+}
+
+const supplierInput = document.getElementById("item_supplier");
+const supplierSuggestionsBox = document.getElementById("supplierSuggestions");
+
+supplierInput.addEventListener("input", async () => {
+  const query = supplierInput.value.trim();
+
+  if (query.length < 1) {
+    supplierSuggestionsBox.classList.add("hidden");
+    return;
+  }
+
+  try {
+    const res = await fetch(`../api/search_suppliers.php?q=${encodeURIComponent(query)}`);
+    const suppliers = await res.json();
+
+    supplierSuggestionsBox.innerHTML = "";
+    supplierSuggestionsBox.classList.remove("hidden");
+
+    if (suppliers.length === 0) {
+      const li = document.createElement("li");
+      li.innerHTML = `No match found. <button class="text-[#0671B7] underline text-sm ml-1" onclick="addNewSupplierAuto('${query}')">+ Add New Supplier</button>`;
+      li.className = "px-4 py-2 text-gray-500";
+      supplierSuggestionsBox.appendChild(li);
+      return;
+    }
+
+    suppliers.forEach(supplier => {
+      const li = document.createElement("li");
+      li.textContent = supplier;
+      li.className = "cursor-pointer px-4 py-2 hover:bg-emerald-100";
+      li.addEventListener("click", () => {
+        supplierInput.value = supplier;
+        supplierSuggestionsBox.classList.add("hidden");
+      });
+      supplierSuggestionsBox.appendChild(li);
+    });
+  } catch (err) {
+    console.error("Supplier autocomplete failed:", err);
+  }
+});
+
+// Close on outside click
+document.addEventListener("click", (e) => {
+  if (!supplierSuggestionsBox.contains(e.target) && e.target !== supplierInput) {
+    supplierSuggestionsBox.classList.add("hidden");
+  }
+});
+
+// Enter key closes dropdown
+supplierInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    supplierSuggestionsBox.classList.add("hidden");
+  }
+});
+
+function addNewSupplierAuto(supplierName) {
+  supplierSuggestionsBox.classList.add("hidden");
+
+  fetch("api/add_supplier.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ name: supplierInput.value }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Supplier added successfully!", "success");
+      } else {
+        showToast(data.message || "Failed to add supplier.", "error", 3000, true);
+      }
+    })
+    .catch((err) => {
+      console.error("Error adding supplier:", err);
+      showToast("An error occurred while processing the request.", "error", 3000, true);
+    });
+}
+
+
