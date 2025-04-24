@@ -1075,7 +1075,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebarOverlay");
 
-  const isMobile = () => window.matchMedia("(max-width: 767px)").matches;
+  // More reliable mobile check
+  const isMobile = () => window.innerWidth <= 767;
 
   const openSidebar = () => {
     sidebar.classList.remove("-translate-x-full");
@@ -1151,7 +1152,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const isClickOnMenuButton = menuToggle.contains(event.target);
       const isSidebarOpen = !sidebar.classList.contains("-translate-x-full");
 
-      // Close sidebar if clicked outside
       if (!isClickInsideSidebar && !isClickOnMenuButton && isSidebarOpen) {
         closeSidebar();
       }
@@ -1161,20 +1161,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // Resize logic to handle switching between mobile and desktop
   window.addEventListener("resize", () => {
     if (isMobile()) {
-      // If the view is mobile, ensure the sidebar is closed
       closeSidebar();
     } else {
-      // If the view is desktop, always open the sidebar
       openSidebar();
     }
   });
 
-  // On page load, open the sidebar if on desktop
-  if (!isMobile()) {
-    openSidebar();
-  }
+  // Slight delay to ensure layout settles before deciding on sidebar visibility
+  setTimeout(() => {
+    if (!isMobile()) {
+      openSidebar();
+    } else {
+      closeSidebar(); // Ensure closed on mobile just in case
+    }
+  }, 50);
 });
-
 
 function loadItems() {
   fetch("api/get_items.php")
