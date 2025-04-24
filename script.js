@@ -10,33 +10,35 @@ document.addEventListener("DOMContentLoaded", () => {
   sortProperties(); // Apply the default sorting
 });
 
-  function toggleDropdown() {
-    const dropdown = document.getElementById('masterlist-dropdown');
-    dropdown.classList.toggle('hidden');
+function toggleDropdown() {
+  const dropdown = document.getElementById("masterlist-dropdown");
+  dropdown.classList.toggle("hidden");
 
-    const icon = document.getElementById('arrow-icon');
-    icon.classList.toggle('rotate-180');
+  const icon = document.getElementById("arrow-icon");
+  icon.classList.toggle("rotate-180");
+}
+
+// Optional: Close dropdown if clicked outside
+window.addEventListener("click", function (e) {
+  const button = document.getElementById("masterlist-button");
+  const dropdown = document.getElementById("masterlist-dropdown");
+  if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.add("hidden");
+    document.getElementById("arrow-icon").classList.remove("rotate-180");
   }
-
-  // Optional: Close dropdown if clicked outside
-  window.addEventListener('click', function (e) {
-    const button = document.getElementById('masterlist-button');
-    const dropdown = document.getElementById('masterlist-dropdown');
-    if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add('hidden');
-      document.getElementById('arrow-icon').classList.remove('rotate-180');
-    }
-  });
-
+});
 
 function showModal() {
+  console.log("showModal function called"); // Debugging log
   const form = document.getElementById("addPropertyForm");
   form.reset();
   document.getElementById("propertyId").value = "";
   document.getElementById("amount").removeAttribute("readonly");
   document.getElementById("amount").removeAttribute("disabled");
   document.querySelector(".modal-header h2").textContent = "Add Property";
-  document.getElementById("propertyModal").style.display = "flex";
+
+  const modal = document.getElementById("propertyModal");
+  modal.style.display = "flex";
 
   // Reset dropdowns
   const supplierDropdown = document.getElementById("item_supplier");
@@ -126,6 +128,22 @@ function handleFormSubmit(event) {
     });
 }
 
+const amountInput = document.getElementById("amount");
+
+  amountInput.addEventListener("keydown", function (e) {
+    // Block the minus key
+    if (e.key === "-" || e.key === "Minus") {
+      e.preventDefault();
+    }
+  });
+
+  amountInput.addEventListener("input", function () {
+    // Just in case someone pastes a negative number
+    if (parseFloat(amountInput.value) < 0) {
+      amountInput.value = "";
+    }
+  });
+
 function loadProperties() {
   fetch("api/get_properties.php")
     .then((response) => response.json())
@@ -167,7 +185,7 @@ function loadProperties() {
             </div>
           </td>
         `;
-        propertyList.appendChild(row);
+        propertyList.appendChild(row); 
 
         // CARD (Mobile)
         const card = document.createElement("div");
@@ -211,97 +229,11 @@ function loadProperties() {
       document.getElementById(
         "totalAmount"
       ).textContent = `Total Amount: ${totalAmount.toFixed(2)}`;
+
+      // Call updatePagination AFTER rows are added
+      updatePagination("properties");
     })
     .catch((error) => console.error("Error:", error));
-}
-
-let currentPage = 1;
-let itemsPerPage = 10;
-
-function changePage(direction) {
-  const totalItems = document.querySelectorAll("#propertyList tr").length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // Calculate the new current page
-  const newPage = currentPage + direction;
-
-  // Only update currentPage if newPage is within bounds
-  if (newPage >= 1 && newPage <= totalPages) {
-    currentPage = newPage;
-  }
-
-  // Disable the previous button if on the first page
-  document.getElementById("prevPage").disabled = currentPage === 1;
-
-  // Disable the next button if on the last page
-  document.getElementById("nextPage").disabled = currentPage === totalPages;
-
-  // Uncheck all checkboxes and the select all checkbox
-  const checkboxes = document.querySelectorAll(
-    "#propertyList input.property-checkbox"
-  );
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = false; // Uncheck individual checkboxes
-  });
-
-  const selectAllCheckbox = document.getElementById("selectAllCheckbox");
-  if (selectAllCheckbox) {
-    selectAllCheckbox.checked = false; // Uncheck the "Select All" checkbox
-    selectAllCheckbox.indeterminate = false; // Remove indeterminate state
-  }
-
-  // Update the pagination display
-  updatePagination();
-
-  // Update the "Select All" checkbox state after changing pages
-  updateSelectAllCheckboxState();
-}
-
-function updatePagination() {
-  const rows = document.querySelectorAll("#propertyList tr");
-  const totalItems = rows.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-
-  rows.forEach((row, index) => {
-    row.style.display = index >= start && index < end ? "" : "none";
-  });
-
-  document.getElementById("currentPage").textContent = `Page ${currentPage}`;
-  document.getElementById("totalPages").textContent = ` of ${totalPages}`;
-}
-
-function updateItemsPerPage() {
-  // Get the new items per page value
-  itemsPerPage = parseInt(document.getElementById("itemsPerPage").value, 10);
-
-  // Calculate the total number of items
-  const totalItems = document.querySelectorAll("#propertyList tr").length;
-
-  // Calculate the new total pages based on the updated items per page
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // Reset to first page if the new items per page is set
-  currentPage = 1;
-
-  // Disable the previous button if on the first page
-  document.getElementById("prevPage").disabled = currentPage === 1;
-
-  // Disable the next button if there are no more pages
-  document.getElementById("nextPage").disabled = currentPage === totalPages;
-
-  // Uncheck the 'Select All' checkbox
-  document.getElementById("selectAllCheckbox").checked = false;
-
-  // Uncheck all individual checkboxes in the current page
-  const checkboxes = document.querySelectorAll(
-    '#propertyList input[type="checkbox"]'
-  );
-  checkboxes.forEach((checkbox) => (checkbox.checked = false));
-
-  // Update the pagination display
-  updatePagination();
 }
 
 function loadSuppliers() {
@@ -502,7 +434,9 @@ function sortProperties() {
 function sortItems() {
   const sortBy = document.getElementById("itemSortBy").value;
   const isMobile = window.innerWidth <= 768;
-  const itemContainer = document.getElementById(isMobile ? "itemCardList" : "itemList");
+  const itemContainer = document.getElementById(
+    isMobile ? "itemCardList" : "itemList"
+  );
   const elements = Array.from(itemContainer.children);
 
   const getCellValue = (element, columnIndex) => {
@@ -516,7 +450,7 @@ function sortItems() {
   };
 
   elements.sort((a, b) => {
-    switch (sortBy) {  
+    switch (sortBy) {
       case "name_asc":
         return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
       case "name_desc":
@@ -563,7 +497,6 @@ function sortSuppliers() {
   supplierContainer.innerHTML = "";
   elements.forEach((el) => supplierContainer.appendChild(el));
 }
-
 
 function editProperty(propertyId) {
   fetch(`api/get_property.php?id=${propertyId}`)
@@ -667,10 +600,15 @@ function editItem(itemId) {
         // Show the modal (make sure it's visible)
         const modal = document.getElementById("itemModal");
         // Show the modal using Tailwind's 'hidden' class removal
-modal.classList.remove('hidden');
+        modal.classList.remove("hidden");
         console.log("Modal should now be visible.");
       } else {
-        showToast(data.message || "Failed to fetch item details.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to fetch item details.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => {
@@ -680,8 +618,7 @@ modal.classList.remove('hidden');
 
 function saveEditedItem() {
   const itemId = document.getElementById("edit_item_id").value;
-const itemName = document.getElementById("edit_item_name").value;
-
+  const itemName = document.getElementById("edit_item_name").value;
 
   if (!itemName) {
     showToast("Item name is required.", "error", 3000, true);
@@ -691,21 +628,26 @@ const itemName = document.getElementById("edit_item_name").value;
   fetch("api/edit_item.php", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       itemId,
-      itemName
-    })
+      itemName,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
         showToast("Item updated successfully.", "success", 3000, true);
-        closeItemModal();  // Close the modal
+        closeItemModal(); // Close the modal
         loadItems();
       } else {
-        showToast(data.message || "Failed to update item.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to update item.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => console.error("Error saving item:", error));
@@ -715,14 +657,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("editItemForm");
   form.addEventListener("submit", function (e) {
     e.preventDefault(); // Prevent default form submission
-    saveEditedItem();   // Call your custom function
+    saveEditedItem(); // Call your custom function
   });
 });
 
 // Function to close the modal
 function closeItemModal() {
-  const modal = document.getElementById('itemModal');
-  modal.classList.add('hidden');
+  const modal = document.getElementById("itemModal");
+  modal.classList.add("hidden");
 }
 
 function editSupplier(supplierId) {
@@ -732,10 +674,16 @@ function editSupplier(supplierId) {
       if (data.success) {
         const supplier = data.supplier;
         document.getElementById("edit_supplier_name").value = supplier.name;
-        document.getElementById("edit_supplier_id").value = supplier.supplier_id;
+        document.getElementById("edit_supplier_id").value =
+          supplier.supplier_id;
         document.getElementById("supplierModal").classList.remove("hidden");
       } else {
-        showToast(data.message || "Failed to fetch supplier details.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to fetch supplier details.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => {
@@ -755,21 +703,26 @@ function saveEditedSupplier() {
   fetch("api/edit_supplier.php", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       supplierId,
-      supplierName
-    })
+      supplierName,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
         showToast("Supplier updated successfully.", "success", 3000, true);
         closeSupplierModal(); // Hide modal
-        loadSupplier();      // Refresh the supplier list
+        loadSupplier(); // Refresh the supplier list
       } else {
-        showToast(data.message || "Failed to update supplier.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to update supplier.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => console.error("Error saving supplier:", error));
@@ -821,11 +774,13 @@ function closeDeleteSupplierModal() {
   document.getElementById("deleteSupplierModal").classList.add("hidden");
 }
 
-document.getElementById("confirmDeleteSupplierBtn").addEventListener("click", () => {
-  if (supplierIdPendingDelete !== null) {
-    deleteSupplier(supplierIdPendingDelete); // Call the supplier deletion function
-  }
-});
+document
+  .getElementById("confirmDeleteSupplierBtn")
+  .addEventListener("click", () => {
+    if (supplierIdPendingDelete !== null) {
+      deleteSupplier(supplierIdPendingDelete); // Call the supplier deletion function
+    }
+  });
 
 function deleteSupplier(supplierId) {
   fetch(`api/delete_supplier.php?id=${supplierId}`, {
@@ -838,7 +793,12 @@ function deleteSupplier(supplierId) {
         loadSupplier(); // reload the list after deletion
         closeDeleteSupplierModal(); // optional modal close
       } else {
-        showToast(data.message || "Failed to delete supplier.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to delete supplier.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => console.error("Error deleting supplier:", error));
@@ -877,7 +837,12 @@ function deleteItem(itemId) {
         loadItems(); // Refresh item list
         closeDeleteItemModal(); // Close the modal
       } else {
-        showToast(data.message || "Failed to delete item.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to delete item.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((error) => {
@@ -909,7 +874,9 @@ function searchProperties() {
 }
 
 function searchItems() {
-  const searchInput = document.getElementById("itemSearchBar").value.toLowerCase();
+  const searchInput = document
+    .getElementById("itemSearchBar")
+    .value.toLowerCase();
   const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
@@ -931,7 +898,9 @@ function searchItems() {
 }
 
 function searchSuppliers() {
-  const searchInput = document.getElementById("supplierSearchBar").value.toLowerCase();
+  const searchInput = document
+    .getElementById("supplierSearchBar")
+    .value.toLowerCase();
   const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
@@ -1106,6 +1075,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebarOverlay");
 
+  const isMobile = () => window.matchMedia("(max-width: 767px)").matches;
+
   const openSidebar = () => {
     sidebar.classList.remove("-translate-x-full");
     overlay.classList.remove("hidden");
@@ -1118,13 +1089,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("sidebar-open");
   };
 
+  // Mobile-specific logic: toggle sidebar when menu button is clicked
   if (menuToggle) {
     menuToggle.addEventListener("click", () => {
-      const isOpen = !sidebar.classList.contains("-translate-x-full");
-      isOpen ? closeSidebar() : openSidebar();
+      if (isMobile()) {
+        const isOpen = !sidebar.classList.contains("-translate-x-full");
+        isOpen ? closeSidebar() : openSidebar();
+      }
     });
   }
 
+  // Close sidebar when clicking on the overlay (on mobile)
   if (overlay) {
     overlay.addEventListener("click", closeSidebar);
   }
@@ -1133,7 +1108,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = {
     properties: document.getElementById("nav-properties"),
     items: document.getElementById("nav-items"),
-    suppliers: document.getElementById("nav-suppliers")
+    suppliers: document.getElementById("nav-suppliers"),
   };
 
   function setActiveNav(section) {
@@ -1145,37 +1120,61 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    document.querySelectorAll('.content-section').forEach(sectionEl => {
-      sectionEl.classList.add('hidden');
+    document.querySelectorAll(".content-section").forEach((sectionEl) => {
+      sectionEl.classList.add("hidden");
     });
 
     const activeSection = document.getElementById(`section-${section}`);
     if (activeSection) {
-      activeSection.classList.remove('hidden');
+      activeSection.classList.remove("hidden");
     }
   }
-  navLinks.properties.addEventListener("click", () => setActiveNav("properties"));
+
+  navLinks.properties.addEventListener("click", () => {
+    setActiveNav("properties");
+  });
+
   navLinks.items.addEventListener("click", () => {
     setActiveNav("items");
     loadItems(); // ✅ Load item list when navigating
   });
+
   navLinks.suppliers.addEventListener("click", () => {
     setActiveNav("suppliers");
     loadSupplier(); // ✅ Load supplier list when navigating
   });
 
+  // Click logic for closing sidebar if clicked outside (mobile)
   document.addEventListener("click", (event) => {
-    const isClickInsideSidebar = sidebar.contains(event.target);
-    const isClickOnMenuButton = menuToggle.contains(event.target);
-  
-    const isSidebarOpen = !sidebar.classList.contains("-translate-x-full");
-  
-    if (!isClickInsideSidebar && !isClickOnMenuButton && isSidebarOpen) {
-      closeSidebar();
+    if (isMobile()) {
+      const isClickInsideSidebar = sidebar.contains(event.target);
+      const isClickOnMenuButton = menuToggle.contains(event.target);
+      const isSidebarOpen = !sidebar.classList.contains("-translate-x-full");
+
+      // Close sidebar if clicked outside
+      if (!isClickInsideSidebar && !isClickOnMenuButton && isSidebarOpen) {
+        closeSidebar();
+      }
     }
   });
-  
+
+  // Resize logic to handle switching between mobile and desktop
+  window.addEventListener("resize", () => {
+    if (isMobile()) {
+      // If the view is mobile, ensure the sidebar is closed
+      closeSidebar();
+    } else {
+      // If the view is desktop, always open the sidebar
+      openSidebar();
+    }
+  });
+
+  // On page load, open the sidebar if on desktop
+  if (!isMobile()) {
+    openSidebar();
+  }
 });
+
 
 function loadItems() {
   fetch("api/get_items.php")
@@ -1222,8 +1221,13 @@ function loadItems() {
           }
         });
       } else {
-        console.error("Invalid response:", data.message || "Invalid data format");
+        console.error(
+          "Invalid response:",
+          data.message || "Invalid data format"
+        );
       }
+      // Call updatePagination AFTER rows are added
+      updatePagination("items");
     })
     .catch((error) => console.error("Error loading items:", error));
 }
@@ -1273,8 +1277,129 @@ function loadSupplier() {
           }
         });
       } else {
-        console.error("Invalid response:", data.message || "Invalid data format");
+        console.error(
+          "Invalid response:",
+          data.message || "Invalid data format"
+        );
       }
+      // Call updatePagination AFTER rows are added
+      updatePagination("suppliers");
     })
     .catch((error) => console.error("Error loading suppliers:", error));
 }
+
+const paginationState = {
+  properties: { currentPage: 1, itemsPerPage: 10 },
+  items: { currentPage: 1, itemsPerPage: 10 },
+  suppliers: { currentPage: 1, itemsPerPage: 10 },
+};
+
+function changePage(section, direction) {
+  const state = paginationState[section];
+  console.log(`Changing page for section: ${section}`);
+
+  const listId =
+    section === "properties"
+      ? "propertyList"
+      : section === "items"
+      ? "itemList"
+      : "supplierList";
+  const list = document.querySelector(`#${listId}`);
+
+  if (!list) {
+    console.error(`${listId} not found!`);
+    return;
+  }
+
+  const rows = Array.from(list.querySelectorAll("tr"));
+  const totalItems = rows.length;
+  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
+
+  console.log(`Total Items: ${totalItems}, Total Pages: ${totalPages}`);
+
+  const newPage = state.currentPage + direction;
+  if (newPage >= 1 && newPage <= totalPages) {
+    state.currentPage = newPage;
+  } else {
+    console.log("Invalid page number, keeping current page.");
+  }
+
+  // Clear "Select All" and all visible checkboxes when page changes
+  const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+  if (selectAllCheckbox) {
+    selectAllCheckbox.checked = false;
+  }
+  const checkboxes = list.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+
+  document.querySelector(`#${section}PrevPage`).disabled = state.currentPage === 1;
+  document.querySelector(`#${section}NextPage`).disabled = state.currentPage === totalPages;
+
+  updatePagination(section);
+}
+
+
+function updatePagination(section) {
+  const state = paginationState[section];
+  const listId = section === "properties" ? "propertyList" : section === "items" ? "itemList" : "supplierList";
+  const cardListId = section === "properties" ? "propertyCardList" : section === "items" ? "itemCardList" : "supplierCardList";
+
+  const list = document.querySelector(`#${listId}`);
+  const cardList = document.querySelector(`#${cardListId}`);
+
+  let rows, cards;
+
+  if (list) {
+    rows = Array.from(list.querySelectorAll("tr"));
+  }
+  if (cardList) {
+    cards = Array.from(cardList.children);
+  }
+
+  const totalItems = (rows || cards).length;
+  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
+
+  console.log(`Total Items: ${totalItems}, Total Pages: ${totalPages}`);
+
+  const start = (state.currentPage - 1) * state.itemsPerPage;
+  const end = start + state.itemsPerPage;
+
+  // Show or hide rows for desktop
+  if (rows) {
+    rows.forEach((row, index) => {
+      row.style.display = index >= start && index < end ? "" : "none";
+    });
+  }
+
+  // Show or hide cards for mobile
+  if (cards) {
+    cards.forEach((card, index) => {
+      card.style.display = index >= start && index < end ? "" : "none";
+    });
+  }
+
+  document.getElementById(`${section}CurrentPage`).textContent = `Page ${state.currentPage}`;
+  document.getElementById(`${section}TotalPages`).textContent = `of ${totalPages}`;
+}
+
+
+function updateItemsPerPage(section) {
+  const state = paginationState[section];
+  const newItemsPerPage = parseInt(
+    document.getElementById(`${section}ItemsPerPage`).value,
+    10
+  );
+
+  state.itemsPerPage = newItemsPerPage;
+  state.currentPage = 1;
+  changePage(section, 0); // Refresh
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Initial rows:", document.querySelectorAll("#propertyList tr").length);
+  updatePagination("properties");
+  updatePagination("items");
+  updatePagination("suppliers");
+});
