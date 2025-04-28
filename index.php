@@ -57,7 +57,7 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
           <option value="default">Sort By</option>
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
@@ -166,7 +166,7 @@
         </div>
         <div>
           <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
-          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
         </div>
 
         <div>
@@ -218,7 +218,7 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
           <option value="default">Sort By</option>
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
@@ -312,7 +312,7 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
           <option value="default">Sort By</option>
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
