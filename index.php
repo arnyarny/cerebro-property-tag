@@ -118,7 +118,7 @@
   <div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
 
   <div class="flex items-center gap-2">
-    <button id="propertiesPrevPage" onclick="changePage('properties', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+    <button id="propertiesPrevPage" onclick="changePage('properties', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Prev</button>
     <span id="propertiesCurrentPage">Page 1</span>
     <span id="propertiesTotalPages"></span>
     <button id="propertiesNextPage" onclick="changePage('properties', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
@@ -160,20 +160,20 @@
           <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
           <div class="relative">
             <input type="text" id="item_name" name="item_name" autocomplete="off"
-  required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+  required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
 <ul id="itemSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
 </div>
         </div>
         <div>
           <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
-          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
         </div>
 
         <div>
         <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
 <div class="relative">
   <input type="text" id="item_supplier" name="item_supplier" autocomplete="off"
-    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" required>
+    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3" required>
   <ul id="supplierSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
 </div>
 
@@ -182,16 +182,16 @@
         <div>
           <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
           <input type="number" id="amount" name="amount" step="0.01" min="0" required
-  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
 
           <input type="hidden" id="propertyId" name="propertyId">
         </div>
       </form>
     </div>
     <div class="modal-footer flex justify-end mt-6 space-x-2">
-      <button type="submit" form="addPropertyForm" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
+      <button type="submit" form="addPropertyForm" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-base">Save</button>
       <!-- Cancel Button -->
-      <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeModal()">Cancel</button>
+      <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-base" onclick="closeModal()">Cancel</button>
     </div>
     </div>
   </div>
@@ -254,7 +254,7 @@
   <div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
 
   <div class="flex items-center gap-2">
-    <button id="itemsPrevPage" onclick="changePage('items', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+    <button id="itemsPrevPage" onclick="changePage('items', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Prev</button>
     <span id="itemsCurrentPage">Page 1</span>
     <span id="itemsTotalPages"></span>
     <button id="itemsNextPage" onclick="changePage('items', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
@@ -277,12 +277,12 @@
     <form id="editItemForm" class="space-y-4">
       <div>
         <label for="edit_item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
-        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
         <input type="hidden" id="edit_item_id" name="edit_item_id">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
-        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
-        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeItemModal()">Cancel</button>
+        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-base">Save</button>
+        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-base" onclick="closeItemModal()">Cancel</button>
       </div>
     </form>
   </div>
@@ -347,7 +347,7 @@
     <!-- Suppliers Pagination -->
   <div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
     <div class="flex items-center gap-2">
-      <button id="suppliersPrevPage" onclick="changePage('suppliers', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Previous</button>
+      <button id="suppliersPrevPage" onclick="changePage('suppliers', -1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Prev</button>
       <span id="suppliersCurrentPage">Page 1</span>
       <span id="suppliersTotalPages"></span>
       <button id="suppliersNextPage" onclick="changePage('suppliers', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
@@ -369,12 +369,12 @@
     <form id="editSupplierForm" class="space-y-4">
       <div>
         <label for="edit_supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
-        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
         <input type="hidden" id="edit_supplier_id" name="edit_supplier_id">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
-        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-sm">Save</button>
-        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-sm" onclick="closeSupplierModal()">Cancel</button>
+        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base">Save</button>
+        <button type="button" class="bg-[#F03A25] hover:bg-[#D32F2F] text-white px-4 py-2 rounded text-base" onclick="closeSupplierModal()">Cancel</button>
       </div>
     </form>
   </div>

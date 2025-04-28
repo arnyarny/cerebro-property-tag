@@ -52,7 +52,7 @@ $qrcode = new QRCode($options);
 $qrcodeData = $qrcode->render($data);
 
 // Load the existing image
-$templateImagePath = __DIR__ . '/../templates/cerebro_property_id.png';
+$templateImagePath = __DIR__ . '/../template/cerebro_property_id.png';
 $templateImage = imagecreatefrompng($templateImagePath);
 
 if ($templateImage === false) {

@@ -393,40 +393,47 @@ function sortProperties() {
 
   const getCellValue = (element, columnIndex) => {
     if (isMobile) {
-      const text = element.querySelectorAll("p")[columnIndex].textContent;
-      const value = text.split(":")[1].trim().toLowerCase();
+      const pTags = element.querySelectorAll("p");
+      if (!pTags[columnIndex]) return "";
 
-      // For amount column, clean it up (remove ₱, commas)
+      const text = pTags[columnIndex].textContent;
+      const value = text.split(":")[1]?.trim().toLowerCase() || "";
+
       if (sortBy.includes("amount")) {
         return value.replace(/[₱,]/g, "");
       }
 
       return value;
     } else {
-      return element.children[columnIndex].textContent.trim().toLowerCase();
+      const cell = element.children[columnIndex];
+      return cell?.textContent.trim().toLowerCase() || "";
     }
   };
 
   rowsOrCards.sort((a, b) => {
+    // Map correct column indexes based on screen size
+    const nameIndex = isMobile ? 1 : 2;
+    const dateIndex = isMobile ? 2 : 3;
+    const amountIndex = isMobile ? 4 : 5;
+
     switch (sortBy) {
       case "name_asc":
-        return getCellValue(a, 1).localeCompare(getCellValue(b, 1));
+        return getCellValue(a, nameIndex).localeCompare(getCellValue(b, nameIndex));
       case "name_desc":
-        return getCellValue(b, 1).localeCompare(getCellValue(a, 1));
+        return getCellValue(b, nameIndex).localeCompare(getCellValue(a, nameIndex));
       case "date_newest":
-        return new Date(getCellValue(b, 2)) - new Date(getCellValue(a, 2));
+        return new Date(getCellValue(b, dateIndex)) - new Date(getCellValue(a, dateIndex));
       case "date_oldest":
-        return new Date(getCellValue(a, 2)) - new Date(getCellValue(b, 2));
+        return new Date(getCellValue(a, dateIndex)) - new Date(getCellValue(b, dateIndex));
       case "amount_low_high":
-        return parseFloat(getCellValue(a, 4)) - parseFloat(getCellValue(b, 4));
+        return parseFloat(getCellValue(a, amountIndex)) - parseFloat(getCellValue(b, amountIndex));
       case "amount_high_low":
-        return parseFloat(getCellValue(b, 4)) - parseFloat(getCellValue(a, 4));
+        return parseFloat(getCellValue(b, amountIndex)) - parseFloat(getCellValue(a, amountIndex));
       default:
         return 0;
     }
   });
 
-  // Re-render the sorted elements
   propertyContainer.innerHTML = "";
   rowsOrCards.forEach((el) => propertyContainer.appendChild(el));
 }
@@ -542,27 +549,9 @@ function editProperty(propertyId) {
             }
           });
 
-        // Prefill the item dropdown
-        const itemDropdown = document.getElementById("item_name");
-        itemDropdown.innerHTML = `<option value="${property.item_name}" selected>${property.item_name}</option>`;
-
-        // Load all items and ensure the current one is selected
-        fetch("api/get_item_names.php")
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success && Array.isArray(data.data)) {
-              itemDropdown.innerHTML = ""; // Clear existing options
-              data.data.forEach((item) => {
-                const option = document.createElement("option");
-                option.value = item;
-                option.textContent = item;
-                if (item === property.item_name) {
-                  option.selected = true; // Mark the current item as selected
-                }
-                itemDropdown.appendChild(option);
-              });
-            }
-          });
+       // Prefill the supplier input
+const supplierInput = document.getElementById("item_supplier");
+supplierInput.value = property.item_supplier;
 
         // Set the modal header to "Edit Property"
         document.querySelector(".modal-header h2").textContent =
@@ -1196,8 +1185,8 @@ function loadItems() {
               <td class="p-2">${item.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1252,8 +1241,8 @@ function loadSupplier() {
               <td class="p-2">${supplier.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-3 py-1 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
+                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1417,7 +1406,7 @@ itemInput.addEventListener("input", async () => {
   }
 
   try {
-    const response = await fetch(`../api/search_items.php?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`api/search_items.php?q=${encodeURIComponent(query)}`);
     const suggestions = await response.json();
 
     suggestionsBox.innerHTML = "";
@@ -1508,7 +1497,7 @@ supplierInput.addEventListener("input", async () => {
   }
 
   try {
-    const res = await fetch(`../api/search_suppliers.php?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`api/search_suppliers.php?q=${encodeURIComponent(query)}`);
     const suppliers = await res.json();
 
     supplierSuggestionsBox.innerHTML = "";
