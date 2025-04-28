@@ -56,20 +56,20 @@
 
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
-      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
-          <option value="default">Sort By</option>
-          <option value="name_asc">Name (A-Z)</option>
-          <option value="name_desc">Name (Z-A)</option>
-          <option value="date_newest">Date Purchased (Newest)</option>
-          <option value="date_oldest">Date Purchased (Oldest)</option>
-          <option value="amount_low_high">Amount (Low to High)</option>
-          <option value="amount_high_low">Amount (High to Low)</option>
-        </select>
+    <div class="flex items-center gap-2 w-full md:w-auto">
+  <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
+    <option value="default">Sort By</option>
+    <option value="name_asc">Name (A-Z)</option>
+    <option value="name_desc">Name (Z-A)</option>
+    <option value="date_newest">Date Purchased (Newest)</option>
+    <option value="date_oldest">Date Purchased (Oldest)</option>
+    <option value="amount_low_high">Amount (Low to High)</option>
+    <option value="amount_high_low">Amount (High to Low)</option>
+  </select>
 
-        <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()"
-          class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
-      </div>
+  <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()"
+    class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
+</div>
 
       <div class="flex gap-2 w-full md:w-auto justify-end">
     <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="showModal()">New</button>
@@ -218,14 +218,14 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
+        <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
           <option value="default">Sort By</option>
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
         </select>
 
         <input type="text" id="itemSearchBar" placeholder="Search..." oninput="searchItems()"
-          class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
+          class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
       </div>
 
       <div class="flex gap-2 w-full md:w-auto justify-end">
@@ -312,14 +312,14 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
+        <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
           <option value="default">Sort By</option>
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
         </select>
 
         <input type="text" id="supplierSearchBar" placeholder="Search..." oninput="searchSuppliers()"
-          class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64">
+          class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
       </div>
 
       <div class="flex gap-2 w-full md:w-auto justify-end">
