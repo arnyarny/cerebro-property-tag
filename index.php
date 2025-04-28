@@ -160,20 +160,20 @@
           <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
           <div class="relative">
             <input type="text" id="item_name" name="item_name" autocomplete="off"
-  required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+  required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
 <ul id="itemSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
 </div>
         </div>
         <div>
           <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
-          <input type="date" id="date" name="date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
+          <input type="date" id="date" name="date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
         </div>
 
         <div>
         <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
 <div class="relative">
   <input type="text" id="item_supplier" name="item_supplier" autocomplete="off"
-    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3" required>
+    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3" required>
   <ul id="supplierSuggestions" class="border rounded-md mt-1 hidden bg-white shadow absolute z-10 w-full max-w-lg"></ul>
 </div>
 
@@ -182,7 +182,7 @@
         <div>
           <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
           <input type="number" id="amount" name="amount" step="0.01" min="0" required
-  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
 
           <input type="hidden" id="propertyId" name="propertyId">
         </div>
@@ -277,7 +277,7 @@
     <form id="editItemForm" class="space-y-4">
       <div>
         <label for="edit_item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
-        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
         <input type="hidden" id="edit_item_id" name="edit_item_id">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
@@ -369,7 +369,7 @@
     <form id="editSupplierForm" class="space-y-4">
       <div>
         <label for="edit_supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
-        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
         <input type="hidden" id="edit_supplier_id" name="edit_supplier_id">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
