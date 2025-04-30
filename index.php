@@ -135,7 +135,7 @@
 <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white p-6 rounded-xl shadow-xl text-center w-full max-w-sm">
     <h2 class="text-lg font-semibold mb-4">QR Code</h2>
-    <img id="qrImage" alt="QR Code" class="max-w-full h-auto mx-auto mb-4" />
+    <img id="qrImage" alt="QR Code" class="max-w-full h-auto mx-auto mb-4 rounded-lg" />
     <div class="flex justify-center space-x-3">
       <button id="printQRCodeBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm">
         Print

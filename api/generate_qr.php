@@ -97,18 +97,18 @@ $textY = $qrY + $qrcodeHeight + $textHeight + 55; // Position below QR code
 
 imagettftext($templateImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $text);
 
-// Draw a rectangle outline around the final image
-$outlineColor = imagecolorallocate($templateImage, 0, 0, 0); // Color for the outline (black)
-$strokeWidth = 1; // Stroke width in pixels
+// // Draw a rectangle outline around the final image
+// $outlineColor = imagecolorallocate($templateImage, 0, 0, 0); // Color for the outline (black)
+// $strokeWidth = 1; // Stroke width in pixels
 
-// Draw the rectangle
-imagerectangle($templateImage, 
-    $strokeWidth / 2, // X1
-    $strokeWidth / 2, // Y1
-    imagesx($templateImage) - ($strokeWidth / 2), // X2
-    imagesy($templateImage) - ($strokeWidth / 2), // Y2
-    $outlineColor // Outline color
-);
+// // Draw the rectangle
+// imagerectangle($templateImage, 
+//     $strokeWidth / 2, // X1
+//     $strokeWidth / 2, // Y1
+//     imagesx($templateImage) - ($strokeWidth / 2), // X2
+//     imagesy($templateImage) - ($strokeWidth / 2), // Y2
+//     $outlineColor // Outline color
+// );
 
 // Set the content type header to output the image directly
 header('Content-Type: image/png');

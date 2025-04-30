@@ -29,6 +29,8 @@
                 img.alt = `QR Code for Property ID: ${id}`;
                 img.style.width = '200px'; // Adjust size as needed
                 img.style.margin = '10px';
+                img.style.border = '2px solid #000'; // Optional: add a border for better visibility
+                img.style.marginLeft = '10px'; // or '1cm', '20px', etc.
 
                 // Add load event listener to count loaded images
                 img.onload = function() {
