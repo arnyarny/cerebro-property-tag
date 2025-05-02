@@ -11,7 +11,7 @@ if (!$propertyId) {
 }
 
 try {
-    $stmt = $conn->prepare("SELECT p.id, i.name AS item_name, p.date, s.name AS item_supplier, p.amount 
+    $stmt = $conn->prepare("SELECT p.id, i.name AS item_name, p.purchased_date, p.depreciation_date, s.name AS item_supplier, p.amount 
                             FROM properties p
                             JOIN items i ON p.item_id = i.item_id
                             JOIN suppliers s ON p.supplier_id = s.supplier_id

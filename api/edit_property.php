@@ -28,11 +28,12 @@ function getSupplierId($conn, $supplier_name) {
 
 $propertyId = $_POST['propertyId'] ?? null;
 $item_name = $_POST['item_name'] ?? null;
-$date = $_POST['date'] ?? null;
+$purchased_date = $_POST['purchased_date'] ?? null;
+$depreciation_date = $_POST['depreciation_date'] ?? null;
 $supplier_name = $_POST['item_supplier'] ?? null;
 $amount = $_POST['amount'] ?? null;
 
-if (empty($propertyId) || empty($item_name) || empty($date) || empty($supplier_name) || !isset($_POST['amount'])) {
+if (empty($propertyId) || empty($item_name) || empty($purchased_date) || empty($depreciation_date) || empty($supplier_name) || !isset($_POST['amount'])) {
     echo json_encode(["success" => false, "message" => "All fields are required."]);
     exit;
 }
@@ -53,8 +54,8 @@ try {
     }
 
     // Update the property
-    $stmt = $conn->prepare("UPDATE properties SET item_id = ?, date = ?, supplier_id = ?, amount = ? WHERE id = ?");
-    $stmt->bind_param("issds", $item_id, $date, $supplier_id, $amount, $propertyId);
+    $stmt = $conn->prepare("UPDATE properties SET item_id = ?, purchased_date = ?, depreciation_date = ?, supplier_id = ?, amount = ? WHERE id = ?");
+    $stmt->bind_param("isssds", $item_id, $purchased_date, $depreciation_date, $supplier_id, $amount, $propertyId);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {

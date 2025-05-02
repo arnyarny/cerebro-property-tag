@@ -6,7 +6,8 @@ $sql = "
     SELECT 
         p.id AS id, 
         i.name AS item_name, 
-        p.date, 
+        p.purchased_date,
+        p.depreciation_date,  
         s.name AS item_supplier, 
         p.amount 
     FROM 

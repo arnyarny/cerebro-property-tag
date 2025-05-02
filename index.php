@@ -63,8 +63,6 @@
     <option value="name_desc">Name (Z-A)</option>
     <option value="date_newest">Date Purchased (Newest)</option>
     <option value="date_oldest">Date Purchased (Oldest)</option>
-    <option value="amount_low_high">Amount (Low to High)</option>
-    <option value="amount_high_low">Amount (High to Low)</option>
   </select>
 
   <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()"
@@ -95,7 +93,8 @@
           <th class="p-2 text-left">Select</th>
           <th class="p-2 text-left">ID</th>
           <th class="p-2 text-left">Item Name</th>
-          <th class="p-2 text-left">Date Purchased</th>
+          <th class="p-2 text-left">Purchased Date</th>
+          <th class="p-2 text-left">Depreciation Date</th>
           <th class="p-2 text-left">Supplier</th>
           <th class="p-2 text-left">Amount</th>
           <th class="p-2 text-left">Actions</th>
@@ -165,10 +164,13 @@
 </div>
         </div>
         <div>
-          <label for="date" class="block text-sm font-medium text-gray-700">Date Purchased</label>
-          <input type="date" id="date" name="date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
+          <label for="purchased_date" class="block text-sm font-medium text-gray-700">Purchased Date</label>
+          <input type="date" id="purchased_date" name="purchased_date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
         </div>
-
+        <div>
+          <label for="depreciation_date" class="block text-sm font-medium text-gray-700">Depreciation Date</label>
+          <input type="date" id="depreciation_date" name="depreciation_date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3 bg-white appearance-none">
+        </div>
         <div>
         <label for="item_supplier" class="block text-sm font-medium text-gray-700">Item Supplier</label>
 <div class="relative">

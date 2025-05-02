@@ -16,7 +16,7 @@ $propertyId = $_GET['id'];
 
 // Fetch property details from the database
 $stmt = $conn->prepare("
-    SELECT p.id, i.name AS item_name, p.date, s.name AS item_supplier, p.amount 
+    SELECT p.id, i.name AS item_name, p.purchased_date, s.name AS item_supplier, p.amount 
     FROM properties p 
     JOIN items i ON p.item_id = i.item_id  
     JOIN suppliers s ON p.supplier_id = s.supplier_id  
@@ -37,7 +37,7 @@ if (!$property) {
 $data = json_encode([
     'id' => $propertyId,
     'item_name' => $property['item_name'],
-    'date' => $property['date'],
+    'purchased_date' => $property['purchased_date'],
     'item_supplier' => $property['item_supplier'],
     'amount' => $property['amount']
 ]);
@@ -84,7 +84,7 @@ imagecopy($templateImage, $qrcodeImage, $qrX, $qrY, 0, 0, imagesx($qrcodeImage),
 $fontPath = __DIR__ . '/../fonts/Vera.ttf'; // Ensure this font file exists
 $fontSize = 20;
 $textColor = imagecolorallocate($templateImage, 0, 0, 0); // Black text
-$text = date("m/d/Y", strtotime($property['date']));
+$text = date("m/d/Y", strtotime($property['purchased_date']));
 
 
 // Get text bounding box

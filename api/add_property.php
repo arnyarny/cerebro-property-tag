@@ -45,11 +45,12 @@ function generatePropertyId($conn) {
 }
 
 $item_name = $_POST['item_name'] ?? null;
-$date = $_POST['date'] ?? null;
+$purchased_date = $_POST['purchased_date'] ?? null;
+$depreciation_date = $_POST['depreciation_date'] ?? null;
 $supplier_name = $_POST['item_supplier'] ?? null;
-$amount = $_POST['amount'] ?? null;
+$amount = $_POST['amount'] ?? null; 
 
-if (!$item_name || !$date || !$supplier_name || !isset($_POST['amount'])) {
+if (!$item_name || !$purchased_date || !$depreciation_date || !$supplier_name || !isset($_POST['amount'])) {
 
     echo json_encode(["success" => false, "message" => "All fields are required."]);
     exit;
@@ -60,8 +61,8 @@ try {
     $supplier_id = getOrInsertSupplier($conn, $supplier_name);
     $property_id = generatePropertyId($conn);
 
-    $stmt = $conn->prepare("INSERT INTO properties (id, item_id, date, supplier_id, amount) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sissd", $property_id, $item_id, $date, $supplier_id, $amount);
+    $stmt = $conn->prepare("INSERT INTO properties (id, item_id, purchased_date, depreciation_date, supplier_id, amount) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sisssd", $property_id, $item_id, $purchased_date, $depreciation_date,  $supplier_id, $amount);
     $stmt->execute();
 
     echo json_encode(["success" => true, "propertyId" => $property_id]);

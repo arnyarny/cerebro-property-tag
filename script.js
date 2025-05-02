@@ -130,19 +130,19 @@ function handleFormSubmit(event) {
 
 const amountInput = document.getElementById("amount");
 
-  amountInput.addEventListener("keydown", function (e) {
-    // Block the minus key
-    if (e.key === "-" || e.key === "Minus") {
-      e.preventDefault();
-    }
-  });
+amountInput.addEventListener("keydown", function (e) {
+  // Block the minus key
+  if (e.key === "-" || e.key === "Minus") {
+    e.preventDefault();
+  }
+});
 
-  amountInput.addEventListener("input", function () {
-    // Just in case someone pastes a negative number
-    if (parseFloat(amountInput.value) < 0) {
-      amountInput.value = "";
-    }
-  });
+amountInput.addEventListener("input", function () {
+  // Just in case someone pastes a negative number
+  if (parseFloat(amountInput.value) < 0) {
+    amountInput.value = "";
+  }
+});
 
 function loadProperties() {
   fetch("api/get_properties.php")
@@ -167,7 +167,8 @@ function loadProperties() {
           </td>
           <td class="p-2 text-sm">${property.id}</td>
           <td class="p-2 text-sm">${property.item_name}</td>
-          <td class="p-2 text-sm">${property.date}</td>
+          <td class="p-2 text-sm">${property.purchased_date}</td>
+          <td class="p-2 text-sm">${property.depreciation_date}</td> 
           <td class="p-2 text-sm">${property.item_supplier}</td>
           <td class="p-2 text-sm">${property.amount}</td>
           <td>
@@ -185,7 +186,7 @@ function loadProperties() {
             </div>
           </td>
         `;
-        propertyList.appendChild(row); 
+        propertyList.appendChild(row);
 
         // CARD (Mobile)
         const card = document.createElement("div");
@@ -208,7 +209,8 @@ function loadProperties() {
   <div class="text-gray-700 mb-4 mt-6">
     <p><span class="font-semibold">ID:</span> ${property.id}</p>
     <p><span class="font-semibold">Item:</span> ${property.item_name}</p>
-    <p><span class="font-semibold">Date:</span> ${property.date}</p>
+    <p><span class="font-semibold">Purchased Date:</span> ${property.purchased_date}</p>
+    <p><span class="font-semibold">Depreciation Date:</span> ${property.depreciation_date}</p>
     <p><span class="font-semibold">Supplier:</span> ${property.item_supplier}</p>
     <p><span class="font-semibold">Amount:</span> ₱${property.amount}</p>
   </div>
@@ -418,17 +420,23 @@ function sortProperties() {
 
     switch (sortBy) {
       case "name_asc":
-        return getCellValue(a, nameIndex).localeCompare(getCellValue(b, nameIndex));
+        return getCellValue(a, nameIndex).localeCompare(
+          getCellValue(b, nameIndex)
+        );
       case "name_desc":
-        return getCellValue(b, nameIndex).localeCompare(getCellValue(a, nameIndex));
+        return getCellValue(b, nameIndex).localeCompare(
+          getCellValue(a, nameIndex)
+        );
       case "date_newest":
-        return new Date(getCellValue(b, dateIndex)) - new Date(getCellValue(a, dateIndex));
+        return (
+          new Date(getCellValue(b, dateIndex)) -
+          new Date(getCellValue(a, dateIndex))
+        );
       case "date_oldest":
-        return new Date(getCellValue(a, dateIndex)) - new Date(getCellValue(b, dateIndex));
-      case "amount_low_high":
-        return parseFloat(getCellValue(a, amountIndex)) - parseFloat(getCellValue(b, amountIndex));
-      case "amount_high_low":
-        return parseFloat(getCellValue(b, amountIndex)) - parseFloat(getCellValue(a, amountIndex));
+        return (
+          new Date(getCellValue(a, dateIndex)) -
+          new Date(getCellValue(b, dateIndex))
+        );
       default:
         return 0;
     }
@@ -514,9 +522,16 @@ function editProperty(propertyId) {
 
         // Prefill the input fields
         document.getElementById("item_name").value = property.item_name;
-        document.getElementById("date").value = new Date(property.date)
+        document.getElementById("purchased_date").value = new Date(
+          property.purchased_date
+        )
           .toISOString()
           .split("T")[0]; // Ensure date is in YYYY-MM-DD format
+          document.getElementById("depreciation_date").value = new Date(
+            property.depreciation_date
+          )
+            .toISOString()
+            .split("T")[0]; // Ensure date is in YYYY-MM-DD format
         document.getElementById("amount").value = parseFloat(
           property.amount
         ).toFixed(2); // Ensure amount is formatted correctly
@@ -549,9 +564,9 @@ function editProperty(propertyId) {
             }
           });
 
-       // Prefill the supplier input
-const supplierInput = document.getElementById("item_supplier");
-supplierInput.value = property.item_supplier;
+        // Prefill the supplier input
+        const supplierInput = document.getElementById("item_supplier");
+        supplierInput.value = property.item_supplier;
 
         // Set the modal header to "Edit Property"
         document.querySelector(".modal-header h2").textContent =
@@ -1303,7 +1318,8 @@ function changePage(section, direction) {
 
   const rows = Array.from(list.querySelectorAll("tr"));
   const totalItems = rows.length;
-  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
+  const totalPages =
+    totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
 
   console.log(`Total Items: ${totalItems}, Total Pages: ${totalPages}`);
 
@@ -1324,17 +1340,28 @@ function changePage(section, direction) {
     checkbox.checked = false;
   });
 
-  document.querySelector(`#${section}PrevPage`).disabled = state.currentPage === 1;
-  document.querySelector(`#${section}NextPage`).disabled = state.currentPage === totalPages;
+  document.querySelector(`#${section}PrevPage`).disabled =
+    state.currentPage === 1;
+  document.querySelector(`#${section}NextPage`).disabled =
+    state.currentPage === totalPages;
 
   updatePagination(section);
 }
 
-
 function updatePagination(section) {
   const state = paginationState[section];
-  const listId = section === "properties" ? "propertyList" : section === "items" ? "itemList" : "supplierList";
-  const cardListId = section === "properties" ? "propertyCardList" : section === "items" ? "itemCardList" : "supplierCardList";
+  const listId =
+    section === "properties"
+      ? "propertyList"
+      : section === "items"
+      ? "itemList"
+      : "supplierList";
+  const cardListId =
+    section === "properties"
+      ? "propertyCardList"
+      : section === "items"
+      ? "itemCardList"
+      : "supplierCardList";
 
   const list = document.querySelector(`#${listId}`);
   const cardList = document.querySelector(`#${cardListId}`);
@@ -1349,7 +1376,8 @@ function updatePagination(section) {
   }
 
   const totalItems = (rows || cards).length;
-  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
+  const totalPages =
+    totalItems === 0 ? 0 : Math.ceil(totalItems / state.itemsPerPage);
 
   console.log(`Total Items: ${totalItems}, Total Pages: ${totalPages}`);
 
@@ -1370,10 +1398,13 @@ function updatePagination(section) {
     });
   }
 
-  document.getElementById(`${section}CurrentPage`).textContent = `Page ${state.currentPage}`;
-  document.getElementById(`${section}TotalPages`).textContent = `of ${totalPages}`;
+  document.getElementById(
+    `${section}CurrentPage`
+  ).textContent = `Page ${state.currentPage}`;
+  document.getElementById(
+    `${section}TotalPages`
+  ).textContent = `of ${totalPages}`;
 }
-
 
 function updateItemsPerPage(section) {
   const state = paginationState[section];
@@ -1388,7 +1419,10 @@ function updateItemsPerPage(section) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Initial rows:", document.querySelectorAll("#propertyList tr").length);
+  console.log(
+    "Initial rows:",
+    document.querySelectorAll("#propertyList tr").length
+  );
   updatePagination("properties");
   updatePagination("items");
   updatePagination("suppliers");
@@ -1406,7 +1440,9 @@ itemInput.addEventListener("input", async () => {
   }
 
   try {
-    const response = await fetch(`api/search_items.php?q=${encodeURIComponent(query)}`);
+    const response = await fetch(
+      `api/search_items.php?q=${encodeURIComponent(query)}`
+    );
     const suggestions = await response.json();
 
     suggestionsBox.innerHTML = "";
@@ -1420,7 +1456,7 @@ itemInput.addEventListener("input", async () => {
       return;
     }
 
-    suggestions.forEach(item => {
+    suggestions.forEach((item) => {
       const li = document.createElement("li");
       li.textContent = item;
       li.className = "cursor-pointer px-4 py-2 hover:bg-emerald-100";
@@ -1497,7 +1533,9 @@ supplierInput.addEventListener("input", async () => {
   }
 
   try {
-    const res = await fetch(`api/search_suppliers.php?q=${encodeURIComponent(query)}`);
+    const res = await fetch(
+      `api/search_suppliers.php?q=${encodeURIComponent(query)}`
+    );
     const suppliers = await res.json();
 
     supplierSuggestionsBox.innerHTML = "";
@@ -1511,7 +1549,7 @@ supplierInput.addEventListener("input", async () => {
       return;
     }
 
-    suppliers.forEach(supplier => {
+    suppliers.forEach((supplier) => {
       const li = document.createElement("li");
       li.textContent = supplier;
       li.className = "cursor-pointer px-4 py-2 hover:bg-emerald-100";
@@ -1528,7 +1566,10 @@ supplierInput.addEventListener("input", async () => {
 
 // Close on outside click
 document.addEventListener("click", (e) => {
-  if (!supplierSuggestionsBox.contains(e.target) && e.target !== supplierInput) {
+  if (
+    !supplierSuggestionsBox.contains(e.target) &&
+    e.target !== supplierInput
+  ) {
     supplierSuggestionsBox.classList.add("hidden");
   }
 });
@@ -1553,13 +1594,21 @@ function addNewSupplierAuto(supplierName) {
       if (data.success) {
         showToast("Supplier added successfully!", "success");
       } else {
-        showToast(data.message || "Failed to add supplier.", "error", 3000, true);
+        showToast(
+          data.message || "Failed to add supplier.",
+          "error",
+          3000,
+          true
+        );
       }
     })
     .catch((err) => {
       console.error("Error adding supplier:", err);
-      showToast("An error occurred while processing the request.", "error", 3000, true);
+      showToast(
+        "An error occurred while processing the request.",
+        "error",
+        3000,
+        true
+      );
     });
 }
-
-
