@@ -59,8 +59,8 @@
     <div class="flex items-center gap-2 w-full md:w-auto">
   <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
     <option value="default">Sort By</option>
-    <option value="name_asc">Name (A-Z)</option>
-    <option value="name_desc">Name (Z-A)</option>
+    <option value="name_asc">Item Name (A-Z)</option>
+    <option value="name_desc">Item Name (Z-A)</option>
     <option value="date_newest">Date Purchased (Newest)</option>
     <option value="date_oldest">Date Purchased (Oldest)</option>
   </select>

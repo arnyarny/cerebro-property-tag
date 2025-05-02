@@ -401,10 +401,6 @@ function sortProperties() {
       const text = pTags[columnIndex].textContent;
       const value = text.split(":")[1]?.trim().toLowerCase() || "";
 
-      if (sortBy.includes("amount")) {
-        return value.replace(/[₱,]/g, "");
-      }
-
       return value;
     } else {
       const cell = element.children[columnIndex];
@@ -416,7 +412,6 @@ function sortProperties() {
     // Map correct column indexes based on screen size
     const nameIndex = isMobile ? 1 : 2;
     const dateIndex = isMobile ? 2 : 3;
-    const amountIndex = isMobile ? 4 : 5;
 
     switch (sortBy) {
       case "name_asc":

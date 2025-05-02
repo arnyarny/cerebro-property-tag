@@ -16,6 +16,8 @@ $sql = "
         items i ON p.item_id = i.item_id
     INNER JOIN 
         suppliers s ON p.supplier_id = s.supplier_id
+    ORDER BY 
+        p.created_date_time DESC
 ";
 $result = $conn->query($sql);
 

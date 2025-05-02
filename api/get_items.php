@@ -3,7 +3,8 @@ include '../db/db.php';
 header('Content-Type: application/json');
 
 try {
-    $sql = "SELECT item_id, name FROM items ORDER BY name ASC";
+    $sql = "SELECT item_id, name FROM items ORDER BY 
+        created_date_time DESC";
     $result = $conn->query($sql);
 
     if (!$result) {

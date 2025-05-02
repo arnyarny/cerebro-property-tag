@@ -60,9 +60,10 @@ try {
     $item_id = getOrInsertItem($conn, $item_name);
     $supplier_id = getOrInsertSupplier($conn, $supplier_name);
     $property_id = generatePropertyId($conn);
+    $created_date_time = date("Y-m-d H:i:s");  // Get the current date and time
 
-    $stmt = $conn->prepare("INSERT INTO properties (id, item_id, purchased_date, depreciation_date, supplier_id, amount) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sisssd", $property_id, $item_id, $purchased_date, $depreciation_date,  $supplier_id, $amount);
+    $stmt = $conn->prepare("INSERT INTO properties (id, item_id, purchased_date, depreciation_date, supplier_id, amount, created_date_time) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sissdss", $property_id, $item_id, $purchased_date, $depreciation_date,  $supplier_id, $amount, $created_date_time);
     $stmt->execute();
 
     echo json_encode(["success" => true, "propertyId" => $property_id]);
