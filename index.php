@@ -57,13 +57,21 @@
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
     <div class="flex items-center gap-2 w-full md:w-auto">
-  <select id="sortBy" onchange="sortProperties()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
-    <option value="default">Sort By</option>
-    <option value="name_asc">Item Name (A-Z)</option>
-    <option value="name_desc">Item Name (Z-A)</option>
-    <option value="date_newest">Date Purchased (Newest)</option>
-    <option value="date_oldest">Date Purchased (Oldest)</option>
-  </select>
+    <div class="relative inline-block w-48">
+          <select id="sortBy" onchange="sortProperties()"
+          class="appearance-none border border-gray-300 rounded w-full px-3 py-2 pr-8 text-sm bg-white text-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="default">Sort By</option>
+          <option value="name_asc">Item Name (A-Z)</option>
+          <option value="name_desc">Item Name (Z-A)</option>
+          <option value="date_newest">Date Purchased (Newest)</option>
+          <option value="date_oldest">Date Purchased (Oldest)</option>
+          </select>
+        <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
 
   <input type="text" id="searchBar" placeholder="Search..." oninput="searchProperties()"
     class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
@@ -219,12 +227,20 @@
     
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
-      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="itemSortBy" onchange="sortItems()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
-          <option value="default">Sort By</option>
-          <option value="name_asc">Name (A-Z)</option>
-          <option value="name_desc">Name (Z-A)</option>
-        </select>
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <div class="relative inline-block w-48">
+          <select id="itemSortBy" onchange="sortItems()"
+          class="appearance-none border border-gray-300 rounded w-full px-3 py-2 pr-8 text-sm bg-white text-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" style="padding-top: 10px;">
+            <option value="default">Sort By</option>
+            <option value="name_asc">Item Name (A-Z)</option>
+            <option value="name_desc">Item Name (Z-A)</option>
+          </select>
+        <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
 
         <input type="text" id="itemSearchBar" placeholder="Search..." oninput="searchItems()"
           class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
@@ -269,18 +285,18 @@
   </div>
   </div>
 
-  <!-- Edit Item Modal -->
+  <!-- Item Modal -->
 <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
     <div class="modal-header flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold">Edit Item</h2>
+      <h2 class="text-xl font-semibold">Add/Edit Item</h2>
       <button class="text-gray-500 hover:text-red-500 text-xl" onclick="closeItemModal()">×</button>
     </div>
-    <form id="editItemForm" class="space-y-4">
+    <form id="itemForm" class="space-y-4">
       <div>
-        <label for="edit_item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
-        <input type="text" id="edit_item_name" name="edit_item_name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
-        <input type="hidden" id="edit_item_id" name="edit_item_id">
+        <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
+        <input type="text" id="itemName" name="itemName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+        <input type="hidden" id="itemId" name="itemId">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
         <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded shadow text-base">Save</button>
@@ -313,12 +329,20 @@
 
     <!-- Controls -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white shadow mt-4 rounded-lg">
-      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-        <select id="supplierSortBy" onchange="sortSuppliers()" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white text-[#9ca3af]">
-          <option value="default">Sort By</option>
-          <option value="name_asc">Name (A-Z)</option>
-          <option value="name_desc">Name (Z-A)</option>
-        </select>
+      <div class="flex items-center gap-2 w-full md:w-auto">
+      <div class="relative inline-block w-48">
+  <select id="supplierSortBy" onchange="sortSuppliers()"
+    class="appearance-none border border-gray-300 rounded w-full px-3 py-2 pr-8 text-sm bg-white text-gray-500 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" style="padding-top: 10px;">
+    <option value="default">Sort By</option>
+    <option value="name_asc">Supplier Name (A-Z)</option>
+    <option value="name_desc">Supplier Name (Z-A)</option>
+  </select>
+  <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+</div>
 
         <input type="text" id="supplierSearchBar" placeholder="Search..." oninput="searchSuppliers()"
           class="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-64 pl-4">
@@ -361,7 +385,7 @@
     </select>
   </div>
 
-<!-- Edit Supplier Modal -->
+<!-- Supplier Modal -->
 <div id="supplierModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
     <div class="modal-header flex justify-between items-center mb-4">
@@ -370,9 +394,9 @@
     </div>
     <form id="editSupplierForm" class="space-y-4">
       <div>
-        <label for="edit_supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
-        <input type="text" id="edit_supplier_name" name="edit_supplier_name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
-        <input type="hidden" id="edit_supplier_id" name="edit_supplier_id">
+        <label for="supplierName" class="block text-sm font-medium text-gray-700">Supplier Name</label>
+        <input type="text" id="supplierName" name="supplierName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 p-3">
+        <input type="hidden" id="supplierId" name="supplierId">
       </div>
       <div class="modal-footer flex justify-end mt-6 space-x-2">
         <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base">Save</button>

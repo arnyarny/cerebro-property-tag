@@ -1,10 +1,10 @@
 <?php
 include '../db/db.php';
-
 header('Content-Type: application/json');
 
 $name = $_POST['name'] ?? null;
-$created_date_time = date("Y-m-d H:i:s");  // Get the current date and time
+
+$created_date_time = date("Y-m-d H:i:s");
 
 if (!$name) {
     echo json_encode(["success" => false, "message" => "Supplier name is required."]);
@@ -12,7 +12,6 @@ if (!$name) {
 }
 
 try {
-    // Insert a placeholder entry into the properties table with the new supplier
     $stmt = $conn->prepare("INSERT INTO suppliers (name, created_date_time) VALUES (?, ?)");
     $stmt->bind_param("ss", $name, $created_date_time);
     if ($stmt->execute()) {

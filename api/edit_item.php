@@ -2,11 +2,8 @@
 include '../db/db.php';
 header('Content-Type: application/json');
 
-// Get the posted data
-$data = json_decode(file_get_contents("php://input"), true);
-
-$itemId = $data['itemId'] ?? null;
-$itemName = $data['itemName'] ?? null;
+$itemId = $_POST['itemId'] ?? null;
+$itemName = $_POST['name'] ?? null;
 
 if (!$itemId || !$itemName) {
     echo json_encode(["success" => false, "message" => "Item ID and Name are required."]);

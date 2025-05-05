@@ -4,7 +4,9 @@ include '../db/db.php';
 header('Content-Type: application/json');
 
 $name = $_POST['name'] ?? null;
-$created_date_time = date("Y-m-d H:i:s");  // Get the current date and time
+
+// Get the current date and time
+$created_date_time = date("Y-m-d H:i:s");
 
 if (!$name) {
     echo json_encode(["success" => false, "message" => "Item name is required."]);
@@ -12,7 +14,7 @@ if (!$name) {
 }
 
 try {
-    // Insert a placeholder entry into the properties table with the new item name
+    // Insert a placeholder entry into the items table with the new item name
     $stmt = $conn->prepare("INSERT INTO items (name, created_date_time) VALUES (?, ?)");
     $stmt->bind_param("ss", $name, $created_date_time);
     if ($stmt->execute()) {

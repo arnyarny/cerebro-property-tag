@@ -339,51 +339,6 @@ function loadItemNames() {
     .catch((error) => console.error("Error loading item names:", error));
 }
 
-function addNewItem() {
-  const newItem = prompt("Enter the name of the new item:");
-  if (newItem) {
-    fetch("api/add_item.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ name: newItem }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          showToast("Item added successfully!", "success");
-
-          // Get the item dropdown
-          const itemDropdown = document.getElementById("item_name");
-
-          // Create a new option for the added item
-          const option = document.createElement("option");
-          option.value = newItem; // Set the value
-          option.textContent = newItem; // Set the displayed text
-
-          // Append the new option to the dropdown
-          itemDropdown.appendChild(option);
-
-          // Optionally, reset the dropdown to select the newly added item
-          itemDropdown.value = newItem;
-
-          // Load item names to ensure consistency
-          loadItems(); // Uncomment if you want to refresh the entire list
-        } else {
-          showToast(data.message || "Failed to add item.", "error", 3000, true);
-        }
-      })
-      .catch((error) => {
-        console.error("Error adding item:", error);
-        showToast(
-          "An error occurred while processing the request.",
-          "error",
-          3000,
-          true
-        );
-      });
-  }
-}
-
 function sortProperties() {
   const sortBy = document.getElementById("sortBy").value;
   const isMobile = window.innerWidth <= 768;
@@ -522,11 +477,11 @@ function editProperty(propertyId) {
         )
           .toISOString()
           .split("T")[0]; // Ensure date is in YYYY-MM-DD format
-          document.getElementById("depreciation_date").value = new Date(
-            property.depreciation_date
-          )
-            .toISOString()
-            .split("T")[0]; // Ensure date is in YYYY-MM-DD format
+        document.getElementById("depreciation_date").value = new Date(
+          property.depreciation_date
+        )
+          .toISOString()
+          .split("T")[0]; // Ensure date is in YYYY-MM-DD format
         document.getElementById("amount").value = parseFloat(
           property.amount
         ).toFixed(2); // Ensure amount is formatted correctly
@@ -581,82 +536,79 @@ function editProperty(propertyId) {
     .catch((error) => console.error("Error fetching property:", error));
 }
 
+function showItemModal(item = null) {
+  const form = document.getElementById("itemForm");
+  form.reset(); // Clear the form
+  const modal = document.getElementById("itemModal");
+  const modalTitle = modal.querySelector(".modal-header h2");
+
+  if (item) {
+    // Edit mode
+    modalTitle.textContent = "Edit Item";
+    document.getElementById("itemName").value = item.name;
+    document.getElementById("itemId").value = item.item_id;
+  } else {
+    // Add mode
+    modalTitle.textContent = "Add Item";
+    document.getElementById("itemId").value = "";
+  }
+
+  modal.classList.remove("hidden"); // Show modal
+}
+
 function editItem(itemId) {
   fetch(`api/get_item.php?id=${itemId}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Fetched item data:", data); // Log the response data to inspect it
       if (data.success) {
-        const item = data.item;
-
-        // Prefill the input fields
-        document.getElementById("edit_item_name").value = item.name;
-        document.getElementById("edit_item_id").value = item.item_id;
-
-        // Set the modal header to "Edit Item"
-        document.querySelector(".modal-header h2").textContent = "Edit Item";
-
-        // Show the modal (make sure it's visible)
-        const modal = document.getElementById("itemModal");
-        // Show the modal using Tailwind's 'hidden' class removal
-        modal.classList.remove("hidden");
-        console.log("Modal should now be visible.");
+        showItemModal(data.item); // Use the reusable function
       } else {
-        showToast(
-          data.message || "Failed to fetch item details.",
-          "error",
-          3000,
-          true
-        );
+        showToast(data.message || "Failed to fetch item details.", "error");
       }
     })
-    .catch((error) => {
-      console.error("Error fetching item:", error);
-    });
+    .catch((error) => console.error("Error fetching item:", error));
 }
 
-function saveEditedItem() {
-  const itemId = document.getElementById("edit_item_id").value;
-  const itemName = document.getElementById("edit_item_name").value;
+function addNewItem() {
+  showItemModal(); // Show the modal with no pre-filled data (Add mode)
+}
 
-  if (!itemName) {
-    showToast("Item name is required.", "error", 3000, true);
-    return;
-  }
+function saveItem() {
+  const itemId = document.getElementById("itemId").value;
+  const itemName = document.getElementById("itemName").value;
 
-  fetch("api/edit_item.php", {
+  const endpoint = itemId ? "api/edit_item.php" : "api/add_item.php";
+
+  fetch(endpoint, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({
+    body: new URLSearchParams({
       itemId,
-      itemName,
+      name: itemName,
     }),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        showToast("Item updated successfully.", "success", 3000, true);
-        closeItemModal(); // Close the modal
-        loadItems();
-      } else {
         showToast(
-          data.message || "Failed to update item.",
-          "error",
-          3000,
-          true
+          itemId ? "Item updated successfully." : "Item added successfully.",
+          "success"
         );
+        closeItemModal();
+        loadItems(); // Refresh list
+      } else {
+        showToast(data.message || "Failed to save item.", "error");
       }
     })
     .catch((error) => console.error("Error saving item:", error));
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("editItemForm");
-  form.addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevent default form submission
-    saveEditedItem(); // Call your custom function
+  document.getElementById("itemForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    saveItem();
   });
 });
 
@@ -666,23 +618,38 @@ function closeItemModal() {
   modal.classList.add("hidden");
 }
 
+function showSupplierModal(supplier = null) {
+  const form = document.getElementById("editSupplierForm");
+  form.reset(); // Clear the form
+  const modal = document.getElementById("supplierModal");
+  const modalTitle = modal.querySelector(".modal-header h2");
+
+  if (supplier) {
+    // Edit mode
+    modalTitle.textContent = "Edit Supplier";
+    document.getElementById("supplierName").value = supplier.name;
+    document.getElementById("supplierId").value = supplier.supplier_id;
+  } else {
+    // Add mode
+    modalTitle.textContent = "Add Supplier";
+    document.getElementById("supplierId").value = "";
+  }
+
+  modal.classList.remove("hidden"); // Show modal
+}
+
+function addNewSupplier() {
+  showSupplierModal(); // Show empty modal for new supplier
+}
+
 function editSupplier(supplierId) {
   fetch(`api/get_supplier_edit.php?id=${supplierId}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        const supplier = data.supplier;
-        document.getElementById("edit_supplier_name").value = supplier.name;
-        document.getElementById("edit_supplier_id").value =
-          supplier.supplier_id;
-        document.getElementById("supplierModal").classList.remove("hidden");
+        showSupplierModal(data.supplier);
       } else {
-        showToast(
-          data.message || "Failed to fetch supplier details.",
-          "error",
-          3000,
-          true
-        );
+        showToast(data.message || "Failed to fetch supplier details.", "error");
       }
     })
     .catch((error) => {
@@ -690,38 +657,37 @@ function editSupplier(supplierId) {
     });
 }
 
-function saveEditedSupplier() {
-  const supplierId = document.getElementById("edit_supplier_id").value;
-  const supplierName = document.getElementById("edit_supplier_name").value;
+function saveSupplier() {
+  const supplierId = document.getElementById("supplierId").value;
+  const supplierName = document.getElementById("supplierName").value;
 
-  if (!supplierName) {
-    showToast("Supplier name is required.", "error", 3000, true);
-    return;
-  }
+  const endpoint = supplierId
+    ? "api/edit_supplier.php"
+    : "api/add_supplier.php";
 
-  fetch("api/edit_supplier.php", {
+  fetch(endpoint, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({
+    body: new URLSearchParams({
       supplierId,
-      supplierName,
+      name: supplierName,
     }),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        showToast("Supplier updated successfully.", "success", 3000, true);
-        closeSupplierModal(); // Hide modal
-        loadSupplier(); // Refresh the supplier list
-      } else {
         showToast(
-          data.message || "Failed to update supplier.",
-          "error",
-          3000,
-          true
+          supplierId
+            ? "Supplier updated successfully."
+            : "Supplier added successfully.",
+          "success"
         );
+        closeSupplierModal();
+        loadSupplier(); // Refresh list
+      } else {
+        showToast(data.message || "Failed to save supplier.", "error");
       }
     })
     .catch((error) => console.error("Error saving supplier:", error));
@@ -731,7 +697,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("editSupplierForm");
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    saveEditedSupplier();
+    saveSupplier();
   });
 });
 
