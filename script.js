@@ -18,14 +18,12 @@ function toggleDropdown() {
   icon.classList.toggle("rotate-180");
 }
 
-// Optional: Close dropdown if clicked outside
-window.addEventListener("click", function (e) {
-  const button = document.getElementById("masterlist-button");
-  const dropdown = document.getElementById("masterlist-dropdown");
-  if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-    dropdown.classList.add("hidden");
-    document.getElementById("arrow-icon").classList.remove("rotate-180");
-  }
+// Prevent closing dropdown when clicking on Items or Suppliers
+document.querySelectorAll('#masterlist-dropdown a').forEach(item => {
+  item.addEventListener('click', function(e) {
+    // Prevent click from closing the dropdown
+    e.stopPropagation();
+  });
 });
 
 function showModal() {
@@ -173,13 +171,13 @@ function loadProperties() {
           <td class="p-2 text-sm">${property.amount}</td>
           <td>
             <div class="flex space-x-2">
-            <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-base" onclick="generateQRCode(${property.id})">
+            <button class="qr-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="generateQRCode(${property.id})">
   Generate QR Code
 </button>
-<button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
+<button class="edit-button bg-white text-[#0671B7] border border-[#0671B7] hover:bg-[#0671B7] hover:text-white px-4 py-2 rounded text-base" onclick="editProperty(${property.id})">
   Edit
 </button>
-<button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="showDeletePropertyModal(${property.id})">
+<button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="showDeletePropertyModal(${property.id})">
   Delete
 </button>
 
@@ -193,20 +191,25 @@ function loadProperties() {
         card.className = "bg-white rounded-xl shadow-md p-4 relative";
 
         card.innerHTML = `
-  <!-- Select Toggle -->
-  <div class="absolute top-3 left-5 flex items-center space-x-5">
-    <label class="inline-flex items-center cursor-pointer">
-      <input type="checkbox" class="toggle-checkbox hidden" data-id="${property.id}">
-      <span class="toggle-label w-10 h-5 bg-gray-300 rounded-full flex items-center justify-between p-1 transition-colors"></span>
-    </label>
-  </div>
+<!-- Circular Tappable Toggle for Mobile with Centered FontAwesome Check Icon -->
+<div class="absolute top-3 left-5 flex items-center space-x-3">
+  <label class="inline-flex items-center cursor-pointer">
+    <!-- Use the 'toggle-checkbox' class to target the checkbox -->
+    <input type="checkbox" class="toggle-checkbox sr-only peer" data-id="${property.id}" />
+    <div class="w-6 h-6 rounded-full bg-white border border-gray-300 peer-checked:bg-[#0671B7] peer-checked:border-none transition-colors duration-300 shadow-inner peer-checked:shadow-[#0671B7]/50 relative">
+      <!-- FontAwesome Check Icon (Centered) -->
+      <i class="fa fa-check text-white text-sm absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 peer-checked:block hidden"></i>
+    </div>
+  </label>
+</div>
+
 
   <button onclick="editProperty(${property.id})" class="absolute top-3 right-5 text-[#0671B7] hover:text-[#1C78B2]">
   <i class="fas fa-pen"></i>
 </button>
 
   <!-- Main Info -->
-  <div class="text-gray-700 mb-4 mt-6">
+  <div class="text-gray-700 mb-4 mt-6 pt-3">
     <p><span class="font-semibold">ID:</span> ${property.id}</p>
     <p><span class="font-semibold">Item:</span> ${property.item_name}</p>
     <p><span class="font-semibold">Purchased Date:</span> ${property.purchased_date}</p>
@@ -217,8 +220,8 @@ function loadProperties() {
 
   <!-- Actions -->
   <div class="flex flex-col gap-2">
-    <button class="qr-button bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded" onclick="generateQRCode(${property.id})">Generate QR Code</button>
-    <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="showDeletePropertyModal(${property.id})">Delete</button>
+    <button class="bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="generateQRCode(${property.id})">Generate QR Code</button>
+    <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="showDeletePropertyModal(${property.id})">Delete</button>
   </div>
 `;
 
@@ -1014,9 +1017,9 @@ function showToast(message, type = "success") {
   const toast = document.createElement("div");
 
   const background = {
-    success: "bg-emerald-600",
+    success: "bg-blue-600",
     error: "bg-red-600",
-    info: "bg-blue-600",
+    info: "bg-emerald-600",
     warning: "bg-yellow-500 text-black",
   }[type];
 
@@ -1161,8 +1164,8 @@ function loadItems() {
               <td class="p-2">${item.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
+                  <button class="edit-button bg-white text-[#0671B7] border border-[#0671B7] hover:bg-[#0671B7] hover:text-white px-4 py-2 rounded text-base" onclick="editItem(${item.item_id})">Edit</button>
+                  <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1180,7 +1183,7 @@ function loadItems() {
 
               <div class="flex flex-col gap-2">
                 <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
-                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
+                <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
               </div>
             `;
             itemCardList.appendChild(card);
@@ -1217,8 +1220,8 @@ function loadSupplier() {
               <td class="p-2">${supplier.name}</td>
               <td class="p-2">
                 <div class="flex space-x-2">
-                  <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
-                  <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
+                  <button class="edit-button bg-white text-[#0671B7] border border-[#0671B7] hover:bg-[#0671B7] hover:text-white px-4 py-2 rounded text-base" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
+                  <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
                 </div>
               </td>
             `;
@@ -1236,7 +1239,7 @@ function loadSupplier() {
 
               <div class="flex flex-col gap-2">
                 <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
-                <button class="delete-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
+                <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
               </div>
             `;
             supplierCardList.appendChild(card);
