@@ -26,13 +26,13 @@
     <i id="arrow-icon" class="fas fa-chevron-down transition-transform duration-200"></i>
   </button>
 
-  <div id="masterlist-dropdown" class="hidden absolute mt-2 space-y-1 pl-6 text-white">
-    <a href="#" id="nav-items" class="block px-4 py-2 rounded hover:underline flex items-center gap-2">
-      <i class="fas fa-box"></i> Items
-    </a>
-    <a href="#" id="nav-suppliers" class="block px-4 py-2 rounded hover:underline flex items-center gap-2">
-      <i class="fas fa-truck"></i> Suppliers
-    </a>
+  <div id="masterlist-dropdown" class="hidden absolute mt-2 space-y-1 w-full text-white">
+  <a href="#" id="nav-items" class="block w-full px-4 py-2 rounded hover:underline flex items-center gap-2">
+  <i class="fas fa-box"></i> Items
+</a>
+<a href="#" id="nav-suppliers" class="block w-full px-4 py-2 rounded hover:underline flex items-center gap-2">
+  <i class="fas fa-truck"></i> Suppliers
+</a>
   </div>
 </div>
 </nav>
