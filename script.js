@@ -1017,7 +1017,7 @@ function showToast(message, type = "success") {
   const toast = document.createElement("div");
 
   const background = {
-    success: "bg-blue-600",
+    success: "bg-[#0671B7]",
     error: "bg-red-600",
     info: "bg-emerald-600",
     warning: "bg-yellow-500 text-black",
@@ -1176,13 +1176,15 @@ function loadItems() {
             card.className = "bg-white rounded-xl shadow p-4 relative";
 
             card.innerHTML = `
+            <button onclick="editItem(${item.item_id})" class="absolute top-3 right-5 text-[#0671B7] hover:text-[#1C78B2]">
+  <i class="fas fa-pen"></i>
+</button>
               <div class="text-gray-700 mb-4">
                 <p><span class="font-semibold">Item ID:</span> ${item.item_id}</p>
                 <p><span class="font-semibold">Name:</span> ${item.name}</p>
               </div>
 
               <div class="flex flex-col gap-2">
-                <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editItem(${item.item_id})">Edit</button>
                 <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteItemModal(${item.item_id})">Delete</button>
               </div>
             `;
@@ -1232,13 +1234,16 @@ function loadSupplier() {
             card.className = "bg-white rounded-xl shadow p-4 relative";
 
             card.innerHTML = `
+            <button onclick="editSupplier(${supplier.supplier_id})" class="absolute top-3 right-5 text-[#0671B7] hover:text-[#1C78B2]">
+  <i class="fas fa-pen"></i>
+</button>
+
               <div class="text-gray-700 mb-4">
                 <p><span class="font-semibold">Supplier ID:</span> ${supplier.supplier_id}</p>
                 <p><span class="font-semibold">Name:</span> ${supplier.name}</p>
               </div>
 
               <div class="flex flex-col gap-2">
-                <button class="edit-button bg-[#0671B7] hover:bg-[#1C78B2] text-white px-4 py-2 rounded" onclick="editSupplier(${supplier.supplier_id})">Edit</button>
                 <button class="delete-button bg-white text-[#F03A25] border border-[#F03A25] hover:bg-[#F03A25] hover:text-white px-4 py-2 rounded text-base" onclick="openDeleteSupplierModal(${supplier.supplier_id})">Delete</button>
               </div>
             `;
@@ -1294,14 +1299,13 @@ function changePage(section, direction) {
     console.log("Invalid page number, keeping current page.");
   }
 
-  // Clear "Select All" and all visible checkboxes when page changes
   const selectAllCheckbox = document.getElementById("selectAllCheckbox");
   if (selectAllCheckbox) {
-    selectAllCheckbox.checked = false;
+    selectAllCheckbox.checked = true;
   }
   const checkboxes = list.querySelectorAll("input[type='checkbox']");
   checkboxes.forEach((checkbox) => {
-    checkbox.checked = false;
+    checkbox.checked = true;
   });
 
   document.querySelector(`#${section}PrevPage`).disabled =
@@ -1353,6 +1357,16 @@ function updatePagination(section) {
     rows.forEach((row, index) => {
       row.style.display = index >= start && index < end ? "" : "none";
     });
+      // ✅ Check all visible checkboxes by default
+  const checkboxes = list.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((checkbox, index) => {
+    // Only check the ones that are visible
+    if (index >= start && index < end) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  });
   }
 
   // Show or hide cards for mobile
@@ -1372,12 +1386,23 @@ function updatePagination(section) {
 
 function updateItemsPerPage(section) {
   const state = paginationState[section];
-  const newItemsPerPage = parseInt(
-    document.getElementById(`${section}ItemsPerPage`).value,
-    10
-  );
+  const selectValue = document.getElementById(`${section}ItemsPerPage`).value;
 
-  state.itemsPerPage = newItemsPerPage;
+  if (selectValue === "all") {
+    const listId =
+      section === "properties"
+        ? "propertyList"
+        : section === "items"
+        ? "itemList"
+        : "supplierList";
+    const list = document.querySelector(`#${listId}`);
+    const totalItems = list ? list.querySelectorAll("tr").length : 0;
+
+    state.itemsPerPage = totalItems || 1; // Prevent divide by zero
+  } else {
+    state.itemsPerPage = parseInt(selectValue, 10);
+  }
+
   state.currentPage = 1;
   changePage(section, 0); // Refresh
 }

@@ -87,7 +87,7 @@
   <!-- Select All -->
   <div class="px-4 mt-4 hidden md:block">
     <label class="inline-flex items-center space-x-2 text-sm">
-      <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="accent-[#0671B7]">
+      <input type="checkbox" id="selectAllCheckbox" checked onchange="toggleSelectAll(this)" class="accent-[#0671B7]">
       <span>Select All</span>
     </label>
   </div>
@@ -120,7 +120,7 @@
       <span id="totalAmount">Total Amount: 0</span>
     </div>
 
-    <!-- Properties Pagination -->
+  <!-- Properties Pagination -->
   <div class="flex flex-wrap justify-center md:justify-between items-center px-4 mt-4 mb-8 gap-2 text-sm">
 
   <div class="flex items-center gap-2">
@@ -130,10 +130,11 @@
     <button id="propertiesNextPage" onclick="changePage('properties', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
   </div>
   <select id="propertiesItemsPerPage" onchange="updateItemsPerPage('properties')" class="border border-gray-300 rounded px-3 py-1">
-    <option value="5">5 per page</option>
-    <option value="10" selected>10 per page</option>
-    <option value="20">20 per page</option>
-  </select>
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+  <option value="all">Show All</option>
+</select>
   </div>
   </div>
 
@@ -280,10 +281,12 @@
     <button id="itemsNextPage" onclick="changePage('items', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
   </div>
   <select id="itemsItemsPerPage" onchange="updateItemsPerPage('items')" class="border border-gray-300 rounded px-3 py-1">
-    <option value="5">5 per page</option>
-    <option value="10" selected>10 per page</option>
-    <option value="20">20 per page</option>
-  </select>
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+  <option value="all">Show All</option>
+</select>
+
   </div>
   </div>
 
@@ -381,10 +384,11 @@
       <button id="suppliersNextPage" onclick="changePage('suppliers', 1)" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Next</button>
     </div>
     <select id="suppliersItemsPerPage" onchange="updateItemsPerPage('suppliers')" class="border border-gray-300 rounded px-3 py-1">
-      <option value="5">5 per page</option>
-      <option value="10" selected>10 per page</option>
-      <option value="20">20 per page</option>
-    </select>
+  <option value="5">5 per page</option>
+  <option value="10" selected>10 per page</option>
+  <option value="20">20 per page</option>
+  <option value="all">Show All</option>
+</select>
   </div>
 
 <!-- Supplier Modal -->
