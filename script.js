@@ -908,36 +908,34 @@ function showToast(message, duration = 3000) {
 }
 
 function generateBulkQRCodes() {
-  const checkboxes = document.querySelectorAll(".property-checkbox:checked");
-  const selectedIds = Array.from(checkboxes).map((checkbox) => checkbox.value);
+  const checkboxes = Array.from(document.querySelectorAll(".property-checkbox:checked")).filter((checkbox) => {
+    const row = checkbox.closest("tr");
+    return row && row.style.display !== "none"; // Only visible rows
+  });
+
+  const selectedIds = checkboxes.map((checkbox) => checkbox.value);
 
   if (selectedIds.length === 0) {
     showToast("No properties selected.", "error", 3000, true);
     return;
   }
 
-  // Open a new page or perform an action with the selected IDs
   window.open(`bulk_print_qr.html?ids=${selectedIds.join(",")}`, "_blank");
 }
 
 function generateBulkMobileQRCodes() {
-  // Select both regular checkboxes (desktop) and toggle checkboxes (mobile)
-  const checkboxes = document.querySelectorAll(
-    ".property-checkbox:checked, .toggle-checkbox:checked"
-  );
+  const checkboxes = Array.from(document.querySelectorAll(".toggle-checkbox:checked")).filter((checkbox) => {
+    const card = checkbox.closest("#propertyCardList > *");
+    return card && getComputedStyle(card).display !== "none"; // ✅ Check if card is visible
+  });
 
-  // Map the selected checkboxes to their IDs using the 'data-id' attribute
-  const selectedIds = Array.from(checkboxes).map(
-    (checkbox) => checkbox.dataset.id
-  );
+  const selectedIds = checkboxes.map((checkbox) => checkbox.dataset.id);
 
-  // Check if no properties are selected
   if (selectedIds.length === 0) {
     showToast("No properties selected.", "error", 3000, true);
     return;
   }
 
-  // Open a new page or perform an action with the selected IDs
   const url = `bulk_print_qr.html?ids=${selectedIds.join(",")}`;
   window.open(url, "_blank");
 }
@@ -950,6 +948,25 @@ function handleBulkQRCodesClick() {
     generateBulkQRCodes(propertyId); // Call the desktop version
   }
 }
+
+function clearCheckboxesOnMobileView() {
+  // Check if the screen width is less than 768px (Mobile View)
+  if (window.innerWidth < 768) {
+    // Uncheck all desktop checkboxes
+    const desktopCheckboxes = document.querySelectorAll(".property-checkbox");
+    desktopCheckboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+
+    // Uncheck all mobile toggle checkboxes
+    const mobileCheckboxes = document.querySelectorAll(".toggle-checkbox");
+    mobileCheckboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+  }
+}
+
+window.addEventListener("resize", clearCheckboxesOnMobileView);
 
 function generateQRCode(id) {
   if (!id) {
@@ -1369,12 +1386,19 @@ function updatePagination(section) {
   });
   }
 
-  // Show or hide cards for mobile
-  if (cards) {
-    cards.forEach((card, index) => {
-      card.style.display = index >= start && index < end ? "" : "none";
-    });
-  }
+// Show or hide cards for mobile
+if (cards) {
+  cards.forEach((card, index) => {
+    const isVisible = index >= start && index < end;
+    card.style.display = isVisible ? "" : "none";
+
+    // ✅ Automatically check the checkbox inside visible cards
+    const checkbox = card.querySelector("input[type='checkbox']");
+    if (checkbox) {
+      checkbox.checked = isVisible;
+    }
+  });
+}
 
   document.getElementById(
     `${section}CurrentPage`
